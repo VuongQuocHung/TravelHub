@@ -6,7 +6,7 @@ const path = require('path');
 const { connectDB } = require("./configs/database.config");
 
 const clientRoute = require("./routes/client/index.route")
-const adminRoute = require("./routes/client/admin.route")
+const adminRoute = require("./routes/admin/index.route")
 
 
 const app = express()
@@ -25,7 +25,8 @@ app.set('view engine', 'pug');
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-
+// Thiết lập đường dẫn
+app.use('/admin', adminRoute);
 app.use('/', clientRoute);
 
 
