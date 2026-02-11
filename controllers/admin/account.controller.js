@@ -4,3 +4,9 @@ module.exports.login = (req, res) => {
     pageTitle: 'Đăng nhập',
   });
 }
+
+module.exports.register = (req, res) => {
+  res.render('admin/pages/register', {
+    pageTitle: 'Đăng ký',
+  });
+}
