@@ -7,6 +7,7 @@ const { connectDB } = require("./configs/database.config");
 
 const clientRoute = require("./routes/client/index.route")
 const adminRoute = require("./routes/admin/index.route")
+const variableConfig = require("./configs/variable.config");
 
 
 const app = express()
@@ -26,7 +27,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 // Thiết lập đường dẫn
-app.use('/admin', adminRoute);
+app.locals.pathAdmin = variableConfig.pathAdmin;
+app.use(`/${variableConfig.pathAdmin}`, adminRoute);
 app.use('/', clientRoute);
 
 
