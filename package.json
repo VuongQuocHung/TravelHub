@@ -7,7 +7,11 @@
     "start": "nodemon index.js"
   },
   "dependencies": {
+    "dotenv": "^17.2.4",
     "express": "^5.2.1",
+    "mongodb": "^7.1.0",
+    "mongoose": "^9.1.6",
+    "nvm": "^0.0.4",
     "pug": "^3.0.3"
   },
   "devDependencies": {
