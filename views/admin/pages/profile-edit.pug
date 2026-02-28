@@ -1,7 +1,5 @@
 extends ../layouts/default.pug
 
-block title
-  title Thông tin cá nhân
 
 block main
   h1.box-title Thông tin cá nhân
@@ -30,4 +28,4 @@ block main
       .inner-button.inner-two-col
         button Cập nhật
     .inner-back
-      a(href="#") Đổi mật khẩu
+      a(href=`/${pathAdmin}/profile/change-password`) Đổi mật khẩu
