@@ -5,7 +5,9 @@ const categoryRoutes = require('./category.route');
 const tourRoutes = require('./tour.route');
 const orderRoutes = require('./order.route');
 const userRoutes = require('./user.route');
+const settingRoutes  = require('./setting.route');
 const contactRoutes = require('./contact.route');
+
 
 router.use('/account', accountRoutes);
 
@@ -20,5 +22,7 @@ router.use('/order', orderRoutes);
 router.use('/user', userRoutes);
 
 router.use('/contact', contactRoutes);
+
+router.use('/setting', settingRoutes);
 
 module.exports = router;
