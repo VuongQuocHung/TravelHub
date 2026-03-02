@@ -25,6 +25,11 @@ app.set('view engine', 'pug');
 // Thiết lập thư mục chứa file tĩnh 
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Tạo biến toàn cục dùng trong fil pug 
+app.locals.pathAdmin = variableConfig.pathAdmin;
+
+// cho phép gửi data lên dạng json
+app.use(express.json());
 
 // Thiết lập đường dẫn
 app.locals.pathAdmin = variableConfig.pathAdmin;

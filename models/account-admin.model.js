@@ -11,6 +11,6 @@ const schema = new mongoose.Schema(
     timestamps: true
   }
 )
+const AccountAdmin = mongoose.model('AccountAdmin', schema, 'accounts-admin');
 
-const Tour = mongoose.model('Tour', schema, 'tours');
-module.exports = Tour;
+module.exports = AccountAdmin;

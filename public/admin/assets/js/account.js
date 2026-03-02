@@ -1,3 +1,5 @@
+// const { pathAdmin } = require("../../../../configs/variable.config");
+
 // Login Form
 const loginForm = document.querySelector("#login-form");
 if(loginForm) {
@@ -57,7 +59,7 @@ if(loginForm) {
 const registerForm = document.querySelector("#register-form");
 if(registerForm) {
   const validation = new JustValidate('#register-form');
-
+ 
   validation
     .addField('#fullName', [
       {
@@ -122,13 +124,35 @@ if(registerForm) {
       const email = event.target.email.value;
       const password = event.target.password.value;
 
-      console.log(fullName);
-      console.log(email);
-      console.log(password);
+      const dataFinal = {
+        fullName: fullName,
+        email: email,
+        password: password
+      }
+      fetch(`/${pathAdmin}/account/register/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(dataFinal)
+      })
+        .then(res => res.json())// chuyển dữ liệu từ json sang js 
+        .then(data => {
+          if(data.code == "error") {
+            alert(data.message);
+          } else {
+            console.log("Thành công");
+          }
+        })
     })
   ;
 }
 // End Register Form
+
+// get: lấy dữ liệu, giao diện
+// post: gửi dữ liệu lên be để tạo mới bản ghi, gửi dữ liệu bảo mật lên be
+// patch: gửi dữ liệu lên be để cập nhật bản ghi
+// delete: gửi dữ liệu lên be để xoa bản ghi
 
 // Forgot Password Form
 const forgotPasswordForm = document.querySelector("#forgot-password-form");
