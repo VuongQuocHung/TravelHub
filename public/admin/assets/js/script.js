@@ -605,3 +605,20 @@ if(profileChangePasswordForm) {
   ;
 }
 // End Profile Change Password Form
+
+// Sider 
+const sider = document.querySelector(".sider");
+if(sider){
+  const pathNameCurrent = window.location.pathname;
+  const menuList = sider.querySelectorAll("a");
+  console.log(menuList);
+  menuList.forEach(item => {
+    const href = item.getAttribute("href");
+    console.log(href);
+    if(href === pathNameCurrent) {
+      item.classList.add("active");
+    }
+  })
+}
+// có reload lại trang
+//End Sider 
