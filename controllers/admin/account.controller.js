@@ -14,7 +14,6 @@ module.exports.register = (req, res) => {
 }
 
 module.exports.registerPost = async (req, res) => {
-  console.log(req.body);
   const {fullName, email, password} = req.body;
 
   const existAccount = await AccountAdmin.findOne({
@@ -33,6 +32,7 @@ module.exports.registerPost = async (req, res) => {
   const salt = await bcrypt.genSalt(10); // Tạo salt - chuỗi ngẫu nhiên có 10 ký tự 
   const hashedPassword = await bcrypt.hash(password, salt); // Mã hóa mật khẩu
 
+  console.log("Chạy vào controller");
 
   const newAccount = new AccountAdmin({
     fullName: fullName,
@@ -45,11 +45,50 @@ module.exports.registerPost = async (req, res) => {
   
   // hàm của express: chuyển js sang json và trả về cho frontend json
   res.json({
-    code: "success",
-    message: "Đăng ký tài khoản thành công!"
+    code: "error",
+    message: "Đăng nhập thành công"
   })
 }
 
+module.exports.loginPost = async (req, res) => {
+  const {email, password} = req.body;
+  const existAccount = await AccountAdmin.findOne({
+    email: email
+  })
+  if(!existAccount){
+    res.json({
+      code: "error",
+      message: 'Email khong ton tai trong he thong'
+    });
+    return;
+  }
+
+  const isPasswordValid = await bcrypt.compare(password, existAccount.password);
+
+  if(!isPasswordValid){
+    res.json({
+      code: "error",
+      message: 'Mat khau khong dung'
+    });
+    return;
+  }
+
+  if(existAccount.status != "active"){
+    res.json({
+      code: "error",
+      message: 'Tai khoan chua duoc duyet'
+    });
+    return;
+  }
+
+  res.json({
+    code: "success",
+    message: 'Email khong ton tai trong he thong'
+  });
+
+  console.log("tai khoan la: " + existAccount);
+
+}
 module.exports.forgotPassword = (req, res) => {
   res.render('admin/pages/forgot-password', {
     pageTitle: 'Quên mật khẩu',
