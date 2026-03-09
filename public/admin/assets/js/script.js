@@ -1,3 +1,4 @@
+
 // Menu Mobile
 const buttonMenuMobile = document.querySelector(".header .inner-button-menu");
 if(buttonMenuMobile) {
@@ -620,3 +621,22 @@ if(sider){
 }
 // có reload lại trang
 //End Sider 
+
+// Logout 
+const buttonLogout = document.querySelector(".header .inner-logout");
+if(buttonLogout){
+  buttonLogout.addEventListener("click", () => {
+    fetch(`/${pathAdmin}/account/logout`, {
+      method: "POST"
+    })
+    .then(res => res.json)
+    .then(data => {
+      if(data.code == "success"){
+        window.location.href = `/${pathAdmin}/account/login`;
+      }
+    })
+  })
+}
+// End Logout
+
+

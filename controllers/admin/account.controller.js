@@ -107,6 +107,15 @@ module.exports.loginPost = async (req, res) => {
   console.log("tai khoan la: " + existAccount);
 
 }
+
+module.exports.logoutPost = (req, res) => {
+  res.clearCookie("token");
+  res.json({
+    code: "success",
+    message: "Đăng xuất thành công!"
+  })
+}
+
 module.exports.forgotPassword = (req, res) => {
   res.render('admin/pages/forgot-password', {
     pageTitle: 'Quên mật khẩu',
