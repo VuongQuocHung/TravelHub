@@ -54,14 +54,6 @@ module.exports.registerPost = (req, res, next) => {
     });
     return;
   } 
-  // else {
-  //   const errorMessage = error.details[0].message;
-  //   req.json({
-  //     code: "error",
-  //     message: errorMessage
-  //   });
-  //   return;
-  // }
   next();
 }
 
@@ -81,7 +73,8 @@ module.exports.loginPost = (req, res, next) => {
     .messages({
       "string.empty": "Vui lòng nhập mật khẩu",
     }),
-  })
+    rememberPassword: Joi.boolean()
+  });
   const { error } = schema.validate(req.body);
   if(error){
     const errorMessage = error.details[0].message;
