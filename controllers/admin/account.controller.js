@@ -104,7 +104,7 @@ module.exports.loginPost = async (req, res) => {
     message: 'Email khong ton tai trong he thong'
   });
 
-  console.log("tai khoan la: " + existAccount);
+  // console.log("tai khoan la: " + existAccount);
 
 }
 
