@@ -1,14 +1,17 @@
 const AccountAdmin = require("../../models/account-admin.model");
 const bcrypt = require("bcryptjs");
 const jwt = require('jsonwebtoken');
+const { randomNumberString } = require("../../helpers/random.helper");
+const ForgotPassword = require("../../models/forgot-password.model");
+const { sendMail } = require("../../helpers/mail.helper")
 
-module.exports.login = (req, res) => {
+module.exports.login = async (req, res) => {
   res.render('admin/pages/login', {
     pageTitle: 'Đăng nhập',
   });
 }
 
-module.exports.register = (req, res) => {
+module.exports.register = async (req, res) => {
   res.render('admin/pages/register', {
     pageTitle: 'Đăng ký',
   });
@@ -46,8 +49,8 @@ module.exports.registerPost = async (req, res) => {
   
   // hàm của express: chuyển js sang json và trả về cho frontend json
   res.json({
-    code: "error",
-    message: "Đăng nhập thành công"
+    code: "success",
+    message: "Đăng ký thành công"
   })
 }
 
@@ -59,7 +62,7 @@ module.exports.loginPost = async (req, res) => {
   if(!existAccount){
     res.json({
       code: "error",
-      message: 'Email khong ton tai trong he thong'
+      message: 'Email không tồn tại'
     });
     return;
   }
@@ -69,7 +72,7 @@ module.exports.loginPost = async (req, res) => {
   if(!isPasswordValid){
     res.json({
       code: "error",
-      message: 'Mat khau khong dung'
+      message: 'Mật khẩu không đúng'
     });
     return;
   }
@@ -77,7 +80,7 @@ module.exports.loginPost = async (req, res) => {
   if(existAccount.status != "active"){
     res.json({
       code: "error",
-      message: 'Tai khoan chua duoc duyet'
+      message: 'Tài khoản chưa được duyệt'
     });
     return;
   }
@@ -101,14 +104,14 @@ module.exports.loginPost = async (req, res) => {
 
   res.json({
     code: "success",
-    message: 'Email khong ton tai trong he thong'
+    message: "Đăng nhập thành công!"
   });
 
   // console.log("tai khoan la: " + existAccount);
 
 }
 
-module.exports.logoutPost = (req, res) => {
+module.exports.logoutPost = async (req, res) => {
   res.clearCookie("token");
   res.json({
     code: "success",
@@ -116,19 +119,118 @@ module.exports.logoutPost = (req, res) => {
   })
 }
 
-module.exports.forgotPassword = (req, res) => {
+module.exports.forgotPassword = async (req, res) => {
   res.render('admin/pages/forgot-password', {
     pageTitle: 'Quên mật khẩu',
   });
 }
 
-module.exports.otpPassword = (req, res) => {
+module.exports.forgotPasswordPost = async (req, res) => {
+  const {email} = req.body;
+
+  // Kiểm tra email đã tồn tại chưa
+  const existAccount = await AccountAdmin.findOne({
+    email: email
+  });
+
+  if(!existAccount){
+    res.json({
+      code: "error",
+      message: "Email không tồn tại!"
+    });
+    return;
+  }
+
+  // Kiểm tra email đã tồn tại trong ForgotPassword chưa (để tránh spam mã otp)
+  const existEmailInForgotPassword = await ForgotPassword.findOne({
+    email: email
+  });
+  if(existEmailInForgotPassword){
+    res.json({
+      code: "error",
+      message: "Mã otp đã được gửi về email, vui lòng thử lại sau 5 phút!"
+    });
+    return;
+  }
+
+  // Tạo mã otp
+  const otp = randomNumberString(6);
+
+  // Lưu vào CSDL: email, otp, sau 5p tự xóa bản ghi
+  const newRecord = new ForgotPassword({
+    email: email,
+    otp: otp,
+    expireAt: Date.now() + (5 * 60 * 1000)
+  });
+  await newRecord.save()
+
+  // Gửi mã OTP tự động về email của người dùng
+  const subject = 'Mã otp quên mật khẩu';
+  const content = `
+    <!DOCTYPE html>
+      <html>
+      <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Xác thực mã OTP</title>
+      </head>
+      <body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f9;">
+          <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px; margin: 20px auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+              <tr>
+                  <td style="padding: 40px 0; text-align: center; background-color: #007bff;">
+                      <h1 style="color: #ffffff; margin: 0; font-size: 24px; letter-spacing: 1px;">XÁC THỰC TÀI KHOẢN</h1>
+                  </td>
+              </tr>
+              <tr>
+                  <td style="padding: 40px 30px;">
+                      <p style="font-size: 16px; color: #333333; line-height: 1.5; margin-bottom: 25px;">
+                          Chào bạn,<br><br>
+                          Bạn vừa yêu cầu mã xác thực (OTP) để thực hiện giao dịch hoặc đăng nhập. Vui lòng sử dụng mã dưới đây:
+                      </p>
+                      <div style="text-align: center; margin: 30px 0;">
+                          <div style="display: inline-block; padding: 15px 40px; background-color: #f8f9fa; border: 2px dashed #007bff; border-radius: 10px;">
+                              <span style="font-size: 32px; font-weight: bold; color: #007bff; letter-spacing: 5px;">${otp}</span>
+                          </div>
+                      </div>
+                      <p style="font-size: 14px; color: #666666; text-align: center; margin-top: 25px;">
+                          Mã OTP này có hiệu lực trong <strong>5 phút</strong>.
+                      </p>
+                      <hr style="border: 0; border-top: 1px solid #eeeeee; margin: 30px 0;">
+                      <div style="background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; border-radius: 4px;">
+                          <p style="font-size: 13px; color: #856404; margin: 0;">
+                              <strong>Lưu ý:</strong> Vui lòng <strong>không cung cấp mã OTP này cho bất kỳ ai</strong>, kể cả nhân viên hỗ trợ của chúng tôi. Nếu bạn không thực hiện yêu cầu này, hãy đổi mật khẩu ngay lập tức.
+                          </p>
+                      </div>
+                  </td>
+              </tr>
+              <tr>
+                  <td style="padding: 20px 30px; background-color: #fdfdfd; text-align: center; border-top: 1px solid #eeeeee;">
+                      <p style="font-size: 12px; color: #999999; margin: 0;">
+                          &copy; 2026 Công ty của bạn. Mọi quyền được bảo lưu.
+                      </p>
+                  </td>
+              </tr>
+          </table>
+      </body>
+    </html>
+  `;
+
+  await sendMail(email, subject, content);
+  
+  res.json({
+    code: "success",
+    message: "Đã gửi mã OTP qua email"
+  })
+
+}
+
+module.exports.otpPassword = async (req, res) => {
   res.render('admin/pages/otp-password', {
     pageTitle: 'Nhập mã otp',
   });
 }
 
-module.exports.resetPassword = (req, res) => {
+module.exports.resetPassword = async (req, res) => {
   res.render('admin/pages/reset-password', {
     pageTitle: 'Đổi mật khẩu',
   });

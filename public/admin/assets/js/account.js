@@ -138,8 +138,9 @@ if(registerForm) {
         .then(data => {
           if(data.code == "error") {
             alert(data.message);
-          } else {
-            console.log("Thành công");
+          } 
+          if(data.code == "success"){
+            window.location.href = `/${pathAdmin}/account/login`;
           }
         })
     })
@@ -170,7 +171,26 @@ if(forgotPasswordForm) {
     ])
     .onSuccess((event) => {
       const email = event.target.email.value;
-      console.log(email);
+      // console.log(email);
+      const dataFinal = {
+        email: email,
+      }
+      fetch(`/${pathAdmin}/account/forgot-password/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(dataFinal)
+      })
+        .then(res => res.json())// chuyển dữ liệu từ json sang js 
+        .then(data => {
+          if(data.code == "error") {
+            alert(data.message);
+          } 
+          if(data.code == "success") {
+            window.location.href = `/${pathAdmin}/account/otp-password`;
+          }
+        })
     })
   ;
 }

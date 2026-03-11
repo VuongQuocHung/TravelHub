@@ -84,13 +84,27 @@ module.exports.loginPost = (req, res, next) => {
     });
     return;
   } 
-  // else {
-  //   const errorMessage = error.details[0].message;
-  //   req.json({
-  //     code: "error",
-  //     message: errorMessage
-  //   });
-  //   return;
-  // }
+  next();
+}
+
+module.exports.forgotPasswordPost = (req, res, next) => {
+  const schema = Joi.object({
+    email: Joi.string()
+    .required()
+    .email()
+    .messages({
+      "string.empty": "Vui lòng nhập email",
+      "string.email": "Email không đúng định dạng"
+    }),
+  });
+  const { error } = schema.validate(req.body);
+  if(error){
+    const errorMessage = error.details[0].message;
+    res.json({
+      code: "error",
+      message: errorMessage,
+    });
+    return;
+  } 
   next();
 }
