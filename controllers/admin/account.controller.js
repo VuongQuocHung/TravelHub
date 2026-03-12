@@ -66,7 +66,7 @@ module.exports.loginPost = async (req, res) => {
     });
     return;
   }
-
+  // Kiểm tra mật khẩu khớp hay không
   const isPasswordValid = await bcrypt.compare(password, existAccount.password);
 
   if(!isPasswordValid){
@@ -227,6 +227,61 @@ module.exports.forgotPasswordPost = async (req, res) => {
 module.exports.otpPassword = async (req, res) => {
   res.render('admin/pages/otp-password', {
     pageTitle: 'Nhập mã otp',
+  });
+}
+
+module.exports.otpPasswordPost = async (req, res) => {
+  const {email, otp} = req.body;
+  const existRecord = await ForgotPassword.findOne({
+    otp: otp,
+    email: email
+  });
+
+  if(!existRecord){
+    res.json({
+      code: "error",
+      message: "Mã OTP không đúng"
+    });
+    return;
+  }
+
+  await ForgotPassword.findOneAndDelete({
+    otp: otp,
+    email: email
+  });
+
+  const existAccount = await AccountAdmin.findOne({
+    email: email
+  });
+
+  if(!existAccount){
+    res.json({
+      code: "error",
+      message: "Tài khoản không tìm thấy"
+    });
+    return;
+  }
+
+  // Tạo chuỗi bảo mật JWT 
+  const token = jwt.sign(
+    {
+      id: existAccount.id,
+      email: email
+    }, 
+    process.env.JWT_SECRET,
+    {
+      expiresIn: "1d" // token có hiệu lực trong 1 ngày
+    }
+  )
+  res.cookie("token", token, {
+    maxAge: (1 * 24 * 60 * 60 * 1000) * 1, // 1 ngày
+    httpOnly: true, // Chỉ cho phép cookie được truy cận bởi server
+    sameSite: 'strict', // chỉ cho phép truy cập khi cùng tên miền
+  })
+
+  res.json({
+    code: "success",
+    message: "Xác thực mã OTP thành công!"
   });
 }
 
