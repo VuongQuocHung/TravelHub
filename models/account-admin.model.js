@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const schema = new mongoose.Schema(
   {
-    fulName: String,
+    fullName: String,
     email: String,
     password: String, 
     status: String  // "initial": khởi tạo, "active": hoạt động, "inactive": tạm dừng

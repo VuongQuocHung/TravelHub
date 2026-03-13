@@ -25,6 +25,13 @@ module.exports.verifyToken = async (req, res, next) => {
 
     req.account = existAccount;
 
+    // Trả biến về cho bên FE
+    res.locals.account = {
+      id: existAccount.id,
+      fullName: existAccount.fullName,
+      email: existAccount.email
+    };
+
     next();
   } catch (error) {
     res.clearCookie("token");

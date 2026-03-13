@@ -19,7 +19,6 @@ module.exports.register = async (req, res) => {
 
 module.exports.registerPost = async (req, res) => {
   const {fullName, email, password} = req.body;
-
   const existAccount = await AccountAdmin.findOne({
     email: email
   });
