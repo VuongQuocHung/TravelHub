@@ -23,6 +23,8 @@ module.exports.verifyToken = async (req, res, next) => {
       res.redirect(`/${pathAdmin}/account/login`);
     }
 
+    req.account = existAccount;
+
     next();
   } catch (error) {
     res.clearCookie("token");

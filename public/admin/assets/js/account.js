@@ -286,7 +286,26 @@ if(resetPasswordForm) {
     ])
     .onSuccess((event) => {
       const password = event.target.password.value;
-      console.log(password);
+      const dataFinal = {
+        password: password
+      };
+
+      fetch(`/${pathAdmin}/account/reset-password`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(dataFinal)
+      })
+        .then(res => res.json())// chuyển dữ liệu từ json sang js 
+        .then(data => {
+          if(data.code == "error") {
+            alert(data.message);
+          } 
+          if(data.code == "success") {
+            window.location.href = `/${pathAdmin}/dashboard`;
+          }
+        })
     })
   ;
 }
