@@ -14,8 +14,9 @@ module.exports.create = async (req, res) => {
 }
 
 module.exports.createPost = async (req, res) => {
-  // console.log(req.file);
+  console.log(req.file);
   // console.log(req.body);
+
 
   if(req.body.position){
     req.body.position = parseInt(req.body.position);
@@ -24,14 +25,14 @@ module.exports.createPost = async (req, res) => {
       position: "desc"
     })
     if(recordPositionMax){
-      req.body.position = recordPositionMax + 1;
+      req.body.position = recordPositionMax.position + 1;
     } else {
       req.body.position = 1;
     }
   }
 
   req.body.createdBy = req.account.id; // account được lưu ở trong hàm verifyToken
-
+  req.body.avatar = req.file ? req.file.path : "";
   // Cách 1: Tạo 1 bản ghi, không trả về dữ liệu
   // await Category.create(req.body);
 

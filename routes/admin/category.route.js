@@ -1,8 +1,9 @@
 const router = require('express').Router();
 const multer  = require('multer')
-const upload = multer()
-
+const cloudinaryHelper = require("../../helpers/cloudinary.helper")
 const categoryController =  require("../../controllers/admin/category.controller");
+
+const upload = multer({ storage: cloudinaryHelper.storage });
 
 router.get('/list', categoryController.list);
 
