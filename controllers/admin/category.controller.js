@@ -1,6 +1,5 @@
 const Category = require("../../models/category.model");
 
-  
 module.exports.list = async (req, res) => {
   res.render('admin/pages/category-list', {
     pageTitle: 'Trang danh mục',
@@ -15,7 +14,7 @@ module.exports.create = async (req, res) => {
 
 module.exports.createPost = async (req, res) => {
   console.log(req.file);
-  // console.log(req.body);
+  console.log(req.body);
 
 
   if(req.body.position){
