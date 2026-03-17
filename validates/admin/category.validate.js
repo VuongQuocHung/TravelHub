@@ -10,7 +10,7 @@ module.exports.createPost = (req, res, next) => {
     parent : Joi.string().allow(''),
     position : Joi.string().allow(''),
     status : Joi.string().allow(''),
-    avatars : Joi.string().allow(''),
+    avatar : Joi.string().allow(''),
     description : Joi.string().allow(''),
   });
 

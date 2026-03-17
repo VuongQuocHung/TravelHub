@@ -42,9 +42,10 @@ if(loginForm) {
         .then(res => res.json()) // chuyển json sang js
         .then(data => {
           if(data.code == "error") {
-            alert(data.message);
+            notyf.error(data.message);
           }
           if(data.code == "success") {
+            drawNotyf(data.code, data.message);
             window.location.href = `/${pathAdmin}/dashboard`;
           }
         })
@@ -137,9 +138,10 @@ if(registerForm) {
         .then(res => res.json())// chuyển dữ liệu từ json sang js 
         .then(data => {
           if(data.code == "error") {
-            alert(data.message);
+            notyf.error(data.message);
           } 
           if(data.code == "success"){
+            drawNotyf(data.code, data.message);
             window.location.href = `/${pathAdmin}/account/login`;
           }
         })
@@ -185,9 +187,10 @@ if(forgotPasswordForm) {
         .then(res => res.json())// chuyển dữ liệu từ json sang js 
         .then(data => {
           if(data.code == "error") {
-            alert(data.message);
+            notyf.error(data.message);
           } 
           if(data.code == "success") {
+            drawNotyf(data.code, data.message);
             window.location.href = `/${pathAdmin}/account/otp-password?email=${email}`;
           }
         })
@@ -228,9 +231,10 @@ if(otpPasswordForm) {
         .then(res => res.json())// chuyển dữ liệu từ json sang js 
         .then(data => {
           if(data.code == "error") {
-            alert(data.message);
+            notyf.error(data.message);
           } 
           if(data.code == "success") {
+            drawNotyf(data.code, data.message);
             window.location.href = `/${pathAdmin}/account/reset-password`;
           }
         })
@@ -300,9 +304,10 @@ if(resetPasswordForm) {
         .then(res => res.json())// chuyển dữ liệu từ json sang js 
         .then(data => {
           if(data.code == "error") {
-            alert(data.message);
+            notyf.error(data.message);
           } 
           if(data.code == "success") {
+            drawNotyf(data.code, data.message);
             window.location.href = `/${pathAdmin}/dashboard`;
           }
         })

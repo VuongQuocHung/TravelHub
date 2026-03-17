@@ -1,4 +1,3 @@
-
 // Menu Mobile
 const buttonMenuMobile = document.querySelector(".header .inner-button-menu");
 if(buttonMenuMobile) {
@@ -145,12 +144,12 @@ if(categoryCreateForm) {
   const validation = new JustValidate('#category-create-form');
 
   validation
-    .addField('#name', [
-      {
-        rule: 'required',
-        errorMessage: 'Vui lòng nhập tên danh mục!'
-      }
-    ])
+    // .addField('#name', [
+    //   {
+    //     rule: 'required',
+    //     errorMessage: 'Vui lòng nhập tên danh mục!'
+    //   }
+    // ])
     .onSuccess((event) => {
       const name = event.target.name.value;
       const parent = event.target.parent.value;
@@ -178,9 +177,10 @@ if(categoryCreateForm) {
         .then(res => res.json())// chuyển dữ liệu từ json sang js 
         .then(data => {
           if(data.code == "error"){
-            alert(data.message);
+            notyf.error(data.message);
           }
           if(data.code == "success"){
+            drawNotyf(data.code, data.message);
             window.location.reload();
           }
         })
@@ -647,6 +647,7 @@ if(buttonLogout) {
       .then(res => res.json())
       .then(data => {
         if(data.code == "success") {
+          drawNotyf(data.code, data.message);
           window.location.href = `/${pathAdmin}/account/login`;
         }
       })
