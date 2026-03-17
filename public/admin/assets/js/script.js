@@ -177,6 +177,9 @@ if(categoryCreateForm) {
       })
         .then(res => res.json())// chuyển dữ liệu từ json sang js 
         .then(data => {
+          if(data.code == "error"){
+            alert(data.message);
+          }
           if(data.code == "success"){
             window.location.reload();
           }
