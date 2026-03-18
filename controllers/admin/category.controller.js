@@ -1,9 +1,41 @@
 const { buildCategoryTree } = require("../../helpers/category.helper");
+const AccountAdmin = require("../../models/account-admin.model");
 const Category = require("../../models/category.model");
+const moment = require("moment");
 
 module.exports.list = async (req, res) => {
+  const categoryList = await Category.find({
+    deleted: false
+  }).sort({
+    position: "desc"
+  });
+
+  for(const item of categoryList){
+    if(item.createdAt){
+      const infoCreater = await AccountAdmin.findOne({
+        _id: item.createdBy 
+      })
+      if(infoCreater){
+        item.createByName = infoCreater.fullName
+        item.createAtFormat = moment(item.createdAt).format("HH:mm DD/MM/YYYY");
+      }
+    }
+
+    if(item.updatedAt){
+      const infoUpdater = await AccountAdmin.findOne({
+        _id: item.updatedBy   
+      })
+      if(infoUpdater){  
+        item.updatedByName = infoUpdater.fullName
+        item.updatedAtFormat = moment(item.updatedAt).format("HH:mm DD/MM/YYYY");
+      }
+    }
+  }
+
+ 
   res.render('admin/pages/category-list', {
     pageTitle: 'Trang danh mục',
+    categoryList: categoryList,
   });
 }
 
