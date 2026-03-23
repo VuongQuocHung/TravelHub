@@ -749,49 +749,73 @@ if(listButtonDelete){
 // End Button Delete
 
 // Filter Status 
-const filterStatus = document.querySelector("[filter-status]");
-if(filterStatus){
-  const newUrl = new URL(window.location.href);
+// const filterStatus = document.querySelector("[filter-status]");
+// if(filterStatus){
+//   const newUrl = new URL(window.location.href);
 
-  filterStatus.addEventListener("change", () => {
-    const value = filterStatus.value;
+//   filterStatus.addEventListener("change", () => {
+//     const value = filterStatus.value;
     
-    if(value){
-      newUrl.searchParams.set("status", value);
-    } else {
-      newUrl.searchParams.delete("status"); 
-    }
-    window.location.href = newUrl.href;
-  });
+//     if(value){
+//       newUrl.searchParams.set("status", value);
+//     } else {
+//       newUrl.searchParams.delete("status"); 
+//     }
+//     window.location.href = newUrl.href;
+//   });
   
-  // Hiển thị trạng thái mặc định
-  const currentValue  = newUrl.searchParams.get("status");
-  if(currentValue ){
-    filterStatus.value = currentValue;
-  }
-}
+//   // Hiển thị trạng thái mặc định
+//   const currentValue  = newUrl.searchParams.get("status");
+//   if(currentValue ){
+//     filterStatus.value = currentValue;
+//   }
+// }
 // End Filter Status
 
 // Filter Created By 
-const filterCreatedBy  = document.querySelector("[filter-createdby]");
-if(filterCreatedBy){
-  const newUrl = new URL(window.location.href);
+// const filterCreatedBy  = document.querySelector("[filter-createdby]");
+// if(filterCreatedBy){
+//   const newUrl = new URL(window.location.href);
 
-  filterCreatedBy.addEventListener("change", () => {
-    const value = filterCreatedBy.value;
-    if(value){
-      newUrl.searchParams.set("createdBy", value);
-    } else {
-      newUrl.searchParams.delete("createdBy"); 
-    }
-    window.location.href = newUrl.href;
-  });
+//   filterCreatedBy.addEventListener("change", () => {
+//     const value = filterCreatedBy.value;
+//     if(value){
+//       newUrl.searchParams.set("createdBy", value);
+//     } else {
+//       newUrl.searchParams.delete("createdBy"); 
+//     }
+//     window.location.href = newUrl.href;
+//   });
   
-  // Hiển thị trạng thái mặc định
-  const currentValue  = newUrl.searchParams.get("createdBy");
-  if(currentValue){
-    filterCreatedBy.value = currentValue;
-  }
-}
+//   // Hiển thị trạng thái mặc định
+//   const currentValue  = newUrl.searchParams.get("createdBy");
+//   if(currentValue){
+//     filterCreatedBy.value = currentValue;
+//   }
+// }
 // End Filter Created By 
+
+// Filter 
+const listFilter = document.querySelectorAll("[filter]");
+if(listFilter.length > 0){
+  const url = new URL(window.location.href);
+
+  listFilter.forEach(filter => {
+    const name = filter.getAttribute("filter"); // name là các loại của bộ lọc (ví dụ lọc theo status, lọc theo createBy)
+    filter.addEventListener("change", () => {
+      const value = filter.value; // value là giá trị chọn, ví dụ với name là status có 2 value là active & inactive
+      if(value){
+        url.searchParams.set(name, value);
+      } else {
+        url.searchParams.delete(name);
+      }
+      window.location.href = url;
+    })
+    const currentValue = url.searchParams.get(name);
+    if(currentValue){
+      filter.value = currentValue
+    }
+  })
+}
+// End Filter 
 

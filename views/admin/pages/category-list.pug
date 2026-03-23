@@ -9,12 +9,12 @@ block main
       .inner-item.inner-label
         <i class="fa-solid fa-filter"></i> Bộ lọc
       .inner-item
-        select(filter-status)
+        select(filter="status")
           option(value="") Trạng thái
           option(value="active") Hoạt động
           option(value="inactive") Tạm dừng
       .inner-item
-        select(filter-createdBy)
+        select(filter="createdBy")
           option(value="") Người tạo
           each item in accountAdminList
             if item.fullName
