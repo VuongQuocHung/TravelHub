@@ -89,110 +89,28 @@ module.exports.createPost = async (req, res) => {
   })
 }
 
-// module.exports.edit = async (req, res) => {
-//   try {
-//     const id = req.params.id;
-//     const categoryDetail = await Category.findOne({
-//       _id: id,
-//       deleted: false
-//     });
-
-//     if(!categoryDetail){
-//       res.redirect(`/${pathAdmin}/category/list`);
-//       return;
-//     }
-
-//     const categoryList = await Category.find({
-//       deleted: false
-//     });
-
-//     const categoryTree = buildCategoryTree(categoryList, "");
-
-
-//     res.render('admin/pages/category-edit', {
-//       pageTitle: 'Chỉnh sửa danh mục',
-//       categoryList: categoryTree,
-//       categoryDetail: categoryDetail
-//     });
-//   } catch (error) {
-//     res.redirect(`/${pathAdmin}/category/list`);
-//   }
-// }
-
-// module.exports.editPatch = async (req, res) => {
-//   try {
-//     const id = req.params.id;
-
-//     const categoryDetail = await Category.findOne({
-//       _id: id,
-//       deleted: false
-//     });
-
-//     if(!categoryDetail) {
-//       res.json({
-//         code: "error",
-//         message: "Danh mục không tồn tại!"
-//       })
-//       return;
-//     }
-    
-//     if(req.body.position) {
-//       req.body.position = parseInt(req.body.position);
-//     } else {
-//       const recordPositionMax = await Category
-//         .findOne({})
-//         .sort({
-//           position: "desc"
-//         })
-//       if(recordPositionMax) {
-//         req.body.position = recordPositionMax.position + 1;
-//       } else {
-//         req.body.position = 1;
-//       }
-//     }
-
-//     req.body.updatedBy = req.account.id;
-
-//     req.body.avatar = req.file ? req.file.path : "";
-
-//     await Category.updateOne({
-//       _id: id
-//     }, req.body);
-
-//     res.json({
-//       code: "success",
-//       message: "Cập nhật danh mục thành công!"
-//     });
-//   } catch (error) {
-//     res.json({
-//       code: "error",
-//       message: "Dữ liệu không hợp lệ!"
-//     });
-//   }
-// }
-
 module.exports.edit = async (req, res) => {
   try {
     const id = req.params.id;
-
     const categoryDetail = await Category.findOne({
       _id: id,
       deleted: false
     });
 
-    if(!categoryDetail) {
+    if(!categoryDetail){
       res.redirect(`/${pathAdmin}/category/list`);
       return;
     }
-    
+
     const categoryList = await Category.find({
       deleted: false
     });
 
     const categoryTree = buildCategoryTree(categoryList, "");
-    
+
+
     res.render('admin/pages/category-edit', {
-      pageTitle: "Chỉnh sửa danh mục",
+      pageTitle: 'Chỉnh sửa danh mục',
       categoryList: categoryTree,
       categoryDetail: categoryDetail
     });
@@ -252,5 +170,45 @@ module.exports.editPatch = async (req, res) => {
     });
   }
 }
+
+module.exports.deletePatch = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    const categoryDetail = await Category.findOne({
+      _id: id,
+      deleted: false
+    });
+
+    if(!categoryDetail) {
+      res.json({
+        code: "error",
+        message: "Danh mục không tồn tại!"
+      })
+      return;
+    }
+    
+
+    await Category.updateOne({
+      _id: id
+    }, {
+      deleted: true,
+      deletedBy: req.account.id,
+      deletedAt: Date.now()
+    });
+
+    res.json({
+      code: "success",
+      message: "Xóa danh mục thành công!"
+    });
+  } catch (error) {
+    res.json({
+      code: "error",
+      message: "Dữ liệu không hợp lệ!"
+    });
+  }
+}
+
+
 
 
