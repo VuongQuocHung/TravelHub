@@ -819,3 +819,23 @@ if(listFilter.length > 0){
 }
 // End Filter 
 
+// Filter Reset 
+const filterReset = document.querySelector("[filter-reset]");
+if(filterReset){
+  const url = new URL(window.location.href);
+  const listFilter = document.querySelectorAll("[filter]");
+  const listFilterName = [];
+  listFilter.forEach(item => {
+    const name = item.getAttribute('filter');
+    listFilterName.push(name);
+  })
+
+  filterReset.addEventListener("click", () => {
+    listFilterName.forEach(name => {
+      url.searchParams.delete(name);
+    })
+    window.location.href = url;
+  })
+}
+// End Filter Reset
+
