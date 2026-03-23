@@ -4,9 +4,17 @@ const Category = require("../../models/category.model");
 const moment = require("moment");
 
 module.exports.list = async (req, res) => {
-  const categoryList = await Category.find({
+  const target = {
     deleted: false
-  }).sort({
+  };
+
+  // Lọc theo trạng thái
+  if(req.query.status){
+    target.status = req.query.status
+  }
+  // Hết lọc theo trạng thái
+  
+  const categoryList = await Category.find(target).sort({
     position: "desc"
   });
 
