@@ -21,9 +21,9 @@ block main
               option(value=item.id) #{item.fullName}
 
       .inner-item.inner-date
-        input(type="date")
+        input(type="date" filter="fromDate")
         span -
-        input(type="date")
+        input(type="date" filter="toDate")
       .inner-item.inner-reset
         <i class="fa-solid fa-rotate-left"></i> Xóa bộ lọc
   //- End Section 4

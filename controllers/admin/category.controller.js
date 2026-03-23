@@ -15,11 +15,25 @@ module.exports.list = async (req, res) => {
   // Hết lọc theo trạng thái
 
   // Lọc theo người tạo
-
   if(req.query.createdBy){
     target.createdBy = req.query.createdBy
   }
   // Hết lọc theo người tạo
+
+  // Lọc theo ngày 
+  if(req.query.fromDate){
+    target.createdAt = {
+      $gte: new Date(req.query.fromDate)
+    }
+  }
+
+  if(req.query.toDate){
+    target.createdAt = {
+      ...target.createdAt,
+      $lte: new Date(req.query.fromDate)
+    }
+  }
+  // Hết lọc theo ngày
 
   const categoryList = await Category.find(target).sort({
     position: "desc"
