@@ -13,7 +13,14 @@ module.exports.list = async (req, res) => {
     target.status = req.query.status
   }
   // Hết lọc theo trạng thái
-  
+
+  // Lọc theo người tạo
+
+  if(req.query.createdBy){
+    target.createdBy = req.query.createdBy
+  }
+  // Hết lọc theo người tạo
+
   const categoryList = await Category.find(target).sort({
     position: "desc"
   });
@@ -40,10 +47,14 @@ module.exports.list = async (req, res) => {
     }
   }
 
- 
+  // Danh sách tài khoản quản trị viên 
+  const accountAdminList = await AccountAdmin.find({}).select("id fullName email");
+  // console.log("accountadminlist: " + accountAdminList);
+
   res.render('admin/pages/category-list', {
     pageTitle: 'Trang danh mục',
     categoryList: categoryList,
+    accountAdminList: accountAdminList,
   });
 }
 
