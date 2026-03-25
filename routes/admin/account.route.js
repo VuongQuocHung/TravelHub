@@ -1,13 +1,11 @@
 const router = require('express').Router();
-
-const { verify } = require('jsonwebtoken');
 const accountController = require("../../controllers/admin/account.controller");
 const accountValidate = require("../../validates/admin/account.validate");
 const authMiddleware = require("../../middlewares/admin/authen.middleware");
 
 router.get('/login', accountController.login);
 
-router.post('/login', accountValidate.loginPost, accountController.loginPost);
+router.post('/login',  accountValidate.loginPost, accountController.loginPost);
 
 router.get('/register', accountController.register);
 

@@ -22,7 +22,8 @@
     "multer-storage-cloudinary": "^4.0.0",
     "nodemailer": "^8.0.2",
     "nvm": "^0.0.4",
-    "pug": "^3.0.3"
+    "pug": "^3.0.3",
+    "slugify": "^1.6.8"
   },
   "devDependencies": {
     "nodemon": "^3.1.11"

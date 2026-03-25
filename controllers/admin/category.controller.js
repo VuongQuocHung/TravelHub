@@ -2,6 +2,7 @@ const { buildCategoryTree } = require("../../helpers/category.helper");
 const AccountAdmin = require("../../models/account-admin.model");
 const Category = require("../../models/category.model");
 const moment = require("moment");
+const slugify = require('slugify');
 
 module.exports.list = async (req, res) => {
   const target = {
@@ -34,6 +35,16 @@ module.exports.list = async (req, res) => {
     }
   }
   // Hết lọc theo ngày
+
+  // Tìm kiếm
+  if(req.query.keyword){
+    const keyword = slugify(req.query.keyword);
+    const regex = new RegExp(keyword, "i");
+    target.slug = regex;
+    console.log(regex);
+  }
+
+  // Hết Tìm Kiếm
 
   const categoryList = await Category.find(target).sort({
     position: "desc"

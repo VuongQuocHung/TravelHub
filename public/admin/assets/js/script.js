@@ -906,4 +906,23 @@ if(changeMulti) {
 }
 // End Change Multi
 
+// Search 
+const search = document.querySelector("[search]");
+if(search){
+  const url = new URL(window.location.href);
+  search.addEventListener("keyup", (event) => {
+    // event ở đây lần lượt là các sự kiện, ví dụ nhập abcd thì event sẽ lần lượt là "a", "b", "c", "d"
+    // console.log(event);
+    if(event.key == "Enter"){
+      const value = search.value; // value ở đây sẽ là "abcd"
+      if(value){
+        url.searchParams.set("keyword", value);
+      } else {
+        url.searchParams.delete("keyword");
+      }
+      window.location.href = url;
+    }
+  })
+}
+
 
