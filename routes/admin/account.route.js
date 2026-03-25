@@ -2,6 +2,7 @@ const router = require('express').Router();
 const accountController = require("../../controllers/admin/account.controller");
 const accountValidate = require("../../validates/admin/account.validate");
 const authMiddleware = require("../../middlewares/admin/authen.middleware");
+const passport = require('passport');
 
 router.get('/login', accountController.login);
 
@@ -28,6 +29,25 @@ router.post(
   accountController.resetPasswordPost
 );
 
+
 router.post('/logout', accountController.logoutPost);
+
+// Redirect đến Google
+router.get('/google',
+  passport.authenticate('google', { 
+    scope: ['profile', 'email'],
+    session: false 
+  })
+);
+
+// router.get('/google', accountController.loginGoogle);
+
+router.get('/google/callback', accountController.loginGoogleCallback);
+
+router.get('/google', (req, res, next) => {
+  console.log("pathAdmin:", pathAdmin);
+  console.log("callback URL sẽ là:", `http://localhost:3000/${pathAdmin}/account/google/callback`);
+  next();
+}, accountController.loginGoogle);
 
 module.exports = router;  

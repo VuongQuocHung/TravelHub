@@ -7,10 +7,7 @@ block main
     
     form.inner-form#login-form
       .inner-group
-        label(
-          class="inner-label"
-          for="email"
-        ) Email
+        label(class="inner-label" for="email") Email
         input(
           type="email"
           name="email"
@@ -19,10 +16,7 @@ block main
           class="inner-control"
         )
       .inner-group
-        label(
-          class="inner-label"
-          for="password"
-        ) Mật khẩu
+        label(class="inner-label" for="password") Mật khẩu
         input(
           type="password"
           name="password"
@@ -37,12 +31,16 @@ block main
             id="remember-password"
             class="inner-check"
           )
-          label(
-            class="inner-label"
-            for="remember-password"
-          ) Nhớ mật khẩu
+          label(class="inner-label" for="remember-password") Nhớ mật khẩu
         a(href=`/${pathAdmin}/account/forgot-password` class="inner-forgot-password") Quên mật khẩu?
       button(class="inner-button") Đăng Nhập
+
+    .inner-divider
+      span hoặc
+
+    a(href=`/${pathAdmin}/account/google` class="btn-google")
+      img(src="https://developers.google.com/identity/images/g-logo.png" alt="Google" width="20")
+      | Đăng nhập với Google
     
     .inner-more
       span Bạn chưa có tài khoản?
