@@ -839,3 +839,71 @@ if(filterReset){
 }
 // End Filter Reset
 
+// Check All
+const checkAll = document.querySelector("[check-all]"); // lấy ra nút chọn tất cả 
+if(checkAll) {
+  const listCheck = document.querySelectorAll("[check-item]"); // lấy tất cả checkbox con
+  checkAll.addEventListener("change", () => {
+    listCheck.forEach(item => {
+      item.checked = checkAll.checked; // tất cả các checkbox con có trạng thái giống như checkAll
+    })
+  })
+}
+// End Check All => tích 1 cái tức là tick hết, bỏ tích ra thì bỏ hết
+
+// Change Multi
+const changeMulti = document.querySelector("[change-multi]");
+if(changeMulti) {
+  const select = changeMulti.querySelector("select");
+  const button = changeMulti.querySelector("button");
+  const dataApi = changeMulti.getAttribute("data-api");
+
+  button.addEventListener("click", () => {
+    const option = select.value; // lấy hành động (tạm dừng, xóa, ...)
+    const listInputChecked = document.querySelectorAll(`[check-item]:checked`); // lấy ra các item được chọn
+
+    if(!option) {
+      notyf.error("Vui lòng chọn hành động để áp dụng!");
+      return;
+    }
+
+    if(listInputChecked.length < 1) {
+      notyf.error("Vui lòng chọn ít nhất 1 bản ghi!");
+      return;
+    }
+
+    // lấy ra danh sách các id của các item được chọn
+    const listId = [];
+    listInputChecked.forEach(input => {
+      const id = input.getAttribute("check-item");
+      listId.push(id);
+    })
+
+    const dataFinal = {
+      listId: listId,
+      option: option
+    };
+
+    fetch(dataApi, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(dataFinal)
+    })
+      .then(res => res.json())
+      .then(data => {
+        if(data.code == "error") {
+          notyf.error(data.message);
+        }
+        
+        if(data.code == "success") {
+          drawNotyf(data.code, data.message);
+          window.location.reload();
+        }
+      })
+  })
+}
+// End Change Multi
+
+
