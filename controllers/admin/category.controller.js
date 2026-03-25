@@ -41,14 +41,56 @@ module.exports.list = async (req, res) => {
     const keyword = slugify(req.query.keyword);
     const regex = new RegExp(keyword, "i");
     target.slug = regex;
-    console.log(regex);
   }
-
   // Hết Tìm Kiếm
 
-  const categoryList = await Category.find(target).sort({
-    position: "desc"
-  });
+  // Pagination
+  // const limit = 3;
+  // let page = 1;
+  // if(req.query.page) {
+  //   const currentPage = parseInt(req.query.page);
+  //   if(currentPage > 0) {
+  //     page = currentPage;
+  //   }
+  // }
+  // const skip = (page - 1) * limit;
+  // const totalRecord = await Category.countDocuments(target );
+  // const totalPage = Math.ceil(totalRecord/limit);
+  // const paginationData = {
+  //   skip: skip,
+  //   totalRecord: totalRecord,
+  //   totalPage: totalPage
+  // };
+
+  // console.log(totalRecord);
+  // console.log(totalPage);
+  // console.log(paginationData);
+
+  const limit = 3;
+  let page = 1;
+  if(req.query.page) {
+    const currentPage = parseInt(req.query.page);
+    if(currentPage > 0) {
+      page = currentPage;
+    }
+  }
+  const skip = (page - 1) * limit;
+  const totalRecord = await Category.countDocuments(target); // đếm các bản ghi thỏa mãn điều kiện
+  const totalPage = Math.ceil(totalRecord/limit); // làm tròn lên
+  const paginationData = {
+    skip: skip,
+    totalRecord: totalRecord,
+    totalPage: totalPage
+  };
+  // Hết Pagination
+
+  const categoryList = await Category
+    .find(target)
+    .sort({
+      position: "desc"
+    })
+    .limit(limit)
+    .skip(skip);
 
   for(const item of categoryList){
     if(item.createdAt){
@@ -80,6 +122,7 @@ module.exports.list = async (req, res) => {
     pageTitle: 'Trang danh mục',
     categoryList: categoryList,
     accountAdminList: accountAdminList,
+    paginationData: paginationData
   });
 }
 

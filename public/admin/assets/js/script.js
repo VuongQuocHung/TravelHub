@@ -924,5 +924,26 @@ if(search){
     }
   })
 }
+// End Search 
 
+// Pagination
+const pagination = document.querySelector(["[pagination]"]);
+if(pagination){
+  const url = new URL(window.location.href);
+  pagination.addEventListener("change", ()=>{
+    const value = pagination.value;
+    if(value){
+      url.searchParams.set("page", value);
+    } else {
+      url.searchParams.delete("page");
+    }
+    window.location.href = url;
+  });
+
+  // Đang ở trang nào thì chỗ pagination hiện trang đó
+  const currentValue = url.searchParams.get("page");
+  if(currentValue){
+    pagination.value = currentValue;
+  }
+}
 
