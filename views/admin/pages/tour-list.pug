@@ -1,7 +1,7 @@
 extends ../layouts/default.pug
 
 block main
-  h1.box-title Quản lý tour
+  h1.box-title #{pageTitle}
 
   //- Section 4
   .section-4
@@ -108,7 +108,7 @@ block main
                 div.inner-time #{item.updateAtFormat}
               td
                 .inner-buttons
-                  button(class="inner-edit") <i class="fa-regular fa-pen-to-square"></i>
+                  a(href=`/${pathAdmin}/tour/edit/${item.id}` class="inner-edit") <i class="fa-regular fa-pen-to-square"></i>
                   button(class="inner-delete") <i class="fa-regular fa-trash-can"></i>
   //- End Section 6
 

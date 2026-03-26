@@ -108,21 +108,19 @@ module.exports.list = async (req, res) => {
 
 
 module.exports.create = async (req, res) => {
-  // Lấy ra danh sách danh mục
+  // Danh sách danh mục
   const categoryList = await Category.find({
     deleted: false
   });
-
   const categoryTree = buildCategoryTree(categoryList, "");
 
-
-  // Lấy ra danh sách tỉnh thành 
+  // Danh sách tỉnh thành
   const cityList = await City.find({});
-
+  
   res.render('admin/pages/tour-create', {
-    pageTitle: 'Trang tạo tour',
+    pageTitle: "Tạo tour",
     categoryList: categoryTree,
-    cityList: cityList,
+    cityList: cityList
   });
 }
 
@@ -174,6 +172,209 @@ module.exports.createPost = async (req, res) => {
     })
   }
 }
+
+// module.exports.edit = async (req, res) => {
+//   // console.log("Chạy vào tour edit");
+//   try {
+//     const id = req.params.id;
+//     const tourDetail = await Tour.findOne({
+//       _id: id,
+//       deleted: false
+//     });
+//     console.log(tourDetail);
+
+//     if(!tourDetail){
+//       res.redirect(`/${pathAdmin}/tour/list`);
+//       return;
+//     }
+
+//     tourDetail.departureDateFormat = moment(tourDetail.departureDate).format('YYYY-MM-DD');
+
+//      // Danh sách danh mục
+//     const categoryList = await Category.find({
+//       deleted: false
+//     });
+//     const categoryTree = buildCategoryTree(categoryList, "");
+
+//     const cityList = await City.find({});
+
+//     res.render('admin/pages/tour-edit', {
+//       pageTitle: 'Chỉnh sửa tour',
+//       tourDetail: tourDetail,
+//       categoryList: categoryTree,
+//       cityList: cityList,
+//     });
+//   } catch (error) {
+//     console.log("Lỗi: " + error);
+//     res.redirect(`/${pathAdmin}/tour/list`);
+//   }
+// }
+
+// module.exports.editPatch = async (req, res) => {
+//   try {
+//     const id = req.params.id;
+//     const tourDetail = await Tour.findOne({
+//       _id: id,
+//       deleted: false
+//     });
+//     console.log(tourDetail);
+
+//     if(!tourDetail){
+//       res.json({
+//         code: "error",
+//         message: "Tour không tồn tại"
+//       })
+//       return;
+//     }
+
+//     if(req.body.position){
+//       req.body.position = parseInt(req.body.position);
+//     } else {
+//       const recordPositionMax = await Tour
+//       .findOne({})
+//       .sort({
+//         position: "desc"
+//       })
+//       if(recordPositionMax){
+//         req.body.position = recordPositionMax.position + 1;
+//       } else {
+//         req.body.position = 1;
+//       }
+//     }
+
+//     req.body.avatar = req.file ? req.file.path : "";
+
+//     req.body.priceAdult = req.body.priceAdult ? parseInt(req.body.priceAdult) : 0;
+//     req.body.priceChildren = req.body.priceChildren ? parseInt(req.body.priceChildren) : 0;
+//     req.body.priceBaby = req.body.priceBaby ? parseInt(req.body.priceBaby) : 0;
+//     req.body.priceNewAdult = req.body.priceNewAdult ? parseInt(req.body.priceNewAdult) : req.body.priceAdult;
+//     req.body.priceNewChildren = req.body.priceNewChildren ? parseInt(req.body.priceNewChildren) : req.body.priceChildren;
+//     req.body.priceNewBaby = req.body.priceNewBaby ? parseInt(req.body.priceNewBaby) : req.body.priceBaby;
+//     req.body.stockAdult = req.body.stockAdult ? parseInt(req.body.stockAdult) : 0;
+//     req.body.stockChildren = req.body.stockChildren ? parseInt(req.body.stockChildren) : 0;
+//     req.body.stockBaby = req.body.stockBaby ? parseInt(req.body.stockBaby) : 0;
+//     req.body.locations = req.body.locations ? JSON.parse(req.body.locations) : []; //locations phải ở dạng mảng
+//     req.body.departureDate = req.body.departureDate ? new Date(req.body.departureDate) : null;
+//     req.body.schedules = req.body.schedules ? JSON.parse(req.body.schedules) : []; // schedules phải ở dạng mảng
+//     req.body.updatedBy = req.account.id;
+
+//     await Tour.updateOne({
+//       _id: id,
+//     }, req.body);
+
+//     res.json({
+//       code: "success",
+//       message: "Cập nhật Tour thành công"
+//     })
+
+//   } catch (error) {
+//     res.json({
+//       code: "error",
+//       message: "Dữ liệu không hợp lệ"
+//     })
+//   }
+// }
+
+module.exports.edit = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    const tourDetail = await Tour.findOne({
+      _id: id,
+      deleted: false
+    });
+
+    if(!tourDetail) {
+      res.redirect(`/${pathAdmin}/tour/list`);
+      return;
+    }
+
+    tourDetail.departureDateFormat = moment(tourDetail.departureDate).format('YYYY-MM-DD');
+
+    // Danh sách danh mục
+    const categoryList = await Category.find({
+      deleted: false
+    });
+    const categoryTree = buildCategoryTree(categoryList, "");
+
+    // Danh sách tỉnh thành
+    const cityList = await City.find({});
+    
+    res.render('admin/pages/tour-edit', {
+      pageTitle: "Chỉnh sửa tour",
+      tourDetail: tourDetail,
+      categoryList: categoryTree,
+      cityList: cityList
+    });
+  } catch (error) {
+    res.redirect(`/${pathAdmin}/tour/list`);
+  }
+}
+
+module.exports.editPatch = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    const tourDetail = await Tour.findOne({
+      _id: id,
+      deleted: false
+    });
+
+    if(!tourDetail) {
+      res.json({
+        code: "error",
+        message: "Tour không tồn tại!"
+      })
+      return;
+    }
+
+    if(req.body.position) {
+      req.body.position = parseInt(req.body.position);
+    } else {
+      const recordPositionMax = await Tour
+        .findOne({})
+        .sort({
+          position: "desc"
+        })
+      if(recordPositionMax) {
+        req.body.position = recordPositionMax.position + 1;
+      } else {
+        req.body.position = 1;
+      }
+    }
+
+    req.body.avatar = req.file ? req.file.path : "";
+
+    req.body.priceAdult = req.body.priceAdult ? parseInt(req.body.priceAdult) : 0;
+    req.body.priceChildren = req.body.priceChildren ? parseInt(req.body.priceChildren) : 0;
+    req.body.priceBaby = req.body.priceBaby ? parseInt(req.body.priceBaby) : 0;
+    req.body.priceNewAdult = req.body.priceNewAdult ? parseInt(req.body.priceNewAdult) : req.body.priceAdult;
+    req.body.priceNewChildren = req.body.priceNewChildren ? parseInt(req.body.priceNewChildren) : req.body.priceChildren;
+    req.body.priceNewBaby = req.body.priceNewBaby ? parseInt(req.body.priceNewBaby) : req.body.priceBaby;
+    req.body.stockAdult = req.body.stockAdult ? parseInt(req.body.stockAdult) : 0;
+    req.body.stockChildren = req.body.stockChildren ? parseInt(req.body.stockChildren) : 0;
+    req.body.stockBaby = req.body.stockBaby ? parseInt(req.body.stockBaby) : 0;
+    req.body.locations = req.body.locations ? JSON.parse(req.body.locations) : [];
+    req.body.departureDate = req.body.departureDate ? new Date(req.body.departureDate) : null;
+    req.body.schedules = req.body.schedules ? JSON.parse(req.body.schedules) : [];
+    req.body.updatedBy = req.account.id;
+
+    await Tour.updateOne({
+      _id: id
+    }, req.body);
+
+    res.json({
+      code: "success",
+      message: "Cập nhật tour thành công!"
+    });
+  } catch (error) {
+    res.json({
+      code: "error",
+      message: "Dữ liệu không hợp lệ!"
+    })
+  }
+}
+
 
 module.exports.trash = async (req, res) => {
   res.render('admin/pages/tour-trash', {
