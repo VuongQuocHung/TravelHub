@@ -1,11 +1,108 @@
 const { buildCategoryTree } = require("../../helpers/category.helper");
 const Category = require("../../models/category.model");
+const AccountAdmin = require("../../models/account-admin.model");
 const Tour = require("../../models/tour.model")
 const City = require("../../models/city.model");
+const moment = require("moment");
+const slugify = require('slugify');
 
 module.exports.list = async (req, res) => {
+  const target = {
+    deleted: false
+  };
+
+  // Lọc theo trạng thái
+  if(req.query.status){
+    target.status = req.query.status
+  }
+  // Hết lọc theo trạng thái
+
+  // Lọc theo người tạo
+  if(req.query.createdBy){
+    target.createdBy = req.query.createdBy
+  }
+  // Hết lọc theo người tạo
+
+  // Lọc theo ngày 
+  if(req.query.fromDate){
+    target.createdAt = {
+      $gte: new Date(req.query.fromDate)
+    }
+  }
+
+  if(req.query.toDate){
+    target.createdAt = {
+      ...target.createdAt,
+      $lte: new Date(req.query.fromDate)
+    }
+  }
+  // Hết lọc theo ngày
+
+  // Tìm kiếm
+  if(req.query.keyword){
+    const keyword = slugify(req.query.keyword);
+    const regex = new RegExp(keyword, "i");
+    target.slug = regex;
+  }
+  // Hết Tìm Kiếm
+
+  // Pagination
+  const limit = 3;
+  let page = 1;
+  if(req.query.page) {
+    const currentPage = parseInt(req.query.page);
+    if(currentPage > 0) {
+      page = currentPage;
+    }
+  }
+  const skip = (page - 1) * limit;
+  const totalRecord = await Tour.countDocuments(target); // đếm các bản ghi thỏa mãn điều kiện
+  const totalPage = Math.ceil(totalRecord/limit); // làm tròn lên
+  const paginationData = {
+    skip: skip,
+    totalRecord: totalRecord,
+    totalPage: totalPage
+  };
+  // Hết Pagination
+
+  const tourList = await Tour
+    .find(target)
+    .sort({
+      position: "desc"
+    })
+    .limit(limit)
+    .skip(skip);
+
+  for(const item of tourList){
+    if(item.createdAt){
+      const infoCreater = await AccountAdmin.findOne({
+        _id: item.createdBy 
+      })
+      if(infoCreater){
+        item.createByName = infoCreater.fullName
+        item.createAtFormat = moment(item.createdAt).format("HH:mm DD/MM/YYYY");
+      }
+    }
+
+    if(item.updatedAt){
+      const infoUpdater = await AccountAdmin.findOne({
+        _id: item.updatedBy   
+      })
+      if(infoUpdater){  
+        item.updatedByName = infoUpdater.fullName
+        item.updatedAtFormat = moment(item.updatedAt).format("HH:mm DD/MM/YYYY");
+      }
+    }
+  }
+
+  // Danh sách tài khoản quản trị viên 
+  const accountAdminList = await AccountAdmin.find({}).select("id fullName email");
+  // console.log("accountadminlist: " + accountAdminList);
   res.render('admin/pages/tour-list', {
     pageTitle: 'Trang danh sách tour',
+    tourList: tourList,
+    accountAdminList: accountAdminList,
+    paginationData: paginationData
   });
 }
 
