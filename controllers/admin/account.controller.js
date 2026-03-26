@@ -311,43 +311,8 @@ module.exports.resetPasswordPost = async (req, res) => {
 }
 
 
-module.exports.loginGoogle = (req, res, next) => {
-  passport.authenticate('google', {
-    scope: ['profile', 'email'],
-    session: false
-  })(req, res, next);
-}
-
-module.exports.loginGoogleCallback = (req, res, next) => {
-  console.log("Chạy vào đây");
-  passport.authenticate('google', {
-    failureRedirect: `/${pathAdmin}/account/login`,
-    session: false
-  }, async (err, account) => {
-    // console.log("err:", err);
-    // console.log("account:", account);
-
-    if (err || !account) {
-      return res.redirect(`/${pathAdmin}/account/login`);
-    }
-
-    const token = jwt.sign(
-      { id: account.id, email: account.email },
-      process.env.JWT_SECRET,
-      { expiresIn: '1d' }
-    );
-
-    // console.log("token:", token); 
-    // console.log("redirect đến:", `/${pathAdmin}/dashboard`);
-
-    res.cookie('token', token, {
-      maxAge: 1 * 24 * 60 * 60 * 1000,
-      httpOnly: true,
-      sameSite: 'lax',
-    });
-
-    res.redirect(`/${pathAdmin}/dashboard`);
-  })(req, res, next);
-}
+module.exports.dashboard = (req, res) => {
+  res.redirect(`/${pathAdmin}/dashboard`);
+};
 
 

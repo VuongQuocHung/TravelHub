@@ -1,3 +1,8 @@
+// Tìm account trong DB theo email
+// Nếu chưa có thì tạo mới
+// Nếu có rồi thì kiểm tra status
+// Gọi done(null, account) để truyền account sang bước tiếp theo
+
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const AccountAdmin = require('../models/account-admin.model');

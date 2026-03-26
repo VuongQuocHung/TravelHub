@@ -3,13 +3,10 @@ require('dotenv').config();
 const express = require('express')
 const path = require('path');
 const { connectDB } = require("./configs/database.config");
-
 const clientRoute = require("./routes/client/index.route")
 const adminRoute = require("./routes/admin/index.route")
 const variableConfig = require("./configs/variable.config");
 const cookieParser = require('cookie-parser');
-
-// Không cần session vì dùng JWT
 
 const app = express()
 const port = 3000

@@ -70,7 +70,7 @@ block main
               td #{item.name}
               td
                 img(src=item.avatar class="inner-avatar")
-              td(class="inner-center") 1
+              td(class="inner-center") #{item.position}
               td(class="inner-center")
                 if(item.status == 'active')
                   .badge.badge-green Hoạt động
