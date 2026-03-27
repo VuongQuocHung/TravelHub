@@ -44,28 +44,6 @@ module.exports.list = async (req, res) => {
   }
   // Hết Tìm Kiếm
 
-  // Pagination
-  // const limit = 3;
-  // let page = 1;
-  // if(req.query.page) {
-  //   const currentPage = parseInt(req.query.page);
-  //   if(currentPage > 0) {
-  //     page = currentPage;
-  //   }
-  // }
-  // const skip = (page - 1) * limit;
-  // const totalRecord = await Category.countDocuments(target );
-  // const totalPage = Math.ceil(totalRecord/limit);
-  // const paginationData = {
-  //   skip: skip,
-  //   totalRecord: totalRecord,
-  //   totalPage: totalPage
-  // };
-
-  // console.log(totalRecord);
-  // console.log(totalPage);
-  // console.log(paginationData);
-
   const limit = 3;
   let page = 1;
   if(req.query.page) {

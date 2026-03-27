@@ -1,0 +1,14 @@
+mixin button-create(link)
+  .inner-button-create
+    a(href=link)  + Tạo mới
+
+mixin button-edit(link)
+  a(href=link class="inner-edit") 
+    <i class="fa-regular fa-pen-to-square"></i>
+
+mixin button-delete(api)
+  button(
+    class="inner-delete" 
+    button-delete 
+    data-api=api
+    ) <i class="fa-regular fa-trash-can"></i>

@@ -1,0 +1,8 @@
+mixin pagination(paginationData, modelList)
+  span(class="inner-label") 
+    | Hiển thị #{modelList.length === 0 ? 0 : paginationData.skip + 1}
+    | - #{paginationData.skip + modelList.length}
+    | của #{paginationData.totalRecord}
+  select(class="inner-pagination" pagination)
+    - for(let i = 1; i <= paginationData.totalPage; i++)
+      option(value=i) Trang #{i}

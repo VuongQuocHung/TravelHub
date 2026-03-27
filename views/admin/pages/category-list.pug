@@ -1,4 +1,9 @@
 extends ../layouts/default.pug
+include ../mixins/filter.pug 
+include ../mixins/change-multi.pug 
+include ../mixins/search.pug 
+include ../mixins/buttons.pug 
+include ../mixins/pagination.pug 
 
 block main
   h1.box-title Quản lý danh mục
@@ -8,43 +13,30 @@ block main
     .inner-wrap
       .inner-item.inner-label
         <i class="fa-solid fa-filter"></i> Bộ lọc
-      .inner-item
-        select(filter="status")
-          option(value="") Trạng thái
-          option(value="active") Hoạt động
-          option(value="inactive") Tạm dừng
-      .inner-item
-        select(filter="createdBy")
-          option(value="") Người tạo
-          each item in accountAdminList
-            if item.fullName
-              option(value=item.id) #{item.fullName}
+        +filter-status([
+          { value: 'active', label: 'Hoạt động' },
+          { value: 'inactive', label: 'Tạm dừng' }
+        ])
 
-      .inner-item.inner-date
-        input(type="date" filter="fromDate")
-        span -
-        input(type="date" filter="toDate")
-      .inner-item.inner-reset(filter-reset)
-        <i class="fa-solid fa-rotate-left"></i> Xóa bộ lọc
+      +filter-created-by(accountAdminList)
+
+      +filter-date()
+      
+      +filter-reset()
   //- End Section 4
 
   //- Section 5
   .section-5
     .inner-wrap
-      .inner-change-status(change-multi data-api = `/${pathAdmin}/category/change-multi`)
-        .inner-item
-          select()
-            option(value="") -- Hành động --
-            option(value="active") Hoạt động
-            option(value="inactive") Dừng hoạt động
-            option(value="delete") Xóa
-        .inner-item   
-          button Áp dụng
-      .inner-search
-        <i class="fa-solid fa-magnifying-glass"></i>
-        input(type="text" placeholder="Tìm kiếm" search)
-      .inner-button-create
-        a(href=`/${pathAdmin}/category/create`)  + Tạo mới
+      +change-multi-status(`/${pathAdmin}/category/change-multi`, [
+        { value: 'active', label: 'Hoạt động' },
+        { value: 'inactive', label: 'Tạm dừng' },
+        { value: 'delete', label: 'Xóa' },
+      ])
+      
+      +search()
+
+      +button-create(`/${pathAdmin}/category/create`)
   //- End Section 5
 
   //- Section 6
@@ -84,26 +76,15 @@ block main
                 div.inner-time #{item.updateAtFormat}
               td
                 .inner-buttons
-                  a(href=`/${pathAdmin}/category/edit/${item.id}` class="inner-edit") 
-                    <i class="fa-regular fa-pen-to-square"></i>
-                  button(
-                    class="inner-delete" 
-                  button-delete 
-                  data-api=`/${pathAdmin}/category/delete/${item.id}`
-                  ) <i class="fa-regular fa-trash-can"></i>
-
+                  +button-edit(`/${pathAdmin}/category/edit/${item.id}`)
+                  +button-delete(`/${pathAdmin}/category/delete/${item.id}`)
+                  
           
   //- End Section 6
 
   //- Section 7
   .section-7
-    span(class="inner-label") 
-      | Hiển thị #{paginationData.skip + 1}
-      | - #{paginationData.skip + categoryList.length}
-      | của #{paginationData.totalRecord}
-    select(class="inner-pagination" pagination)
-      - for(let i = 1; i <= paginationData.totalPage; i++)
-        option(value=i) Trang #{i}
+    +pagination(paginationData, categoryList)
 
   //- End Section 7
 

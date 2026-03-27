@@ -85,7 +85,7 @@ block main
   //- Section 7
   .section-7
     span(class="inner-label") 
-      | Hiển thị #{paginationData.skip + 1}
+      | Hiển thị #{tourList.length === 0 ? 0 : paginationData.skip + 1}
       | - #{paginationData.skip + tourList.length}
       | của #{paginationData.totalRecord}
     select(class="inner-pagination" pagination)

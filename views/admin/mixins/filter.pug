@@ -1,0 +1,24 @@
+mixin filter-status(options)
+  .inner-item
+    select(filter="status")
+      option(value="") Trạng thái
+      each item in options 
+        option(value=item.value) #{item.label}
+
+mixin filter-created-by(accountAdminList)
+  .inner-item
+    select(filter="createdBy")
+      option(value="") Người tạo
+      each item in accountAdminList
+        if item.fullName
+          option(value=item.id) #{item.fullName}
+
+mixin filter-date()
+  .inner-item.inner-date
+    input(type="date" filter="fromDate")
+    span -
+    input(type="date" filter="toDate")
+
+mixin filter-reset()
+  .inner-item.inner-reset(filter-reset)
+    <i class="fa-solid fa-rotate-left"></i> Xóa bộ lọc

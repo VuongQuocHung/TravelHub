@@ -1,0 +1,9 @@
+mixin change-multi-status(api, options)
+  .inner-change-status(change-multi data-api = api)
+    .inner-item
+      select()
+        option(value="") -- Hành động --
+        each item in options 
+          option(value=item.value) #{item.label}
+    .inner-item   
+      button Áp dụng
