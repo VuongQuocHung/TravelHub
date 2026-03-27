@@ -436,3 +436,39 @@ module.exports.trash = async (req, res) => {
   });
 }
 
+// Hàm khôi phục tour đã xóa
+module.exports.undoPatch = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    const tourDetail = await Tour.findOne({
+      _id: id,
+      deleted: true // tìm tour đã xóa khớp với id gửi lên
+    });
+
+    if(!tourDetail) {
+      res.json({
+        code: "error",
+        message: "Tour không tồn tại!"
+      })
+      return;
+    }
+    
+    await Tour.updateOne({
+      _id: id
+    }, {
+      deleted: false, // khôi phục tour
+    });
+
+    res.json({
+      code: "success",
+      message: "Khôi phục tour thành công!"
+    });
+  } catch (error) {
+    res.json({
+      code: "error",
+      message: "Dữ liệu không hợp lệ!"
+    });
+  }
+}
+

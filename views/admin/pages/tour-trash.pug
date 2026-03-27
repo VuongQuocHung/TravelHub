@@ -68,12 +68,13 @@ block main
                 div.inner-time #{item.deletedAtFormat}
               td
                 .inner-buttons
-                  a(href=`/${pathAdmin}/tour/edit/${item.id}` class="inner-edit") <i class="fa-regular fa-pen-to-square"></i>
                   button(
-                    class="inner-delete" 
-                  button-delete 
-                  data-api=`/${pathAdmin}/tour/delete/${item.id}`
-                  ) <i class="fa-regular fa-trash-can"></i>
+                    class="inner-undo" 
+                    button-delete 
+                    data-api=`/${pathAdmin}/tour/undo/${item.id}`
+                  ) <i class="fa-solid fa-rotate-left"></i>
+                  button(class="inner-delete") <i class="fa-regular fa-trash-can"></i>
+
   //- End Section 6
 
   //- Section 7
