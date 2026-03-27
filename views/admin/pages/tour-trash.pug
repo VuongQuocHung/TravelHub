@@ -73,7 +73,11 @@ block main
                     button-delete 
                     data-api=`/${pathAdmin}/tour/undo/${item.id}`
                   ) <i class="fa-solid fa-rotate-left"></i>
-                  button(class="inner-delete") <i class="fa-regular fa-trash-can"></i>
+                  button(
+                    class="inner-delete" 
+                    button-delete 
+                    data-api=`/${pathAdmin}/tour/delete-eternal/${item.id}`
+                  ) <i class="fa-regular fa-trash-can"></i>
 
   //- End Section 6
 

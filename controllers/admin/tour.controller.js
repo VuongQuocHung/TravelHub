@@ -472,3 +472,36 @@ module.exports.undoPatch = async (req, res) => {
   }
 }
 
+module.exports.deleteEternal = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    const tourDetail = await Tour.findOne({
+      _id: id,
+      deleted: true // phải vào thùng rác mới xóa vĩnh viễn được
+    });
+
+    if(!tourDetail) {
+      res.json({
+        code: "error",
+        message: "Tour không tồn tại!"
+      })
+      return;
+    }
+    
+    await Tour.deleteOne({ // hàm này dùng để xóa hẳn 1 bản ghi
+      _id: id
+    });
+
+    res.json({
+      code: "success",
+      message: "Đã xóa vĩnh viên tour !"
+    });
+  } catch (error) {
+    res.json({
+      code: "error",
+      message: "Dữ liệu không hợp lệ!"
+    });
+  }
+}
+
