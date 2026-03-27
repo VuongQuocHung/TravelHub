@@ -363,8 +363,76 @@ module.exports.changeMultiPatch = async (req, res) => {
 }
 
 module.exports.trash = async (req, res) => {
+
+  const target = {
+    deleted: true
+  };
+
+  // Tìm kiếm
+  if(req.query.keyword){
+    const keyword = slugify(req.query.keyword);
+    const regex = new RegExp(keyword, "i");
+    target.slug = regex;
+  }
+  // Hết Tìm Kiếm
+
+  // Pagination
+  const limit = 3;
+  let page = 1;
+  if(req.query.page) {
+    const currentPage = parseInt(req.query.page);
+    if(currentPage > 0) {
+      page = currentPage;
+    }
+  }
+  const skip = (page - 1) * limit;
+  const totalRecord = await Tour.countDocuments(target); // đếm các bản ghi thỏa mãn điều kiện
+  const totalPage = Math.ceil(totalRecord/limit); // làm tròn lên
+  const paginationData = {
+    skip: skip,
+    totalRecord: totalRecord,
+    totalPage: totalPage
+  };
+  // Hết Pagination
+
+  const tourList = await Tour
+    .find(target)
+    .sort({
+      deletedAt: "desc"
+    })
+    .limit(limit)
+    .skip(skip);
+
+  for(const item of tourList){
+    if(item.createdAt){
+      const infoCreater = await AccountAdmin.findOne({
+        _id: item.createdBy 
+      })
+      if(infoCreater){
+        item.createByName = infoCreater.fullName
+        item.createAtFormat = moment(item.createdAt).format("HH:mm DD/MM/YYYY");
+      }
+    }
+
+    if(item.deletedBy){
+      const infoUpdater = await AccountAdmin.findOne({
+        _id: item.deletedBy   
+      })
+      if(infoUpdater){  
+        item.deletedByName = infoUpdater.fullName
+        item.deletedAtFormat = moment(item.deletedAt).format("HH:mm DD/MM/YYYY");
+      }
+    }
+  }
+
+  // Danh sách tài khoản quản trị viên 
+  const accountAdminList = await AccountAdmin.find({}).select("id fullName email");
+  
   res.render('admin/pages/tour-trash', {
     pageTitle: 'Trang các tour đã xóa',
+    tourList: tourList,
+    accountAdminList: accountAdminList,
+    paginationData: paginationData
   });
 }
 
