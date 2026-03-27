@@ -43,14 +43,14 @@ block main
   //- Section 5
   .section-5
     .inner-wrap
-      .inner-change-status
+      .inner-change-status(change-multi data-api = `/${pathAdmin}/tour/change-multi`)
         .inner-item
-          select
+          select()
             option(value="") -- Hành động --
-            option(value="") Hoạt động
-            option(value="") Dừng hoạt động
-            option(value="") Xóa
-        .inner-item
+            option(value="active") Hoạt động
+            option(value="inactive") Dừng hoạt động
+            option(value="delete") Xóa
+        .inner-item   
           button Áp dụng
       .inner-search
         <i class="fa-solid fa-magnifying-glass"></i>
@@ -79,41 +79,45 @@ block main
             th Cập nhật bởi
             th Hành động
         tbody
-          each item in tourList
-            tr
-              td(class="inner-center")
-                input(type="checkbox" class="inner-check" check-item=item.id)
-              td #{item.name}
-              td
-                img(src=item.avatar class="inner-avatar")
-              td
-                div NL: #{item.priceNewAdult.toLocaleString("vi-VN")}đ
-                div TE: #{item.priceNewChildren.toLocaleString("vi-VN")}đ
-                div EB: #{item.priceNewBaby.toLocaleString("vi-VN")}đ
-              td
-                div NL: #{item.stockAdult}
-                div TE: #{item.stockChildren}
-                div EB: #{item.stockBaby}
-              td(class="inner-center") #{item.position}
-              td(class="inner-center")
-                if(item.status == 'active')
-                  .badge.badge-green Hoạt động
-                else if(item.status == 'inactive')
-                  .badge.badge-red Tạm dừng
-              td
-                div #{item.createByName}
-                div.inner-time #{item.createAtFormat}
-              td
-                div #{item.updateByName}
-                div.inner-time #{item.updateAtFormat}
-              td
-                .inner-buttons
-                  a(href=`/${pathAdmin}/tour/edit/${item.id}` class="inner-edit") <i class="fa-regular fa-pen-to-square"></i>
-                  button(
-                    class="inner-delete" 
-                  button-delete 
-                  data-api=`/${pathAdmin}/tour/delete/${item.id}`
-                  ) <i class="fa-regular fa-trash-can"></i>
+          if(tourList.length > 0)
+            each item in tourList
+              tr
+                td(class="inner-center")
+                  input(type="checkbox" class="inner-check" check-item=item.id)
+                td #{item.name}
+                td
+                  img(src=item.avatar class="inner-avatar")
+                td
+                  div NL: #{item.priceNewAdult.toLocaleString("vi-VN")}đ
+                  div TE: #{item.priceNewChildren.toLocaleString("vi-VN")}đ
+                  div EB: #{item.priceNewBaby.toLocaleString("vi-VN")}đ
+                td
+                  div NL: #{item.stockAdult}
+                  div TE: #{item.stockChildren}
+                  div EB: #{item.stockBaby}
+                td(class="inner-center") #{item.position}
+                td(class="inner-center")
+                  if(item.status == 'active')
+                    .badge.badge-green Hoạt động
+                  else if(item.status == 'inactive')
+                    .badge.badge-red Tạm dừng
+                td
+                  div #{item.createByName}
+                  div.inner-time #{item.createAtFormat}
+                td
+                  div #{item.updateByName}
+                  div.inner-time #{item.updateAtFormat}
+                td
+                  .inner-buttons
+                    a(href=`/${pathAdmin}/tour/edit/${item.id}` class="inner-edit") <i class="fa-regular fa-pen-to-square"></i>
+                    button(
+                      class="inner-delete" 
+                    button-delete 
+                    data-api=`/${pathAdmin}/tour/delete/${item.id}`
+                    ) <i class="fa-regular fa-trash-can"></i>
+          else 
+            tr  
+              td(colspan="10") Không có dữ liệu
   //- End Section 6
 
   //- Section 7

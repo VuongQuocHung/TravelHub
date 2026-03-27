@@ -26,4 +26,6 @@ router.get('/edit/:id', tourController.edit);
 
 router.patch('/delete/:id', tourController.deletePatch);
 
+router.patch('/change-multi', tourController.changeMultiPatch);
+
 module.exports = router;  

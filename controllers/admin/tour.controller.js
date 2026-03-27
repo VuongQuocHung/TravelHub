@@ -314,6 +314,54 @@ module.exports.deletePatch = async (req, res) => {
   }
 }
 
+module.exports.changeMultiPatch = async (req, res) => {
+  try {
+    const { listId, option } = req.body;
+
+    switch (option) {
+      case "active":
+      case "inactive":
+        await Tour.updateMany({
+          _id: { $in: listId },
+          deleted: false
+        }, {
+          status: option,
+          updatedBy: req.account.id
+        });
+        res.json({
+          code: "success",
+          message: "Đã cập nhật trạng thái!"
+        })
+        break;
+      case "delete":
+        await Tour.updateMany({
+          _id: { $in: listId },
+          deleted: false
+        }, {
+          deleted: true,
+          deletedBy: req.account.id,
+          deletedAt: Date.now()
+        });
+        res.json({
+          code: "success",
+          message: "Đã xóa tour!"
+        })
+        break;
+      default:
+        res.json({
+          code: "error",
+          message: "Dữ liệu không hợp lệ!"
+        })
+        break;
+    }
+  } catch (error) {
+    res.json({
+      code: "error",
+      message: "Dữ liệu không hợp lệ!"
+    })
+  }
+}
+
 module.exports.trash = async (req, res) => {
   res.render('admin/pages/tour-trash', {
     pageTitle: 'Trang các tour đã xóa',
