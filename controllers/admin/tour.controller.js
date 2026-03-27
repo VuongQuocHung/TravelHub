@@ -333,6 +333,7 @@ module.exports.changeMultiPatch = async (req, res) => {
           message: "Đã cập nhật trạng thái!"
         })
         break;
+
       case "delete":
         await Tour.updateMany({
           _id: { $in: listId },
@@ -347,6 +348,31 @@ module.exports.changeMultiPatch = async (req, res) => {
           message: "Đã xóa tour!"
         })
         break;
+
+      case "undo": // khôi phục
+        await Tour.updateMany({
+          _id: { $in: listId },
+          deleted: true // tìm các bản ghi đang ở trong thùng rác
+        }, {
+          deleted: false // khôi phục lại các bản ghi
+        });
+        res.json({
+          code: "success",
+          message: "Khôi phục các tour đã xóa thành công!"
+        })
+        break;
+
+      case "delete-eternal": // xóa vĩnh viễn
+        await Tour.deleteMany({ // xóa nhiều bản ghi
+          _id: { $in: listId },
+          deleted: true // tìm các bản ghi đang ở trong thùng rác
+        });
+        res.json({
+          code: "success",
+          message: "Đã xóa vĩnh viễn tour!"
+        })
+        break;
+
       default:
         res.json({
           code: "error",
