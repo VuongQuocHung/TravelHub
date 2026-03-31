@@ -1,4 +1,7 @@
 const SettingWebsiteInfo = require("../../models/setting-website-info.model");
+const Role = require("../../models/role.model");
+const { permissionsList } = require("../../configs/variable.config");
+
 
 module.exports.list = (req, res) => {
   res.render('admin/pages/setting-list', {
@@ -42,6 +45,8 @@ module.exports.websiteInfoPatch = async (req, res) => {
 
 }
 
+
+
 module.exports.accountAdminList = async (req, res) => {
   res.render('admin/pages/setting-account-admin-list', {
     pageTitle: 'Trang tài khoản quản trị',
@@ -57,11 +62,32 @@ module.exports.accountAdminCreate = async (req, res) => {
 module.exports.roleList = async (req, res) => {
   res.render('admin/pages/setting-role-list', {
     pageTitle: 'Trang nhóm quyền',
+    permissionsList: permissionsList,
   });
 }
 
 module.exports.roleCreate = async (req, res) => {
   res.render('admin/pages/setting-role-create', {
     pageTitle: 'Trang tạo nhóm quyền',
+    permissionsList: permissionsList,
   });
+}
+
+module.exports.roleCreatePost = async (req, res) => {
+  try {
+    req.body.createBy = req.account.id;
+    
+    const newRecord = new Role(req.body);
+    await newRecord.save();
+    res.json({
+      code: "success",
+      message: "Tạo nhóm quyền thành công"
+    }) 
+  } catch (error) {
+    console.log(error);
+    res.json({
+      code: "error",
+      message: "Tạo nhóm quyền thất bại"
+    }) 
+  }
 }

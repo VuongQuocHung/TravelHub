@@ -705,9 +705,28 @@ if(settingRoleCreateForm) {
       });
       // End permissions
 
-      console.log(name);
-      console.log(description);
-      console.log(permissions);
+      const dataFinal = {
+        name: name,
+        description: description,
+        permissions: permissions
+      };
+      fetch(`/${pathAdmin}/setting/role/create`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(dataFinal)
+      })
+        .then(res => res.json())
+        .then(data => {
+          if(data.code == "error") {
+            notyf.error(data.message); // Hiển thị thông báo nhưng không reload trang 
+          }
+          if(data.code == "success") {
+            drawNotyf(data.code, data.message); // Hiển thị thông báo nhưng có reload trang
+            window.location.reload(); // Load lại trang
+          }
+        })
     })
   ;
 }
