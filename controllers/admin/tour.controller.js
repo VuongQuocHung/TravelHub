@@ -358,7 +358,7 @@ module.exports.changeMultiPatch = async (req, res) => {
         });
         res.json({
           code: "success",
-          message: "Khôi phục các tour đã xóa thành công!"
+          message: "Khôi phục tour đã xóa thành công!"
         })
         break;
 

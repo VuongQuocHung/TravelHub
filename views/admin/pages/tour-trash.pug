@@ -1,5 +1,9 @@
 extends ../layouts/default.pug
-
+include ../mixins/filter.pug 
+include ../mixins/change-multi.pug 
+include ../mixins/search.pug 
+include ../mixins/buttons.pug 
+include ../mixins/pagination.pug 
 
 block main
   h1.box-title Thùng rác tour
@@ -7,18 +11,12 @@ block main
   //- Section 5
   .section-5
     .inner-wrap
-      .inner-change-status(change-multi data-api = `/${pathAdmin}/tour/change-multi`)
-        .inner-item
-          select()
-            option(value="") -- Hành động --
-            option(value="undo") Khôi phục
-            option(value="delete-eternal") Xóa vĩnh viễn
-
-        .inner-item   
-          button Áp dụng
-      .inner-search
-        <i class="fa-solid fa-magnifying-glass"></i>
-        input(type="text" placeholder="Tìm kiếm" search)
+      +change-multi-status(`/${pathAdmin}/tour/change-multi`, [
+        { value: 'undo', label: 'Khôi phục' },
+        { value: 'delete-eternal', label: 'Xóa vĩnh viễn' },
+      ])
+      
+      +search()
   //- End Section 5
 
   //- Section 6
