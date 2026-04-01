@@ -730,7 +730,63 @@ if(settingRoleCreateForm) {
     })
   ;
 }
-// End Setting Role Create Form
+
+// Setting Role Edit Form
+const settingRoleEditForm = document.querySelector("#setting-role-edit-form");
+if(settingRoleEditForm) {
+  const validation = new JustValidate('#setting-role-edit-form');
+
+  validation
+    .addField('#name', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng nhập tên nhóm quyền!'
+      },
+    ])
+    .onSuccess((event) => {
+      const name = event.target.name.value;
+      const description = event.target.description.value;
+      const permissions = [];
+      const id = event.target.id.value;
+
+      if(!id) {
+        notyf.error("Không tìm thấy ID nhóm quyền để cập nhật");
+        return;
+      }
+
+      // permissions
+      const listElementPermission = settingRoleEditForm.querySelectorAll('input[name="permissions"]:checked');
+      listElementPermission.forEach(input => {
+        permissions.push(input.value);
+      });
+      // End permissions
+
+      const dataFinal = {
+        name: name,
+        description: description,
+        permissions: permissions
+      };  
+      fetch(`/${pathAdmin}/setting/role/edit/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(dataFinal)
+      })
+        .then(res => res.json())
+        .then(data => {
+          if(data.code == "error") {
+            notyf.error(data.message); // Hiển thị thông báo nhưng không reload trang 
+          }
+          if(data.code == "success") {
+            drawNotyf(data.code, data.message); // Hiển thị thông báo nhưng có reload trang
+            window.location.reload(); // Load lại trang
+          }
+        })
+    })
+  ;
+}
+// End Setting Role Edit Form
 
 // Profile Edit Form
 const profileEditForm = document.querySelector("#profile-edit-form");
@@ -951,7 +1007,7 @@ if(listButtonDelete){
 // }
 // End Filter Created By 
 
-// Filter 
+// Filter (gộp của cả 2 filter Status & Created By ở trên và các filter khác nếu có)
 const listFilter = document.querySelectorAll("[filter]");
 if(listFilter.length > 0){
   const url = new URL(window.location.href);

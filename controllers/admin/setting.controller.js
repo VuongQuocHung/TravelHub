@@ -60,9 +60,17 @@ module.exports.accountAdminCreate = async (req, res) => {
 }
 
 module.exports.roleList = async (req, res) => {
+  const roleList = await Role
+    .find({
+      deleted: false
+    })
+    .sort({
+      createdAt: "desc"
+    });
+
   res.render('admin/pages/setting-role-list', {
     pageTitle: 'Trang nhóm quyền',
-    permissionsList: permissionsList,
+    roleList: roleList
   });
 }
 
@@ -76,7 +84,7 @@ module.exports.roleCreate = async (req, res) => {
 module.exports.roleCreatePost = async (req, res) => {
   try {
     req.body.createBy = req.account.id;
-    
+
     const newRecord = new Role(req.body);
     await newRecord.save();
     res.json({
@@ -89,5 +97,75 @@ module.exports.roleCreatePost = async (req, res) => {
       code: "error",
       message: "Tạo nhóm quyền thất bại"
     }) 
+  }
+}
+
+module.exports.roleEdit = async (req, res) => {
+  try {
+    const id = req.params.id;
+    console.log("id = " + id);
+    
+    const roleDetail = await Role.findOne({
+      _id: id,
+      deleted: false
+    });
+
+    if(!roleDetail){
+      res.redirect('/admin/setting/role/list');
+    }
+
+    console.log(roleDetail.permissions);
+    console.log(permissionsList);
+
+    res.render('admin/pages/setting-role-edit', {
+      pageTitle: 'Trang chỉnh sửa nhóm quyền',
+      permissionsList: permissionsList,
+      roleDetail: roleDetail
+    });
+
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+module.exports.roleEditPatch = async (req, res) => {
+  try {
+    const id = req.params.id;
+    console.log(id);
+    const tourDetail = await Role.findOne({
+      _id: id,
+      deleted: false
+    });
+    console.log(tourDetail);
+    if(!id){  
+      return res.json({
+      code: "error",
+      message: "Thiếu ID"
+    });
+}
+
+    if(!tourDetail){
+      res.json({
+        code: "error",
+        message: "Nhóm quyền không tồn tại"
+      })
+      return;
+    }
+
+    req.body.updateBy = req.account.id;
+    await Role.updateOne({
+      _id: id
+    }, req.body);
+
+    res.json({
+      code: "success",
+      message: "Cập nhật nhóm quyền thành công"
+    }) 
+  } catch (error) {
+    console.log(error);
+    res.json({
+      code: "error",
+      message: "Cập nhật nhóm quyền thất bại"
+    })
   }
 }
