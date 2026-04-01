@@ -44,4 +44,6 @@ router.get('/role/trash/', settingController.roleTrash);
 
 router.patch('/role/undo/:id', settingController.roleUndoPatch);
 
+router.patch('/role/delete-eternal/:id', settingController.roleDeleteEternal);
+
 module.exports = router;  

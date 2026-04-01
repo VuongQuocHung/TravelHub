@@ -44,8 +44,6 @@ module.exports.websiteInfoPatch = async (req, res) => {
 
 }
 
-
-
 module.exports.accountAdminList = async (req, res) => {
   res.render('admin/pages/setting-account-admin-list', {
     pageTitle: 'Trang tài khoản quản trị',
@@ -197,6 +195,40 @@ module.exports.roleDeletePatch = async (req, res) => {
     res.json({
       code: "success",
       message: "Xóa nhóm quyền thành công"
+    }) ;
+  } catch (error) {
+    console.log(error);
+    res.json({
+      code: "error",
+      message: "Xóa nhóm quyền thất bại"
+    }) ;
+  }
+}
+
+module.exports.roleDeleteEternal = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    const roleDetail = await Role.findOne({
+      _id: id,
+      deleted: true
+    });
+
+    if(!roleDetail){
+      res.json({
+        code: "error",
+        message: "Nhóm quyền không tồn tại"
+      })
+      return;
+    }
+    
+    await Role.deleteOne({
+      _id: id
+    })
+
+    res.json({
+      code: "success",
+      message: "Xóa vĩnh viễn role thành công"
     }) ;
   } catch (error) {
     console.log(error);
