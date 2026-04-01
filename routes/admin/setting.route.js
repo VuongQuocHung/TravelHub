@@ -38,4 +38,6 @@ router.get('/role/edit/:id', settingController.roleEdit);
 
 router.patch('/role/edit/:id', settingController.roleEditPatch);
 
+router.patch('/role/delete/:id', settingController.roleDeletePatch);
+
 module.exports = router;  

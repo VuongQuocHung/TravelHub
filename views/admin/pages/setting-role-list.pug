@@ -10,17 +10,12 @@ block main
   //- Section 5
   .section-5
     .inner-wrap
-      .inner-change-status
-        .inner-item
-          select
-            option(value="") -- Hành động --
-            option(value="") Xóa
-        .inner-item
-          button Áp dụng
-      .inner-search
-        +search()
-      .inner-button-create
-        a(href=`/${pathAdmin}/setting/role/create`)  + Tạo mới
+      +change-multi-status(`/${pathAdmin}/tour/change-multi`, [
+        { value: 'delete', label: 'Xóa' },
+      ])
+      +search()
+      +button-create(`/${pathAdmin}/setting/role/create`)
+
   //- End Section 5
 
   //- Section 6

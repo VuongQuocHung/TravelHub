@@ -2,7 +2,6 @@ const SettingWebsiteInfo = require("../../models/setting-website-info.model");
 const Role = require("../../models/role.model");
 const { permissionsList } = require("../../configs/variable.config");
 
-
 module.exports.list = (req, res) => {
   res.render('admin/pages/setting-list', {
     pageTitle: 'Trang cài đặt chung',
@@ -167,5 +166,43 @@ module.exports.roleEditPatch = async (req, res) => {
       code: "error",
       message: "Cập nhật nhóm quyền thất bại"
     })
+  }
+}
+
+module.exports.roleDeletePatch = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    const roleDetail = await Role.findOne({
+      _id: id,
+      deleted: false
+    });
+
+    if(!roleDetail){
+      res.json({
+        code: "error",
+        message: "Nhóm quyền không tồn tại"
+      })
+      return;
+    }
+    
+    await Role.updateOne({
+      _id: id
+    }, {
+      deleted: true,
+      deletedBy: req.account.id,
+      deletedAt: Date.now()
+     });
+
+    res.json({
+      code: "success",
+      message: "Xóa nhóm quyền thành công"
+    }) ;
+  } catch (error) {
+    console.log(error);
+    res.json({
+      code: "error",
+      message: "Xóa nhóm quyền thất bại"
+    }) ;
   }
 }
