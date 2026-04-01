@@ -11,6 +11,7 @@ block main
     .inner-wrap
       +change-multi-status(`/${pathAdmin}/setting/role/change-multi`, [
         { value: 'undo', label: 'Khôi phục' },
+        { value: 'delete-eternal', label: 'Xóa vĩnh viễn' },
       ])
       +search()
 
@@ -47,5 +48,7 @@ block main
                     button-delete 
                     data-api=`/${pathAdmin}/setting/role/delete-eternal/${role.id}`
                   ) <i class="fa-regular fa-trash-can"></i>
+    .inner-back
+      a(href=`/${pathAdmin}/setting/role/list`) Quay lại danh sách
                   
   //- End Section 6

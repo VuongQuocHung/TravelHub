@@ -1257,12 +1257,12 @@ a {
   opacity: 1;
 }
 
-.section-8 .inner-back {
+.inner-back {
   text-align: center;
   margin-top: 30px;
 }
 
-.section-8 .inner-back a {
+.inner-back a {
   font-weight: 700;
   font-size: 18px;
   color: var(--color-primary);

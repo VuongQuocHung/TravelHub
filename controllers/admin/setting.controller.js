@@ -255,7 +255,6 @@ module.exports.roleTrash = async (req, res) => {
 }
 
 module.exports.roleUndoPatch = async (req, res) => {
-  console.log("vao undo");
   try {
     const id = req.params.id;
     console.log(id);
@@ -288,6 +287,68 @@ module.exports.roleUndoPatch = async (req, res) => {
     res.json({
       code: "error",
       message: "Cập nhật nhóm quyền thất bại"
+    })
+  }
+}
+
+module.exports.roleChangeMultiPatch = async (req, res) => {
+  try {
+    const { listId, option } = req.body;
+    console.log(listId);
+    console.log(option);
+    switch (option) {
+      case "delete":
+        await Role.updateMany({
+          _id: { $in: listId},
+          deleted: false
+        }, {
+          deleted: true,
+          deletedBy: req.account.id,
+          deletedAt: Date.now()
+        });
+        res.json({
+          code: "success",
+          message: "Xóa nhóm quyền thành công"
+        }) 
+        break;
+
+      case "undo":
+        await Role.updateMany({
+          _id: { $in: listId},
+          deleted: true
+        }, {
+          deleted: false
+        });
+        res.json({
+          code: "success",
+          message: "Khôi phục nhóm quyền thành công"
+        }) 
+        break;
+
+      case "delete-eternal":
+        await Role.deleteMany({
+          _id: { $in: listId},
+          deleted: true
+        });
+        res.json({
+          code: "success",
+          message: "Xóa vĩnh viễn nhóm quyền thành công"
+        }) 
+        break;
+        
+      default:
+        res.json({
+          code: "error",
+          message: "Không có tùy chọn nào được chọn"
+        }) 
+        break;
+    }
+
+  } catch (error) {
+    console.log(error);
+    res.json({
+      code: "error",
+      message: "Thay đổi nhóm quyền thất bại"
     })
   }
 }

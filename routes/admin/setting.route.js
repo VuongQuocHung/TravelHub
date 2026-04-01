@@ -46,4 +46,6 @@ router.patch('/role/undo/:id', settingController.roleUndoPatch);
 
 router.patch('/role/delete-eternal/:id', settingController.roleDeleteEternal);
 
+router.patch('/role/change-multi/', settingController.roleChangeMultiPatch);
+
 module.exports = router;  
