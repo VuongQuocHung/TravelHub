@@ -131,11 +131,11 @@ module.exports.roleEditPatch = async (req, res) => {
   try {
     const id = req.params.id;
     console.log(id);
-    const tourDetail = await Role.findOne({
+    const roleDetail = await Role.findOne({
       _id: id,
       deleted: false
     });
-    console.log(tourDetail);
+    console.log(roleDetail);
     if(!id){  
       return res.json({
       code: "error",
@@ -143,7 +143,7 @@ module.exports.roleEditPatch = async (req, res) => {
     });
 }
 
-    if(!tourDetail){
+    if(!roleDetail){
       res.json({
         code: "error",
         message: "Nhóm quyền không tồn tại"
@@ -204,5 +204,58 @@ module.exports.roleDeletePatch = async (req, res) => {
       code: "error",
       message: "Xóa nhóm quyền thất bại"
     }) ;
+  }
+}
+
+module.exports.roleTrash = async (req, res) => {
+  const roleList = await Role
+    .find({
+      deleted: true
+    })
+    .sort({
+      createdAt: "desc"
+    });
+
+  res.render('admin/pages/setting-role-trash', {
+    pageTitle: 'Trang nhóm quyền đã xóa',
+    roleList: roleList
+  });
+}
+
+module.exports.roleUndoPatch = async (req, res) => {
+  console.log("vao undo");
+  try {
+    const id = req.params.id;
+    console.log(id);
+    const roleDetail = await Role.findOne({
+      _id: id,
+      deleted: true
+    });
+
+    if(!roleDetail){
+      res.json({
+        code: "error",
+        message: "Nhóm quyền không tồn tại"
+      })
+      return;
+    }
+    console.log(roleDetail);
+
+    await Role.updateOne({
+      _id: id
+    }, {
+      deleted: false,
+    });
+
+    res.json({
+      code: "success",
+      message: "Khôi phục nhóm quyền thành công"
+    }) 
+  } catch (error) {
+    console.log(error);
+    res.json({
+      code: "error",
+      message: "Cập nhật nhóm quyền thất bại"
+    })
   }
 }
