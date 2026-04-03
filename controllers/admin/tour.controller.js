@@ -43,6 +43,8 @@ module.exports.list = async (req, res) => {
     const keyword = slugify(req.query.keyword);
     const regex = new RegExp(keyword, "i");
     target.slug = regex;
+    console.log("target tìm kiếm: " + target.slug);
+    console.log("keyword tìm kiếm: " + keyword);
   }
   // Hết Tìm Kiếm
 
@@ -441,11 +443,11 @@ module.exports.trash = async (req, res) => {
     }
 
     if(item.deletedBy){
-      const infoUpdater = await AccountAdmin.findOne({
+      const infoDeleter = await AccountAdmin.findOne({
         _id: item.deletedBy   
       })
-      if(infoUpdater){  
-        item.deletedByName = infoUpdater.fullName
+      if(infoDeleter){  
+        item.deletedByName = infoDeleter.fullName
         item.deletedAtFormat = moment(item.deletedAt).format("HH:mm DD/MM/YYYY");
       }
     }

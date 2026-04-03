@@ -3,6 +3,7 @@ include ../mixins/filter.pug
 include ../mixins/change-multi.pug 
 include ../mixins/search.pug 
 include ../mixins/buttons.pug 
+include ../mixins/back.pug 
 
 block main
   h1.box-title #{pageTitle}
@@ -49,6 +50,6 @@ block main
                     data-api=`/${pathAdmin}/setting/role/delete-eternal/${role.id}`
                   ) <i class="fa-regular fa-trash-can"></i>
     .inner-back
-      a(href=`/${pathAdmin}/setting/role/list`) Quay lại danh sách
+      +back(`/${pathAdmin}/setting/role/list`)
                   
   //- End Section 6

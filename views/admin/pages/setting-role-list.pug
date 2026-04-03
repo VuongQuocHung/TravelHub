@@ -3,6 +3,8 @@ include ../mixins/filter.pug
 include ../mixins/change-multi.pug 
 include ../mixins/search.pug 
 include ../mixins/buttons.pug 
+include ../mixins/pagination.pug
+include ../mixins/trash.pug
 
 block main
   h1.box-title Nhóm quyền
@@ -13,11 +15,12 @@ block main
       +change-multi-status(`/${pathAdmin}/setting/role/change-multi`, [
         { value: 'delete', label: 'Xóa' },
       ])
+
       +search()
+
       +button-create(`/${pathAdmin}/setting/role/create`)
       
-      .inner-button-trash 
-        a(href=`/${pathAdmin}/setting/role/trash`) Thùng rác
+      +trash(`/${pathAdmin}/setting/role/trash`)
 
   //- End Section 5
 

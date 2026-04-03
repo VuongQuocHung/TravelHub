@@ -12,3 +12,17 @@ mixin button-delete(api)
     button-delete 
     data-api=api
     ) <i class="fa-regular fa-trash-can"></i>
+
+mixin button-undo(api_link)
+  button(
+    class="inner-undo" 
+    button-delete  
+    data-api=api_link
+  ) <i class="fa-solid fa-rotate-left"></i>
+
+mixin button-delete-eternal(api_link)
+  button(
+    class="inner-delete" 
+    button-delete 
+    data-api=api_link
+  ) <i class="fa-regular fa-trash-can"></i>

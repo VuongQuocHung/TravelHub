@@ -3,6 +3,7 @@ include ../mixins/filter.pug
 include ../mixins/change-multi.pug 
 include ../mixins/search.pug 
 include ../mixins/buttons.pug 
+include ../mixins/trash.pug
 include ../mixins/pagination.pug 
 
 block main
@@ -37,6 +38,8 @@ block main
       +search()
 
       +button-create(`/${pathAdmin}/category/create`)
+
+      +trash(`/${pathAdmin}/category/trash`)
   //- End Section 5
 
   //- Section 6

@@ -10,13 +10,14 @@ router.get('/list', categoryController.list);
 
 router.get('/create', categoryController.create);
 
+router.get('/trash', categoryController.trash);
+
 router.post('/create', 
   upload.single('avatar'), 
   categoryValidate.createPost,
   categoryController.createPost);
 
 router.get('/edit/:id', categoryController.edit);
-
 
 router.patch(
   '/edit/:id', 
@@ -28,5 +29,9 @@ router.patch(
 router.patch('/delete/:id', categoryController.deletePatch);
 
 router.patch('/change-multi', categoryController.changeMultiPatch);
+
+router.patch('/undo/:id', categoryController.undoPatch);
+
+router.patch('/delete-eternal/:id', categoryController.deleteEternal);
 
 module.exports = router;  

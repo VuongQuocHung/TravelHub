@@ -44,6 +44,7 @@ module.exports.list = async (req, res) => {
   }
   // Hết Tìm Kiếm
 
+  // Pagination
   const limit = 3;
   let page = 1;
   if(req.query.page) {
@@ -319,6 +320,144 @@ module.exports.changeMultiPatch = async (req, res) => {
       code: "error",
       message: "Dữ liệu không hợp lệ!"
     })
+  }
+}
+
+module.exports.trash = async (req, res) => {
+  const target = {
+    deleted: true
+  };
+
+  // Tìm kiếm
+  if(req.query.keyword){
+    const keyword = slugify(req.query.keyword);
+    const regex = new RegExp(keyword, "i");
+    target.slug = regex;
+  }
+  // Hết Tìm Kiếm
+
+  // Pagination
+  const limit = 9;
+  let page = 1;
+  if(req.query.page) {
+    const currentPage = parseInt(req.query.page);
+    if(currentPage > 0) {
+      page = currentPage;
+    }
+  }
+  const skip = (page - 1) * limit;
+  const totalRecord = await Category.countDocuments(target); // đếm các bản ghi thỏa mãn điều kiện
+  const totalPage = Math.ceil(totalRecord/limit); // làm tròn lên
+  const paginationData = {
+    skip: skip,
+    totalRecord: totalRecord,
+    totalPage: totalPage
+  };
+  // Hết Pagination
+
+  const categoryList = await Category
+    .find(target)
+    .sort({
+      deletedAt: "desc"
+    })
+    .limit(limit)
+    .skip(skip);
+
+  for(const item of categoryList){
+    if(item.createdAt){
+      const infoCreater = await AccountAdmin.findOne({
+        _id: item.createdBy 
+      })
+      if(infoCreater){
+        item.createByName = infoCreater.fullName
+        item.createAtFormat = moment(item.createdAt).format("HH:mm DD/MM/YYYY");
+      }
+    }
+
+    if(item.deletedBy){
+      const infoDeleter = await AccountAdmin.findOne({
+        _id: item.deletedBy   
+      })
+      if(infoDeleter){  
+        item.deletedByName = infoDeleter.fullName
+        item.deletedAtFormat = moment(item.deletedAt).format("HH:mm DD/MM/YYYY");
+      }
+    }
+  }
+
+
+  res.render('admin/pages/category-trash', {
+    pageTitle: 'Trang danh mục đã xóa',
+    categoryList: categoryList,
+    paginationData: paginationData
+  });
+}
+
+module.exports.undoPatch = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    const categoryDetail = await Category.findOne({
+      _id: id,
+      deleted: true // tìm danh mục đã xóa khớp với id gửi lên
+    });
+
+    if(!categoryDetail) {
+      res.json({
+        code: "error",
+        message: "Danh mục không tồn tại!"
+      })
+      return;
+    }
+    
+    await Category.updateOne({
+      _id: id
+    }, {
+      deleted: false, // khôi phục danh mục
+    });
+
+    res.json({
+      code: "success",
+      message: "Khôi phục danh mục thành công!"
+    });
+  } catch (error) {
+    res.json({
+      code: "error",
+      message: "Dữ liệu không hợp lệ!"
+    });
+  }
+}
+
+module.exports.deleteEternal = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    const categoryDetail = await Category.findOne({
+      _id: id,
+      deleted: true // phải vào thùng rác mới xóa vĩnh viễn được
+    });
+
+    if(!categoryDetail) {
+      res.json({
+        code: "error",
+        message: "Danh mục không tồn tại!"
+      })
+      return;
+    }
+    
+    await Category.deleteOne({ // hàm này dùng để xóa hẳn 1 bản ghi
+      _id: id
+    });
+
+    res.json({
+      code: "success",
+      message: "Đã xóa vĩnh viễn danh mục !"
+    });
+  } catch (error) {
+    res.json({
+      code: "error",
+      message: "Dữ liệu không hợp lệ!"
+    });
   }
 }
 
