@@ -3,7 +3,6 @@ const AccountAdmin = require("../../models/account-admin.model");
 const Category = require("../../models/category.model");
 const moment = require("moment");
 const slugify = require('slugify');
-
 module.exports.list = async (req, res) => {
   const target = {
     deleted: false
@@ -94,7 +93,25 @@ module.exports.list = async (req, res) => {
   }
 
   // Danh sách tài khoản quản trị viên 
-  const accountAdminList = await AccountAdmin.find({}).select("id fullName email");
+  const accountAdminList = await AccountAdmin.aggregate(
+  [{
+      $group: {
+        _id: "$fullName",
+        doc: { $first: "$$ROOT" } // lấy bản ghi đầu tiên
+      }
+    } ,
+    {
+      $replaceRoot: { newRoot: "$doc" }
+    },
+    {
+      $project: {
+        _id: 1,
+        fullName: 1,
+        email: 1
+      }
+    }
+  ]);
+
   // console.log("accountadminlist: " + accountAdminList);
 
   res.render('admin/pages/category-list', {
@@ -337,7 +354,7 @@ module.exports.trash = async (req, res) => {
   // Hết Tìm Kiếm
 
   // Pagination
-  const limit = 9;
+  const limit = 3;
   let page = 1;
   if(req.query.page) {
     const currentPage = parseInt(req.query.page);
