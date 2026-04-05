@@ -48,8 +48,27 @@ module.exports.websiteInfoPatch = async (req, res) => {
 }
 
 module.exports.accountAdminList = async (req, res) => {
+  const accountAdminList = await AccountAdmin.find({
+    deleted: false
+  }).sort({
+    createdAt: "desc"
+  })
+
+  for(const accountAdmin of accountAdminList){
+    if(accountAdmin.role){
+      const role = await Role.findOne({
+        _id: accountAdmin.role
+      });
+
+      if(role){
+        accountAdmin.roleName = role.name;
+      }
+    }
+  }
+
   res.render('admin/pages/setting-account-admin-list', {
     pageTitle: 'Trang tài khoản quản trị',
+    accountAdminList: accountAdminList
   });
 }
 
@@ -67,7 +86,7 @@ module.exports.accountAdminCreate = async (req, res) => {
 module.exports.accountAdminCreatePost = async (req, res) => {
   try {
     console.log(req.body);
-    
+
     const existingAccount = await AccountAdmin.findOne({
       email: req.body.email
     });
