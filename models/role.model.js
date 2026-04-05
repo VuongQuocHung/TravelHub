@@ -6,6 +6,11 @@ const schema = new mongoose.Schema(
     permissions: Array,
     createdBy: String,
     updatedBy: String,
+    slug: {
+      type: String,
+      slug: "name",
+      unique: true
+    },
     deleted: {
       type: Boolean,
       default: false

@@ -1,6 +1,7 @@
 const SettingWebsiteInfo = require("../../models/setting-website-info.model");
 const Role = require("../../models/role.model");
 const { permissionsList } = require("../../configs/variable.config");
+const slugify = require('slugify');
 
 module.exports.list = (req, res) => {
   res.render('admin/pages/setting-list', {
@@ -57,10 +58,18 @@ module.exports.accountAdminCreate = async (req, res) => {
 }
 
 module.exports.roleList = async (req, res) => {
+  const target = {
+    deleted: false
+  };
+
+  if(req.query.keyword){
+    const keyword = slugify(req.query.keyword);
+    const regex = new RegExp(keyword, "i");
+    target.slug = regex;
+  }
+
   const roleList = await Role
-    .find({
-      deleted: false
-    })
+    .find(target)
     .sort({
       createdAt: "desc"
     });
