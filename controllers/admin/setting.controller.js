@@ -2,6 +2,8 @@ const SettingWebsiteInfo = require("../../models/setting-website-info.model");
 const Role = require("../../models/role.model");
 const { permissionsList } = require("../../configs/variable.config");
 const slugify = require('slugify');
+const bcrypt = require("bcryptjs");
+const AccountAdmin = require("../../models/account-admin.model");
 
 module.exports.list = (req, res) => {
   res.render('admin/pages/setting-list', {
@@ -52,9 +54,51 @@ module.exports.accountAdminList = async (req, res) => {
 }
 
 module.exports.accountAdminCreate = async (req, res) => {
-  res.render('admin/pages/setting-account-admin-create', {
-    pageTitle: 'Trang tạo mới tài khoảng quản trị',
+  const roleList = await Role.find({
+    deleted: false
   });
+  
+  res.render('admin/pages/setting-account-admin-create', {
+    pageTitle: 'Trang tạo mới tài khoản quản trị',
+    roleList: roleList
+  });
+}
+
+module.exports.accountAdminCreatePost = async (req, res) => {
+  try {
+    console.log(req.body);
+    
+    const existingAccount = await AccountAdmin.findOne({
+      email: req.body.email
+    });
+
+    if(existingAccount){
+      return res.json({
+        code: "error",
+        message: "Email đã tồn tại"
+      }); 
+    }
+
+    const salt = await bcrypt.genSalt(10); //  Tạo salt - Chuỗi ngẫu nhiên có 10 ký tự
+    req.body.password = await bcrypt.hash(req.body.password, salt); // Mã hóa mật khẩu với salt
+
+    req.body.avatar = req.file ? req.file.path : ""; // Lưu đường dẫn ảnh vào trường avatar, nếu không có file nào được tải lên thì để trống
+    req.body.createdBy = req.account.id; // Lưu ID người tạo vào trường createdBy
+
+    const newRecord = new AccountAdmin(req.body);
+    await newRecord.save();
+    res.json({
+      code: "success",
+      message: "Tạo tài khoản quản trị thành công"
+    });
+
+  } catch (error) {
+    console.log(error);
+    res.json({
+      code: "error",
+      message: "Tạo tài khoản quản trị thất bại"
+    }) 
+  }
 }
 
 module.exports.roleList = async (req, res) => {
@@ -109,7 +153,6 @@ module.exports.roleCreatePost = async (req, res) => {
 module.exports.roleEdit = async (req, res) => {
   try {
     const id = req.params.id;
-    console.log("id = " + id);
     
     const roleDetail = await Role.findOne({
       _id: id,
