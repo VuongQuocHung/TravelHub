@@ -31,16 +31,42 @@ block main
           class="inner-control"
         )
       .inner-group
-        label(
-          class="inner-label"
-          for="password"
-        ) Mật khẩu
-        input(
-          type="password"
-          name="password"
-          id="password"
-          class="inner-control"
-        )
+        label(class="inner-label" for="password") Mật khẩu
+        .inner-password-wrapper
+          input(
+            type="password"
+            name="password"
+            id="password"
+            class="inner-control"
+            autocomplete="new-password"
+          )
+          button.inner-toggle-password(
+            type="button"
+            data-target="password"
+            aria-label="Hiện mật khẩu"
+            aria-pressed="false"
+          )
+            i.fa-solid.fa-eye
+            i.fa-solid.fa-eye-slash
+          
+      .inner-group
+        label(class="inner-label" for="passwordConfirm") Xác nhận mật khẩu
+        .inner-password-wrapper
+          input(
+            type="password"
+            name="passwordConfirm"
+            id="passwordConfirm"
+            class="inner-control"
+            autocomplete="new-password"
+          )
+          button.inner-toggle-password(
+            type="button"
+            data-target="passwordConfirm"
+            aria-label="Hiện xác nhận mật khẩu"
+            aria-pressed="false"
+          )
+            i.fa-solid.fa-eye
+            i.fa-solid.fa-eye-slash
       .inner-meta
         .inner-confirm
           input(

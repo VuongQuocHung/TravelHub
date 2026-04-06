@@ -1,20 +1,22 @@
 
 // Toggle Password (Show/Hide)
-const togglePasswordButtons = document.querySelectorAll(".inner-toggle-password");
-if (togglePasswordButtons.length) {
+const togglePasswordButtons = document.querySelectorAll(".inner-toggle-password"); // Lấy ra các con mắt ẩn/hiện
+if (togglePasswordButtons.length) { 
   togglePasswordButtons.forEach((button) => {
-    const targetId = button.getAttribute("data-target") || "password";
-    const passwordInput = document.getElementById(targetId);
+    const targetId = button.getAttribute("data-target") || "password"; // Lấy giá trị của thuộc tính data-target, nếu không có thì mặc định là "password"
+
+    const wrapper = button.closest(".inner-password-wrapper");
+    const passwordInput = wrapper?.querySelector("input") || document.getElementById(targetId);
     if (!passwordInput) return;
 
-    const syncState = () => {
-      const isShowing = passwordInput.type === "text";
-      button.classList.toggle("is-showing", isShowing);
-      button.setAttribute("aria-pressed", String(isShowing));
-      button.setAttribute("aria-label", isShowing ? "Ẩn mật khẩu" : "Hiện mật khẩu");
+    const syncState = () => { // Hàm để đồng bộ trạng thái hiển thị mật khẩu
+      const isShowing = passwordInput.type === "text"; // Thêm/xóa class → đổi icon
+      button.classList.toggle("is-showing", isShowing); // thêm class khi đang hiện mật khẩu (đổi icon)
+      button.setAttribute("aria-pressed", String(isShowing)); // hỗ trợ accessibility
+      button.setAttribute("aria-label", isShowing ? "Ẩn mật khẩu" : "Hiện mật khẩu"); // đọc cho screen reader
     };
 
-    syncState();
+    syncState(); // Đồng bộ trạng thái ban đầu khi trang được tải
     button.addEventListener("click", () => {
       passwordInput.type = passwordInput.type === "password" ? "text" : "password";
       syncState();
