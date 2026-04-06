@@ -123,7 +123,7 @@ module.exports.accountAdminEditPatch = async (req, res) => {
       _id: id,
       deleted: false
     });
-    console.log(accountAdminDetail);
+    // console.log(accountAdminDetail);
 
     if(!accountAdminDetail){
       res.json({
@@ -133,6 +133,22 @@ module.exports.accountAdminEditPatch = async (req, res) => {
       return;
     }
 
+    // Kiểm tra email đã tồn tại chưa 
+    const exsitEmail = await AccountAdmin.findOne({
+      email: req.body.email,
+      _id: { $ne: req.account.id} // $ne - not equal là toán tử "không bằng"
+    });
+    console.log(req.account.id);
+
+    if(exsitEmail){
+      return res.json({
+        code: "error",
+        message: "Email đã tồn tại"
+      }); 
+    }
+
+    req.body.avatar = req.file ? req.file.path : accountAdminDetail.avatar; // Nếu có file mới được tải lên thì cập nhật avatar, nếu không thì giữ nguyên avatar cũ
+
     req.body.updateBy = req.account.id;
     await AccountAdmin.updateOne({
       _id: id
@@ -140,7 +156,7 @@ module.exports.accountAdminEditPatch = async (req, res) => {
 
     res.json({
       code: "success",
-      message: "Cập nhật tài khoản quản trị thành công"
+      message: "Cập nhật thành công"
     }) 
   } catch (error) {
     console.log(error);
