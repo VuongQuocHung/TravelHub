@@ -83,6 +83,75 @@ module.exports.accountAdminCreate = async (req, res) => {
   });
 }
 
+module.exports.accountAdminEdit = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    // kiểm tra có tồn tại tài khoản admin với id và chưa bị xóa hay không
+    const accountAdmin = await AccountAdmin.findOne({
+      _id: id,
+      deleted: false
+    });
+
+    // nếu ko có thì trở về trang danh sách tài khoản admin
+    if(!accountAdmin){
+      res.redirect('/admin/setting/account-admin/list');
+    }
+
+    // lấy danh sách role để hiển thị ở dropdown chọn role khi chỉnh sửa tài khoản admin
+    const roleList = await Role.find({
+      deleted: false
+    });
+
+    res.render('admin/pages/setting-account-admin-edit', {
+      pageTitle: 'Trang chỉnh sửa tài khoản quản trị',
+      accountAdmin: accountAdmin,
+      roleList: roleList
+    });
+
+  } catch (error) {
+    console.log(error);
+    res.redirect('/admin/setting/account-admin/list');
+  }
+}
+
+module.exports.accountAdminEditPatch = async (req, res) => {
+  try {
+    const id = req.params.id;
+    console.log(id);
+    const accountAdminDetail = await AccountAdmin.findOne({
+      _id: id,
+      deleted: false
+    });
+    console.log(accountAdminDetail);
+
+    if(!accountAdminDetail){
+      res.json({
+        code: "error",
+        message: "Tài khoản quản trị không tồn tại"
+      })
+      return;
+    }
+
+    req.body.updateBy = req.account.id;
+    await AccountAdmin.updateOne({
+      _id: id
+    }, req.body);
+
+    res.json({
+      code: "success",
+      message: "Cập nhật tài khoản quản trị thành công"
+    }) 
+  } catch (error) {
+    console.log(error);
+    res.json({
+      code: "error",
+      message: "Cập nhật tài khoản quản trị thất bại"
+    })
+  }
+}
+
+
 module.exports.accountAdminCreatePost = async (req, res) => {
   try {
     console.log(req.body);

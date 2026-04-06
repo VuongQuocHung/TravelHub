@@ -697,6 +697,99 @@ if(settingAccountAdminCreateForm) {
 }
 // End Setting Account Admin Create Form
 
+// Setting Account Admin Edit Form
+const settingAccountAdminEditForm = document.querySelector("#setting-account-admin-edit-form");
+if(settingAccountAdminEditForm) {
+  const validation = new JustValidate('#setting-account-admin-edit-form');
+
+  validation
+    .addField('#fullName', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng nhập họ tên!'
+      },
+      {
+        rule: 'minLength',
+        value: 5,
+        errorMessage: 'Họ tên phải có ít nhất 5 ký tự!',
+      },
+      {
+        rule: 'maxLength',
+        value: 50,
+        errorMessage: 'Họ tên không được vượt quá 50 ký tự!',
+      },
+    ])
+    .addField('#email', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng nhập email!'
+      },
+      {
+        rule: 'email',
+        errorMessage: 'Email không đúng định dạng!',
+      },
+    ])
+    .addField('#phone', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng nhập số điện thoại!'
+      },
+      {
+        rule: 'customRegexp',
+        value: /(84|0[3|5|7|8|9])+([0-9]{8})\b/g,
+        errorMessage: 'Số điện thoại không đúng định dạng!'
+      },
+    ])
+    .addField('#positionCompany', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng nhập chức vụ!'
+      },
+    ])
+  
+    .onSuccess((event) => {
+      const id = event.target.id.value;
+      const fullName = event.target.fullName.value;
+      const email = event.target.email.value;
+      const phone = event.target.phone.value;
+      const role = event.target.role.value;
+      const positionCompany = event.target.positionCompany.value;
+      const status = event.target.status.value;
+      const avatars = filePond.avatar.getFiles();
+      let avatar = null;
+      if(avatars.length > 0) {
+        avatar = avatars[0].file;
+      }
+
+      const formData = new FormData();
+      formData.append("id", id);
+      formData.append("fullName", fullName);
+      formData.append("email", email);
+      formData.append("phone", phone);
+      formData.append("role", role);
+      formData.append("positionCompany", positionCompany);
+      formData.append("status", status);
+      formData.append("avatar", avatar);
+     
+      fetch(`/${pathAdmin}/setting/account-admin/edit/${id}`, {
+        method: "PATCH",
+        body: formData
+      })
+        .then(res => res.json())
+        .then(data => {
+          if(data.code == "error") {
+            notyf.error(data.message); // Hiển thị thông báo nhưng không reload trang
+          }
+          if(data.code == "success") {
+            drawNotyf(data.code, data.message); // Hiển thị thông báo nhưng có reload trang
+            window.location.reload(); // Load lại trang
+          }
+        })
+    })
+  ;
+}
+// End Setting Account Admin Edit Form
+
 // Setting Role Create Form
 const settingRoleCreateForm = document.querySelector("#setting-role-create-form");
 if(settingRoleCreateForm) {
