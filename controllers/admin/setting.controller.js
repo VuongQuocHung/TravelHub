@@ -118,7 +118,7 @@ module.exports.accountAdminEdit = async (req, res) => {
 module.exports.accountAdminEditPatch = async (req, res) => {
   try {
     const id = req.params.id;
-    console.log(id);
+    // console.log(id);
     const accountAdminDetail = await AccountAdmin.findOne({
       _id: id,
       deleted: false
@@ -138,7 +138,7 @@ module.exports.accountAdminEditPatch = async (req, res) => {
       email: req.body.email,
       _id: { $ne: req.account.id} // $ne - not equal là toán tử "không bằng"
     });
-    console.log(req.account.id);
+    // console.log(req.account.id);
 
     if(exsitEmail){
       return res.json({

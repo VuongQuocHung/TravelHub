@@ -1,6 +1,6 @@
-const { pathAdmin } = require("../../configs/variable.config");
 const jwt = require('jsonwebtoken');
 const AccountAdmin = require("../../models/account-admin.model");
+const Role = require("../../models/role.model");
 
 module.exports.verifyToken = async (req, res, next) => {
   try {
@@ -25,19 +25,24 @@ module.exports.verifyToken = async (req, res, next) => {
     }
 
     req.account = existAccount;
-
+    
     // Trả biến về cho bên FE
-    res.locals.account = {
-      id: existAccount.id,
-      fullName: existAccount.fullName,
-      email: existAccount.email
-    };
+    res.locals.account = existAccount;
+    // console.log("existAccount", existAccount);
 
+    // Tìm nhóm quyền của tài khoản
+    const roleInfo = await Role.findOne({
+      _id: existAccount.role
+    });
+
+    // console.log("roleInfo", roleInfo);
+    if(roleInfo){
+      // console.log("roleInfo.name", roleInfo.name);
+      res.locals.account.roleName = roleInfo.name;
+    }
     next();
   } catch (error) {
     res.clearCookie("token");
     res.redirect(`/${pathAdmin}/account/login`);
   }
-
-
 }
