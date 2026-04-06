@@ -167,6 +167,74 @@ module.exports.accountAdminEditPatch = async (req, res) => {
   }
 }
 
+module.exports.accountAdminEditPassword = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    // kiểm tra có tồn tại tài khoản admin với id và chưa bị xóa hay không
+    const accountAdmin = await AccountAdmin.findOne({
+      _id: id,
+      deleted: false
+    });
+
+    // nếu ko có thì trở về trang danh sách tài khoản admin
+    if(!accountAdmin){
+      res.redirect('/admin/setting/account-admin/list');
+    }
+
+    res.render('admin/pages/setting-account-admin-edit-password', {
+      pageTitle: 'Trang đổi mật khẩu tài khoản quản trị',
+      accountAdmin: accountAdmin
+    });
+
+  } catch (error) {
+    console.log(error);
+    res.redirect('/admin/setting/account-admin/list');
+  }
+}
+
+module.exports.accountAdminEditPasswordPatch = async (req, res) => {
+  try {
+    console.log("Chạy vào edit password patch");
+    const id = req.params.id;
+    const accountAdminDetail = await AccountAdmin.findOne({
+      _id: id,
+      deleted: false
+    });
+    console.log(id);
+    console.log(accountAdminDetail);
+
+    if(!accountAdminDetail){
+      res.json({
+        code: "error",
+        message: "Tài khoản quản trị không tồn tại"
+      })
+      return;
+    }
+
+    console.log(req.body);
+    const satl = await bcrypt.genSalt(10); //  Tạo salt - Chuỗi ngẫu nhiên có 10 ký tự
+    const hashedPassword = await bcrypt.hash(req.body.password, satl); // Mã hóa mật khẩu với salt
+
+    req.body.updateBy = req.account.id;
+    await AccountAdmin.updateOne({
+      _id: id
+    }, {
+      password: hashedPassword,
+    });
+
+    res.json({
+      code: "success",
+      message: "Đổi mật khẩu thành công"
+    }) 
+  } catch (error) {
+    console.log(error);
+    res.json({
+      code: "error",
+      message: "Cập nhật tài khoản quản trị thất bại"
+    })
+  }
+}
 
 module.exports.accountAdminCreatePost = async (req, res) => {
   try {

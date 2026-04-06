@@ -1,4 +1,28 @@
 
+// Toggle Password (Show/Hide)
+const togglePasswordButtons = document.querySelectorAll(".inner-toggle-password");
+if (togglePasswordButtons.length) {
+  togglePasswordButtons.forEach((button) => {
+    const targetId = button.getAttribute("data-target") || "password";
+    const passwordInput = document.getElementById(targetId);
+    if (!passwordInput) return;
+
+    const syncState = () => {
+      const isShowing = passwordInput.type === "text";
+      button.classList.toggle("is-showing", isShowing);
+      button.setAttribute("aria-pressed", String(isShowing));
+      button.setAttribute("aria-label", isShowing ? "Ẩn mật khẩu" : "Hiện mật khẩu");
+    };
+
+    syncState();
+    button.addEventListener("click", () => {
+      passwordInput.type = passwordInput.type === "password" ? "text" : "password";
+      syncState();
+      passwordInput.focus();
+    });
+  });
+}
+
 // Login Form
 const loginForm = document.querySelector("#login-form");
 if(loginForm) {

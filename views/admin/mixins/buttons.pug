@@ -26,3 +26,9 @@ mixin button-delete-eternal(api_link)
     button-delete 
     data-api=api_link
   ) <i class="fa-regular fa-trash-can"></i>
+
+mixin button-edit-password(link)
+  a(
+    href=link 
+    class="inner-edit"
+    ) <i class="fa-solid fa-key"></i>

@@ -4,7 +4,6 @@ block main
   .form-account
     h2.inner-title Đăng nhập
     p.inner-desc Vui lòng nhập email và mật khẩu để tiếp tục
-    
     form.inner-form#login-form
       .inner-group
         label(class="inner-label" for="email") Email
@@ -17,12 +16,23 @@ block main
         )
       .inner-group
         label(class="inner-label" for="password") Mật khẩu
-        input(
-          type="password"
-          name="password"
-          id="password"
-          class="inner-control"
-        )
+        .inner-password-wrapper
+          input(
+            type="password"
+            name="password"
+            id="password"
+            class="inner-control"
+            autocomplete="current-password"
+          )
+          button.inner-toggle-password(
+            type="button"
+            data-target="password"
+            aria-label="Hiện mật khẩu"
+            aria-pressed="false"
+          )
+            i.fa-solid.fa-eye
+            i.fa-solid.fa-eye-slash
+
       .inner-meta
         .inner-confirm
           input(

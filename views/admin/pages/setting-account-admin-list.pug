@@ -84,6 +84,7 @@ block main
                    .badge.badge-gray Khởi tạo
               td
                 .inner-buttons
+                  +button-edit-password(`/${pathAdmin}/setting/account-admin/edit-password/${accountAdmin.id}`)
                   +button-edit(`/${pathAdmin}/setting/account-admin/edit/${accountAdmin.id}`)
                   +button-delete(`/${pathAdmin}/setting/account-admin/delete/${accountAdmin.id}`)
   //- End Section 6

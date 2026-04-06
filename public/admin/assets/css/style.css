@@ -96,6 +96,49 @@ a {
   outline: none;
 }
 
+.form-account .inner-group .inner-password-wrapper {
+  position: relative;
+}
+
+.form-account .inner-group .inner-password-wrapper .inner-control {
+  padding-right: 56px;
+}
+
+.form-account .inner-group .inner-toggle-password {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  border: 0;
+  background: transparent;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text);
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+.form-account .inner-group .inner-toggle-password:hover {
+  color: var(--color-primary);
+  opacity: 1;
+}
+
+.form-account .inner-group .inner-toggle-password .fa-eye-slash {
+  display: none;
+}
+
+.form-account .inner-group .inner-toggle-password.is-showing .fa-eye {
+  display: none;
+}
+
+.form-account .inner-group .inner-toggle-password.is-showing .fa-eye-slash {
+  display: inline-block;
+}
+
 .form-account .inner-group .inner-control.just-validate-error-field {
   border-color: red;
 }
