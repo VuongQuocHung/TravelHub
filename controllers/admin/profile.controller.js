@@ -1,5 +1,6 @@
 const AccountAdmin = require("../../models/account-admin.model");
 const jwt = require('jsonwebtoken');
+const bcrypt = require("bcryptjs");
 
 module.exports.edit = async (req, res) => {
   res.render('admin/pages/profile-edit', {
@@ -75,4 +76,35 @@ module.exports.changePassword = async (req, res) => {
   res.render('admin/pages/profile-change-password', {
     pageTitle: 'Trang đổi mật khẩu',
   });
+}
+
+module.exports.changePasswordPatch = async (req, res) => {
+  try {
+    const id = req.account.id;
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(req.body.password, salt);
+
+    req.body.updatedBy = id;
+
+    console.log(req.body);
+
+    await AccountAdmin.updateOne({
+      _id: id
+    }, {
+      password: hashedPassword,
+    });
+
+    res.json({
+      code: "success",
+      message: "Đổi mật khẩu thành công",
+    });
+
+  } catch (error) {
+    console.log(error);
+    res.json({
+      code: "error",
+      message: "Có lỗi xảy ra khi cập nhật thông tin cá nhân"
+    });
+  }
 }
