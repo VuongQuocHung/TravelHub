@@ -7,80 +7,81 @@ include ../mixins/pagination.pug
 include ../mixins/back.pug 
 
 block main
-  h1.box-title Thùng rác tour
+  if (pers.includes("tour-trash"))
+    h1.box-title Thùng rác tour
 
-  //- Section 5
-  .section-5
-    .inner-wrap
-      +change-multi-status(`/${pathAdmin}/tour/change-multi`, [
-        { value: 'undo', label: 'Khôi phục' },
-        { value: 'delete-eternal', label: 'Xóa vĩnh viễn' },
-      ])
-      
-      +search()
-  //- End Section 5
+    //- Section 5
+    .section-5
+      .inner-wrap
+        +change-multi-status(`/${pathAdmin}/tour/change-multi`, [
+          { value: 'undo', label: 'Khôi phục' },
+          { value: 'delete-eternal', label: 'Xóa vĩnh viễn' },
+        ])
+        
+        +search()
+    //- End Section 5
 
-  //- Section 6
-  .section-6
-    .table-2
-      table
-        thead
-          tr
-            th(class="inner-center")
-              input(type="checkbox" class="inner-check" check-all)
-            th Tên tour
-            th Ảnh đại diện
-            th Giá
-            th Còn lại
-            th(class="inner-center") Vị trí
-            th(class="inner-center") Trạng thái
-            th Tạo bởi
-            th Xóa bởi
-            th Hành động
-        tbody
-          each item in tourList
+    //- Section 6
+    .section-6
+      .table-2
+        table
+          thead
             tr
-              td(class="inner-center")
-                input(type="checkbox" class="inner-check" check-item=item.id)
-              td #{item.name}
-              td
-                 img(src=item.avatar class="inner-avatar")
-              td
-                div NL: #{item.priceNewAdult.toLocaleString("vi-VN")}đ
-                div TE: #{item.priceNewChildren.toLocaleString("vi-VN")}đ
-                div EB: #{item.priceNewBaby.toLocaleString("vi-VN")}đ
-              td
-                div NL: #{item.stockAdult}
-                div TE: #{item.stockChildren}
-                div EB: #{item.stockBaby}
-              td(class="inner-center") #{item.position}
-              td(class="inner-center")
-                if(item.status == 'active')
-                  .badge.badge-green Hoạt động
-                else if(item.status == 'inactive')
-                  .badge.badge-red Tạm dừng
-              td
-                div #{item.createByName}
-                div.inner-time #{item.createAtFormat}
-              td
-                div #{item.deletedByName}
-                div.inner-time #{item.deletedAtFormat}
-              td
-                .inner-buttons
-                  +button-undo(`/${pathAdmin}/tour/undo/${item.id}`)
-                  +button-delete-eternal(`/${pathAdmin}/tour/delete-eternal/${item.id}`)
-    .inner-back 
-      +back(`/${pathAdmin}/tour/list`)  
+              th(class="inner-center")
+                input(type="checkbox" class="inner-check" check-all)
+              th Tên tour
+              th Ảnh đại diện
+              th Giá
+              th Còn lại
+              th(class="inner-center") Vị trí
+              th(class="inner-center") Trạng thái
+              th Tạo bởi
+              th Xóa bởi
+              th Hành động
+          tbody
+            each item in tourList
+              tr
+                td(class="inner-center")
+                  input(type="checkbox" class="inner-check" check-item=item.id)
+                td #{item.name}
+                td
+                  img(src=item.avatar class="inner-avatar")
+                td
+                  div NL: #{item.priceNewAdult.toLocaleString("vi-VN")}đ
+                  div TE: #{item.priceNewChildren.toLocaleString("vi-VN")}đ
+                  div EB: #{item.priceNewBaby.toLocaleString("vi-VN")}đ
+                td
+                  div NL: #{item.stockAdult}
+                  div TE: #{item.stockChildren}
+                  div EB: #{item.stockBaby}
+                td(class="inner-center") #{item.position}
+                td(class="inner-center")
+                  if(item.status == 'active')
+                    .badge.badge-green Hoạt động
+                  else if(item.status == 'inactive')
+                    .badge.badge-red Tạm dừng
+                td
+                  div #{item.createByName}
+                  div.inner-time #{item.createAtFormat}
+                td
+                  div #{item.deletedByName}
+                  div.inner-time #{item.deletedAtFormat}
+                td
+                  .inner-buttons
+                    +button-undo(`/${pathAdmin}/tour/undo/${item.id}`)
+                    +button-delete-eternal(`/${pathAdmin}/tour/delete-eternal/${item.id}`)
+      .inner-back 
+        +back(`/${pathAdmin}/tour/list`)  
 
-  //- End Section 6
+    //- End Section 6
 
-  //- Section 7
-  .section-7
-    span(class="inner-label") 
-      | Hiển thị #{tourList.length === 0 ? 0 : paginationData.skip + 1}
-      | - #{paginationData.skip + tourList.length}
-      | của #{paginationData.totalRecord}
-    select(class="inner-pagination" pagination)
-      - for(let i = 1; i <= paginationData.totalPage; i++)
-        option(value=i) Trang #{i}
-  //- End Section 7
+    //- Section 7
+    .section-7
+      span(class="inner-label") 
+        | Hiển thị #{tourList.length === 0 ? 0 : paginationData.skip + 1}
+        | - #{paginationData.skip + tourList.length}
+        | của #{paginationData.totalRecord}
+      select(class="inner-pagination" pagination)
+        - for(let i = 1; i <= paginationData.totalPage; i++)
+          option(value=i) Trang #{i}
+    //- End Section 7

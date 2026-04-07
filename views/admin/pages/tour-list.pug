@@ -40,18 +40,26 @@ block main
   //- Section 5
   .section-5
     .inner-wrap
-      +change-multi-status(`/${pathAdmin}/tour/change-multi`, [
-        { value: 'active', label: 'Hoạt động' },
-        { value: 'inactive', label: 'Tạm dừng' },
-        { value: 'delete', label: 'Xóa' },
-      ])
+      .inner-change-status(change-multi data-api=`/${pathAdmin}/tour/change-multi`)
+          .inner-item
+            select
+              option(value="") -- Hành động --
+              if (pers.includes("tour-edit"))
+                option(value="active") Hoạt động
+                option(value="inactive") Tạm dừng
+              if (pers.includes("tour-delete"))
+                option(value="delete") Xóa
+          .inner-item
+            button Áp dụng
       
       +search()
 
-      +button-create(`/${pathAdmin}/tour/create`)
+      if (pers.includes("tour-create"))
+        +button-create(`/${pathAdmin}/tour/create`)
 
-      .inner-button-trash
-        a(href=`/${pathAdmin}/tour/trash`) Thùng rác
+      if (pers.includes("tour-trash"))
+        .inner-button-trash
+          a(href=`/${pathAdmin}/tour/trash`) Thùng rác
   //- End Section 5
 
   //- Section 6
@@ -102,12 +110,18 @@ block main
                   div.inner-time #{item.updateAtFormat}
                 td
                   .inner-buttons
-                    a(href=`/${pathAdmin}/tour/edit/${item.id}` class="inner-edit") <i class="fa-regular fa-pen-to-square"></i>
-                    button(
-                      class="inner-delete" 
-                    button-delete 
-                    data-api=`/${pathAdmin}/tour/delete/${item.id}`
-                    ) <i class="fa-regular fa-trash-can"></i>
+                    if (pers.includes("tour-edit"))
+                      a(
+                        href=`/${pathAdmin}/tour/edit/${item.id}` 
+                        class="inner-edit"
+                        ) <i class="fa-regular fa-pen-to-square"></i>
+                        
+                    if (pers.includes("tour-delete"))
+                      button(
+                        class="inner-delete" 
+                        button-delete 
+                        data-api=`/${pathAdmin}/tour/delete/${item.id}`
+                      ) <i class="fa-regular fa-trash-can"></i>
           else 
             tr  
               td(colspan="10") Không có dữ liệu

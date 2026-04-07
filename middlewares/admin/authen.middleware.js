@@ -39,6 +39,7 @@ module.exports.verifyToken = async (req, res, next) => {
     if(roleInfo){
       // console.log("roleInfo.name", roleInfo.name);
       res.locals.account.roleName = roleInfo.name;
+      res.locals.pers = roleInfo.permissions; // Trả về cho FE để check quyền
     }
     next();
   } catch (error) {

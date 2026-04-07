@@ -195,14 +195,11 @@ module.exports.accountAdminEditPassword = async (req, res) => {
 
 module.exports.accountAdminEditPasswordPatch = async (req, res) => {
   try {
-    console.log("Chạy vào edit password patch");
     const id = req.params.id;
     const accountAdminDetail = await AccountAdmin.findOne({
       _id: id,
       deleted: false
     });
-    console.log(id);
-    console.log(accountAdminDetail);
 
     if(!accountAdminDetail){
       res.json({
@@ -212,7 +209,6 @@ module.exports.accountAdminEditPasswordPatch = async (req, res) => {
       return;
     }
 
-    console.log(req.body);
     const satl = await bcrypt.genSalt(10); //  Tạo salt - Chuỗi ngẫu nhiên có 10 ký tự
     const hashedPassword = await bcrypt.hash(req.body.password, satl); // Mã hóa mật khẩu với salt
 
@@ -238,7 +234,6 @@ module.exports.accountAdminEditPasswordPatch = async (req, res) => {
 
 module.exports.accountAdminCreatePost = async (req, res) => {
   try {
-    console.log(req.body);
 
     const existingAccount = await AccountAdmin.findOne({
       email: req.body.email
@@ -335,9 +330,6 @@ module.exports.roleEdit = async (req, res) => {
       res.redirect('/admin/setting/role/list');
     }
 
-    console.log(roleDetail.permissions);
-    console.log(permissionsList);
-
     res.render('admin/pages/setting-role-edit', {
       pageTitle: 'Trang chỉnh sửa nhóm quyền',
       permissionsList: permissionsList,
@@ -352,12 +344,12 @@ module.exports.roleEdit = async (req, res) => {
 module.exports.roleEditPatch = async (req, res) => {
   try {
     const id = req.params.id;
-    console.log(id);
+
     const roleDetail = await Role.findOne({
       _id: id,
       deleted: false
     });
-    console.log(roleDetail);
+
     if(!id){  
       return res.json({
       code: "error",
@@ -481,7 +473,7 @@ module.exports.roleTrash = async (req, res) => {
 module.exports.roleUndoPatch = async (req, res) => {
   try {
     const id = req.params.id;
-    console.log(id);
+
     const roleDetail = await Role.findOne({
       _id: id,
       deleted: true
@@ -494,7 +486,7 @@ module.exports.roleUndoPatch = async (req, res) => {
       })
       return;
     }
-    console.log(roleDetail);
+
 
     await Role.updateOne({
       _id: id
@@ -518,8 +510,7 @@ module.exports.roleUndoPatch = async (req, res) => {
 module.exports.roleChangeMultiPatch = async (req, res) => {
   try {
     const { listId, option } = req.body;
-    console.log(listId);
-    console.log(option);
+
     switch (option) {
       case "delete":
         await Role.updateMany({

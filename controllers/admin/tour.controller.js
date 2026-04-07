@@ -323,6 +323,12 @@ module.exports.changeMultiPatch = async (req, res) => {
     switch (option) {
       case "active":
       case "inactive":
+        if(!res.locals.pers.includes("tour-edit")){
+          return res.json({
+            code: "error",
+            message: "Không có quyền truy cập!"
+          })
+        }
         await Tour.updateMany({
           _id: { $in: listId },
           deleted: false
@@ -337,6 +343,12 @@ module.exports.changeMultiPatch = async (req, res) => {
         break;
 
       case "delete":
+        if(!res.locals.pers.includes("tour-delete")){
+          return res.json({
+            code: "error",
+            message: "Không có quyền truy cập!"
+          })
+        }
         await Tour.updateMany({
           _id: { $in: listId },
           deleted: false
