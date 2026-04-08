@@ -2,15 +2,18 @@
 .top-header
   .container
     .inner-wrap
+      if(settingWebInfo.phone)
       .inner-item
         i.fa-solid.fa-phone
-        | 0123.456.789
+        | #{settingWebInfo.phone}
+      if(settingWebInfo.email)
       .inner-item
         i.fa-solid.fa-envelope
-        | contact@28travel.com
+        | #{settingWebInfo.email}
+      if(settingWebInfo.address)
       .inner-item
         i.fa-solid.fa-building
-        | Số 123, đường ABC, thành phố XYZ
+        | #{settingWebInfo.address}
 // End Top Header
 
 // Header
