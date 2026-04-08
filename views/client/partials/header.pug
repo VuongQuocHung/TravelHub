@@ -2,18 +2,18 @@
 .top-header
   .container
     .inner-wrap
-      if(settingWebInfo.phone)
+      if(settingWebsiteInfo.phone)
       .inner-item
         i.fa-solid.fa-phone
-        | #{settingWebInfo.phone}
-      if(settingWebInfo.email)
+        | #{settingWebsiteInfo.phone}
+      if(settingWebsiteInfo.email)
       .inner-item
         i.fa-solid.fa-envelope
-        | #{settingWebInfo.email}
-      if(settingWebInfo.address)
+        | #{settingWebsiteInfo.email}
+      if(settingWebsiteInfo.address)
       .inner-item
         i.fa-solid.fa-building
-        | #{settingWebInfo.address}
+        | #{settingWebsiteInfo.address}
 // End Top Header
 
 // Header
@@ -27,38 +27,24 @@ header.header
       .inner-logo
         a(href="index.html")
           img(
-            alt="28.TRAVEL" 
-            src="/client/assets/images/logo.png"
+            alt=settingWebsiteInfo.websiteName 
+            src=settingWebsiteInfo.logo
             )
       // Menu
       nav.inner-menu
         ul
           li
             a.active(href="index.html") Trang chủ
-          li
-            a(href="#") Tour trong nước
-            i.fa-solid.fa-caret-down
-            ul
-              li
-                a(href="#") Tour Miền Bắc
-              li
-                a(href="#") Tour Miền Trung
-              li
-                a(href="#") Tour Miền Nam
-              li
-                a(href="#") Tour Xuyên Việt
-          li
-            a(href="#") Tour nước ngoài
-            i.fa-solid.fa-caret-down
-            ul
-              li
-                a(href="#") Tour Châu Á
-              li
-                a(href="#") Tour Châu Âu
-              li
-                a(href="#") Tour Châu Mỹ
-              li
-                a(href="#") Tour Châu Úc
+          each item in categoryTree
+            li
+              a(href=`category/${item.slug}`) #{item.name}
+              if (item.children.length > 0)
+                i.fa-solid.fa-caret-down
+                ul
+                  each itemChild in item.children
+                    li
+                      a(href=`category/${itemChild.slug}`) #{itemChild.name}
+                    
           li
             a(href="#") Tin tức
           li
@@ -66,10 +52,10 @@ header.header
         .inner-overlay
       // Cart
       .inner-cart
-        a(href="#")
+        a(href="/cart")
           img(
             alt="Cart" 
             src="/client/assets/images/icon-cart.svg"
             )
-          span 1
+          span 0
 // End Header

@@ -213,7 +213,7 @@ input, button, textarea {
   .header .inner-menu {
     position: fixed;
     top: 0;
-    left: -100%;
+    left: calc(-100% - 18px);
     height: 100%;
     z-index: 999;
     transition: all 0.3s;
