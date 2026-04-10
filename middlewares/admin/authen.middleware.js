@@ -41,6 +41,7 @@ module.exports.verifyToken = async (req, res, next) => {
       res.locals.account.roleName = roleInfo.name;
       res.locals.pers = roleInfo.permissions; // Trả về cho FE để check quyền
     }
+
     next();
   } catch (error) {
     res.clearCookie("token");

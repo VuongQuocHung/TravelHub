@@ -1,0 +1,44 @@
+mixin product-item(data)
+  .product-item
+    .inner-image
+      a(href=`/tour/detail/${data.slug}`)
+        img(
+          alt=data.name
+          src=data.avatar
+          )
+    .inner-discount
+      i.fa-solid.fa-bolt
+      | Giảm -#{data.discountAdult}%
+    .inner-content
+      h3.inner-title
+        a(href=`/tour/detail/${data.slug}`) #{data.name}
+      .inner-prices
+        .inner-price-old
+          | #{data.priceAdult.toLocaleString("vi-VN")}
+          span.inner-unit đ
+        .inner-price-new
+          | #{data.priceNewAdult.toLocaleString("vi-VN")}
+          span.inner-unit đ
+      .inner-desc
+        .inner-desc-item
+          //- | Mã Tour:
+          //- b 123456789
+        .inner-desc-item
+          | Ngày Khởi Hành:
+          b #{data.departureDateFormat}
+        .inner-desc-item
+          | Thời Gian:
+          b #{data.time}
+      .inner-meta
+        //- .inner-rating
+        //-   .inner-stars
+        //-     i.fa-solid.fa-star
+        //-     i.fa-solid.fa-star
+        //-     i.fa-solid.fa-star
+        //-     i.fa-solid.fa-star
+        //-     i.fa-solid.fa-star
+        //-   .inner-number (5)
+        .inner-stock
+          .inner-label Số chỗ còn:
+          .inner-number #{data.stockAdult}
+  // End Product Item

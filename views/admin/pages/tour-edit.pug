@@ -24,6 +24,11 @@ block main
           select(id="status" name="status")
             option(value="active" selected=(tourDetail.status == "active")) Hoạt động
             option(value="inactive" selected=(tourDetail.status == "inactive")) Dừng hoạt động
+        .inner-group
+          label(class="inner-label" for="featured") Sản phẩm nổi bật
+          select(id="featured" name="featured")
+            option(value="0" selected=(tourDetail.featured == "0")) Không
+            option(value="1" selected=(tourDetail.featured == "1")) Có
         .inner-group.inner-two-col
           label(class="inner-label" for="avatar") Ảnh đại diện
           div(class="inner-upload-image" image-default=tourDetail.avatar)

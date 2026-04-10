@@ -2,6 +2,8 @@
 module.exports.checkPer = (permissions) => {
   return (req, res, next) => {
     const existPer = permissions.some(per => res.locals.pers.includes(per));
+    console.log("existPer", existPer);
+    
     if(!existPer){
       return res.json({
         code: "error",

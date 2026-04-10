@@ -380,6 +380,7 @@ if(tourEditForm) {
       const category = event.target.category.value;
       const position = event.target.position.value;
       const status = event.target.status.value;
+      const featured = event.target.featured.value;
       const avatars = filePond.avatar.getFiles();
       let avatar = null;
       if(avatars.length > 0) {
@@ -430,6 +431,7 @@ if(tourEditForm) {
       formData.append("category", category);
       formData.append("position", position);
       formData.append("status", status);
+      formData.append("featured", featured);
       formData.append("avatar", avatar);
       formData.append("priceAdult", priceAdult);
       formData.append("priceChildren", priceChildren);
