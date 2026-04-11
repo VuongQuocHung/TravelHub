@@ -4,6 +4,8 @@ const { permissionsList } = require("../../configs/variable.config");
 const slugify = require('slugify');
 const bcrypt = require("bcryptjs");
 const AccountAdmin = require("../../models/account-admin.model");
+const { buildCategoryTree } = require("../../helpers/category.helper");
+const Category = require("../../models/category.model");
 
 module.exports.list = (req, res) => {
   res.render('admin/pages/setting-list', {
@@ -20,10 +22,23 @@ module.exports.websiteInfo = async (req, res) => {
   });
 }
 
-module.exports.websiteInfoPatch = async (req, res) => {
-  console.log(req.body);
-  console.log(req.files);
+module.exports.websiteInfoHome = async (req, res) => {
+  const settingWebsiteInfo = await SettingWebsiteInfo.findOne();
 
+  const categoryList = await Category.find({
+    deleted: false,
+  });
+
+  const categoryTree = buildCategoryTree(categoryList, "");
+
+  res.render('admin/pages/setting-website-info-home', {
+    pageTitle: 'Trang cấu hình trang chủ',
+    settingWebsiteInfo: settingWebsiteInfo,
+    categoryList: categoryTree
+  });
+}
+
+module.exports.websiteInfoPatch = async (req, res) => {
   if(req.files.logo){ // logo ở đây là 1 mảng các đối tượng
     req.body.logo = req.files.logo[0].path;
   } else {
@@ -43,6 +58,19 @@ module.exports.websiteInfoPatch = async (req, res) => {
   res.json({
     code: "success",
     message: "Cập nhật website thành công"
+  })
+
+}
+
+module.exports.websiteInfoHomePatch = async (req, res) => {
+
+  await SettingWebsiteInfo.findOneAndUpdate({}, req.body, {
+    upsert: true // phải thêm cái này để khi chưa có bản ghi nào trong collection setting-website-infos ở db thì nó sẽ tự tạo mới, nếu không có thì nó sẽ không làm gì cả vì không tìm thấy document nào để update cả
+  });
+
+  res.json({
+    code: "success",
+    message: "Cập nhật trang chủ thành công"
   })
 
 }

@@ -7,6 +7,7 @@ const router = require('express').Router();
 const settingController =  require("../../controllers/admin/setting.controller");
 
 router.get('/list', settingController.list);
+
 router.get('/website-info', settingController.websiteInfo);
 
 router.patch(
@@ -22,6 +23,14 @@ router.patch(
     },
   ]), 
   settingController.websiteInfoPatch
+);
+
+router.get('/website-info-home', settingController.websiteInfoHome);
+
+router.patch(
+  '/website-info-home', 
+  upload.none(), 
+  settingController.websiteInfoHomePatch
 );
 
 router.get('/account-admin/list', settingController.accountAdminList);

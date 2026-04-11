@@ -8,6 +8,7 @@ const schema = new mongoose.Schema(
     address: String,  // "initial": khởi tạo, "active": hoạt động, "inactive": tạm dừng
     logo: String,
     favicon: String,
+    categoryIdSection4: String,
   },
   {
     timestamps: true

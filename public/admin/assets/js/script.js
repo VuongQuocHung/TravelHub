@@ -275,6 +275,7 @@ if(tourCreateForm) {
       const category = event.target.category.value;
       const position = event.target.position.value;
       const status = event.target.status.value;
+      const featured = event.target.featured.value;
       const avatars = filePond.avatar.getFiles();
       let avatar = null;
       if(avatars.length > 0) {
@@ -325,6 +326,7 @@ if(tourCreateForm) {
       formData.append("category", category);
       formData.append("position", position);
       formData.append("status", status);
+      formData.append("featured", featured);
       formData.append("avatar", avatar);
       formData.append("priceAdult", priceAdult);
       formData.append("priceChildren", priceChildren);
@@ -580,6 +582,44 @@ if(settingWebsiteInfoForm) {
   ;
 }
 // End Setting Website Info Form
+
+// Setting Website Info Home Form
+const settingWebsiteInfoHomeForm = document.querySelector("#setting-website-info-home");
+if(settingWebsiteInfoHomeForm) {
+  const validation = new JustValidate('#setting-website-info-home');
+
+  validation
+    .addField('#categoryIdSection4', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng chọn danh mục cho Section4!'
+      },
+    ])
+    .onSuccess((event) => {
+      const categoryIdSection4 = event.target.categoryIdSection4.value;
+
+      const formData = new FormData();
+      formData.append("categoryIdSection4", categoryIdSection4);
+
+      fetch(`/${pathAdmin}/setting/website-info`, {
+        method: "PATCH",
+        body: formData
+      })
+        .then(res => res.json())
+        .then(data => {
+          if(data.code == "error") {
+            notyf.error(data.message); // Hiển thị thông báo nhưng không reload trang
+          }
+          
+          if(data.code == "success") {
+            drawNotyf(data.code, data.message); // Hiển thị thông báo nhưng có reload trang
+            window.location.reload(); // Load lại trang
+          }
+        })
+    })
+  ;
+}
+// End Setting Website Info Home Form
 
 // Setting Account Admin Create Form
 const settingAccountAdminCreateForm = document.querySelector("#setting-account-admin-create-form");
