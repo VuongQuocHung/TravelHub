@@ -595,12 +595,20 @@ if(settingWebsiteInfoHomeForm) {
         errorMessage: 'Vui lòng chọn danh mục cho Section4!'
       },
     ])
+    .addField('#categoryIdSection6', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng chọn danh mục cho Section6!'
+      },
+    ])
     .onSuccess((event) => {
       const categoryIdSection4 = event.target.categoryIdSection4.value;
+      const categoryIdSection6 = event.target.categoryIdSection6.value;
 
       const formData = new FormData();
       formData.append("categoryIdSection4", categoryIdSection4);
-
+      formData.append("categoryIdSection6", categoryIdSection6);
+      
       fetch(`/${pathAdmin}/setting/website-info`, {
         method: "PATCH",
         body: formData

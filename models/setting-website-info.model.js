@@ -9,6 +9,7 @@ const schema = new mongoose.Schema(
     logo: String,
     favicon: String,
     categoryIdSection4: String,
+    categoryIdSection6: String,
   },
   {
     timestamps: true

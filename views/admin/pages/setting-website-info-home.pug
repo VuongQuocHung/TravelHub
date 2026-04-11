@@ -12,6 +12,11 @@ block main
         select(id="categoryIdSection4" name="categoryIdSection4")
           option(value="") -- Chọn danh mục --
           +options(categoryList, 0, settingWebsiteInfo.categoryIdSection4)
+      .inner-group
+        label(class="inner-label" for="categoryIdSection6") Chọn danh mục cho Section 6
+        select(id="categoryIdSection6" name="categoryIdSection6")
+          option(value="") -- Chọn danh mục --
+          +options(categoryList, 0, settingWebsiteInfo.categoryIdSection6)
       .inner-button.inner-two-col
         button Cập nhật
     .inner-back

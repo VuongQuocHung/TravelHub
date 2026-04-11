@@ -1,5 +1,7 @@
 extends ../layouts/default.pug
 include ../mixins/product.pug 
+include ../mixins/setting-list.pug 
+
 block main 
   // Section 1
   .section-1
@@ -187,25 +189,8 @@ block main
   // End Section 3
 
   // Section 4
-  if(categoryDetailSection4 && tourListSection4.length > 0)
-    .section-4
-      .container
-        h2.box-title(
-          data-aos-duration="800" 
-          data-aos="fade-up"
-          ) #{categoryDetailSection4.name}
-        .inner-wrap(
-          data-aos-delay="150" 
-          data-aos-duration="800" 
-          data-aos="fade-up"
-          )
-          each item in tourListSection4
-            +product-item(item)
-          
-        .inner-button
-        a.button-outline(href=`category/${categoryDetailSection4.slug}`) Xem tất cả
-  // End Section 4
-
+  +section-4(categoryDetailSection4, tourListSection4)
+  
   // Section 5
   .section-5(
     data-aos-duration="800" 
@@ -221,24 +206,7 @@ block main
   // End Section 5
 
   // Section 6
-  .section-4
-    .container
-      h2.box-title(
-        data-aos-duration="800" 
-        data-aos="fade-up"
-        ) Tour Nước Ngoài
-      .inner-wrap(
-        data-aos-delay="150" 
-        data-aos-duration="800" 
-        data-aos="fade-up"
-        )
-        
-        +product-item(tourListSection2[0])
-
-        +product-item(tourListSection2[1])
-
-      .inner-button
-        a.button-outline(href="#") Xem tất cả
+  +section-4(categoryDetailSection6, tourListSection6)
   // End Section 6
 
   // Section 7

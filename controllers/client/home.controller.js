@@ -19,12 +19,19 @@ module.exports.home = async (req, res) => {
   }
 
   const dataSection4 = await getListProductByCategory(res.locals.settingWebsiteInfo.categoryIdSection4);
-  console.log(dataSection4.tourList);
 
+  const dataSection6 = await getListProductByCategory(res.locals.settingWebsiteInfo.categoryIdSection6);
+
+  console.log(dataSection4);
+  console.log(dataSection6);
+  
   res.render('client/pages/home', {
     pageTitle: 'Trang chủ',
     tourListSection2: tourListSection2,
     tourListSection4: dataSection4.tourList,
-    categoryDetailSection4: dataSection4.categoryDetail
+    categoryDetailSection4: dataSection4.categoryDetail,
+
+    tourListSection6: dataSection6.tourList,
+    categoryDetailSection6: dataSection6.categoryDetail
   });
 }

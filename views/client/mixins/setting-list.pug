@@ -1,0 +1,18 @@
+mixin section-4(categoryDetail, tourList)
+  if(categoryDetail && tourList.length > 0)
+    .section-4
+      .container
+        h2.box-title(
+          data-aos-duration="800" 
+          data-aos="fade-up"
+          ) #{categoryDetail.name}
+        .inner-wrap(
+          data-aos-delay="150" 
+          data-aos-duration="800" 
+          data-aos="fade-up"
+          )
+          each item in tourList
+            +product-item(item)
+          
+        .inner-button
+          a.button-outline(href=`category/${categoryDetail.slug}`) Xem tất cả
