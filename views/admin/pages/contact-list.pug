@@ -1,4 +1,10 @@
 extends ../layouts/default.pug
+include ../mixins/filter.pug 
+include ../mixins/change-multi.pug 
+include ../mixins/search.pug 
+include ../mixins/buttons.pug 
+include ../mixins/trash.pug
+include ../mixins/pagination.pug 
 
 
 block main
@@ -20,16 +26,11 @@ block main
   //- Section 5
   .section-5
     .inner-wrap
-      .inner-change-status
-        .inner-item
-          select
-            option(value="") -- Hành động --
-            option(value="") Xóa
-        .inner-item
-          button Áp dụng
-      .inner-search
-        <i class="fa-solid fa-magnifying-glass"></i>
-        input(type="text" placeholder="Tìm kiếm")
+      +change-multi-status(`/${pathAdmin}/contact/change-multi`, [
+        { value: 'delete', label: 'Xóa' },
+      ])
+      +search()
+
   //- End Section 5
 
   //- Section 6
@@ -39,7 +40,7 @@ block main
         thead
           tr
             th(class="inner-center")
-              input(type="checkbox" class="inner-check")
+              input(type="checkbox" class="inner-check" check-all)
             th Email
             th Ngày tạo
             th(class="inner-center") Hành động
@@ -47,12 +48,12 @@ block main
           each item in contactList
             tr
               td(class="inner-center")
-                input(type="checkbox" class="inner-check")
+                input(type="checkbox" class="inner-check" check-item=item.id)
                 td #{item.email}
                 td #{item.createdAtFormat}
               td(class="inner-center")
                 .inner-buttons
-                  button(class="inner-delete") <i class="fa-regular fa-trash-can"></i>
+                  +button-delete(`/${pathAdmin}/contact/delete/${item.id}`)
   //- End Section 6
 
   //- Section 7
