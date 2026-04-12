@@ -9,10 +9,13 @@ module.exports.list = async (req, res) => {
     .sort({ 
       createdAt: "desc"
     });
+  console.log("contact email : ", contactList);
   
   for (const item of contactList) {
     item.createdAtFormat = moment(item.createdAt).format("HH:mm - DD/MM/YYYY");
   }
+
+  console.log("contact email : ", contactList);
 
   res.render('admin/pages/contact-list', {
     pageTitle: 'Trang thông tin liên hệ',
