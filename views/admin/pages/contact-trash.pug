@@ -5,33 +5,20 @@ include ../mixins/search.pug
 include ../mixins/buttons.pug 
 include ../mixins/trash.pug
 include ../mixins/pagination.pug 
-
+include ../mixins/back.pug 
 
 block main
-  h1.box-title Thông tin liên hệ
-
-  //- Section 4
-  .section-4
-    .inner-wrap
-      .inner-item.inner-label
-        <i class="fa-solid fa-filter"></i> Bộ lọc
-      .inner-item.inner-date
-        input(type="date")
-        span -
-        input(type="date")
-      .inner-item.inner-reset
-        <i class="fa-solid fa-rotate-left"></i> Xóa bộ lọc
-  //- End Section 4
+  h1.box-title Các thông tin liên hệ đã xóa
 
   //- Section 5
   .section-5
     .inner-wrap
       +change-multi-status(`/${pathAdmin}/contact/change-multi`, [
-        { value: 'delete', label: 'Xóa' },
+        { value: 'undo', label: 'Khôi phục' },
+        { value: 'delete-eternal', label: 'Xóa vĩnh viễn' },
       ])
+      
       +search()
-
-      +trash(`/${pathAdmin}/contact/trash`)
 
   //- End Section 5
 
@@ -56,6 +43,9 @@ block main
               td(class="inner-center")
                 .inner-buttons
                   +button-delete(`/${pathAdmin}/contact/delete/${item.id}`)
+      
+      .inner-back 
+        +back(`/${pathAdmin}/contact/list`)    
   //- End Section 6
 
   //- Section 7

@@ -33,7 +33,7 @@ module.exports.list = async (req, res) => {
   if(req.query.toDate){
     target.createdAt = {
       ...target.createdAt,
-      $lte: new Date(req.query.fromDate)
+      $lte: new Date(req.query.toDate)
     }
   }
   // Hết lọc theo ngày
@@ -43,9 +43,9 @@ module.exports.list = async (req, res) => {
     const keyword = slugify(req.query.keyword);
     const regex = new RegExp(keyword, "i");
     target.slug = regex;
-    console.log("target tìm kiếm: " + target.slug);
-    console.log("keyword tìm kiếm: " + keyword);
   }
+  console.log("target tìm kiếm: " + target.slug);
+  console.log("keyword tìm kiếm: " + req.query.keyword);
   // Hết Tìm Kiếm
 
   // Pagination

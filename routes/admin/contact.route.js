@@ -8,4 +8,6 @@ router.patch('/change-multi', contactController.changeMultiPatch);
 
 router.patch('/delete/:id', contactController.deletePatch);
 
+router.get('/trash', contactController.trash);
+
 module.exports = router;  
