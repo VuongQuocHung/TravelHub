@@ -1,4 +1,4 @@
-// // Notyf
+// Notyf
 var notyf = new Notyf({
   duration: 3000,
   position: {
@@ -27,4 +27,4 @@ const drawNotyf = (code, message) => {
   }));
 }
 
-// // End Notyf
+// End Notyf
