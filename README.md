@@ -110,6 +110,10 @@ res.json({ success: true, data: tours });
 
 (Chi tiết endpoint có trong `routes/`)
 
+## Đăng nhập với tài khoản admin: 
+- Username: le
+- Password: Admin@123
+
 ## Những phần đang in progress 
 - Hoàn thiện hiển thị một số dữ liệu backend ra frontend (một vài route chưa render đầy đủ dữ liệu).
 - Chưa tích hợp thanh toán (payment gateway).
