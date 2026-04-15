@@ -1,0 +1,13 @@
+mixin box-breadcrumb(data)
+  .box-breadcrumb
+    .inner-image
+      img(
+        alt="" 
+        src=data.avatar
+        )
+    .inner-content
+      .container
+        h1.inner-title #{data.name}
+        .inner-list
+          a(href="/") Trang Chủ
+          a(href=`category/${data.slug}`) #{data.name}
