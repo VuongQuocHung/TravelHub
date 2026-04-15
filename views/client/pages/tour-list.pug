@@ -1,5 +1,6 @@
 extends ../layouts/default.pug 
 include ../mixins/breadcrumb.pug
+include ../mixins/product.pug
 
 block main 
   // Breadcrumb
@@ -70,9 +71,8 @@ block main
           // End Box Filter
         .inner-right
           .inner-info
-            h2.inner-title Tour Nước Ngoài
-            .inner-desc
-              | Du lịch Châu Á: là châu lục lớn và đông dân nhất thế giới. Châu Á cũng có nhiều danh lam thắng cảnh đẹp tại một số quốc gia như Hàn Quốc, Nhật Bản, Trung Quốc, Việt Nam,... và VK Travel là nhà tổ chức du lịch chuyên nghiệp hàng đầu Châu Á, đã 5 lần liên tiếp nhận giải TTG Travel Awards. Hãy cùng 28.Travel du lịch Châu Á để tận hưởng những dịch vụ tốt nhất.
+            h2.inner-title #{categoryDetail.name}
+            .inner-desc !{categoryDetail.description}
           .inner-info-2
             .inner-sort
               .inner-label Sắp xếp:
@@ -96,138 +96,9 @@ block main
               span.inner-title Bộ Lọc
               i.fa-solid.fa-filter
           .inner-list-tour
-            // Product Item
-            .product-item
-              .inner-image
-                a(href="")
-                  img(
-                    alt="" 
-                    src="/client/assets/images/product-1.jpg"
-                    )
-              .inner-discount
-                i.fa-solid.fa-bolt
-                | Giảm -30%
-              .inner-content
-                h3.inner-title
-                  a(href="") Hà Nội - Lào Cai - SaPa 4N3Đ
-                .inner-prices
-                  .inner-price-old
-                    | 13.650.000
-                    span.inner-unit đ
-                  .inner-price-new
-                    | 2.590.000
-                    span.inner-unit đ
-                .inner-desc
-                  .inner-desc-item
-                    | Mã Tour:
-                    b 123456789
-                  .inner-desc-item
-                    | Ngày Khởi Hành:
-                    b 22/07/2024
-                  .inner-desc-item
-                    | Thời Gian:
-                    b 10 Ngày 9 Đêm
-                .inner-meta
-                  .inner-rating
-                    .inner-stars
-                      i.fa-solid.fa-star
-                      i.fa-solid.fa-star
-                      i.fa-solid.fa-star
-                      i.fa-solid.fa-star
-                      i.fa-solid.fa-star
-                    .inner-number (5)
-                  .inner-stock
-                    .inner-label Số chỗ còn:
-                    .inner-number 10
-            // End Product Item
-            // Product Item
-            .product-item
-              .inner-image
-                a(href="")
-                  img(
-                    alt="" 
-                    src="/client/assets/images/product-2.jpg"
-                    )
-              .inner-discount
-                i.fa-solid.fa-bolt
-                | Giảm -30%
-              .inner-content
-                h3.inner-title
-                  a(href="") Tour 2024 Phú Quốc - Thiên Đường Đảo Ngọc (3N2D)
-                .inner-prices
-                  .inner-price-old
-                    | 13.650.000
-                    span.inner-unit đ
-                  .inner-price-new
-                    | 2.590.000
-                    span.inner-unit đ
-                .inner-desc
-                  .inner-desc-item
-                    | Mã Tour:
-                    b 123456789
-                  .inner-desc-item
-                    | Ngày Khởi Hành:
-                    b 22/07/2024
-                  .inner-desc-item
-                    | Thời Gian:
-                    b 10 Ngày 9 Đêm
-                .inner-meta
-                  .inner-rating
-                    .inner-stars
-                      i.fa-solid.fa-star
-                      i.fa-solid.fa-star
-                      i.fa-solid.fa-star
-                      i.fa-solid.fa-star
-                      i.fa-solid.fa-star
-                    .inner-number (5)
-                  .inner-stock
-                    .inner-label Số chỗ còn:
-                    .inner-number 10
-            // End Product Item
-            // Product Item
-            .product-item
-              .inner-image
-                a(href="")
-                  img(
-                    alt="" 
-                    src="/client/assets/images/product-3.jpg"
-                    )
-              .inner-discount
-                i.fa-solid.fa-bolt
-                | Giảm -30%
-              .inner-content
-                h3.inner-title
-                  a(href="") Combo Đà Nẵng 2024: ĐÀ NẴNG - HỘI AN - BÀ NÀ HILL
-                .inner-prices
-                  .inner-price-old
-                    | 13.650.000
-                    span.inner-unit đ
-                  .inner-price-new
-                    | 2.590.000
-                    span.inner-unit đ
-                .inner-desc
-                  .inner-desc-item
-                    | Mã Tour:
-                    b 123456789
-                  .inner-desc-item
-                    | Ngày Khởi Hành:
-                    b 22/07/2024
-                  .inner-desc-item
-                    | Thời Gian:
-                    b 10 Ngày 9 Đêm
-                .inner-meta
-                  .inner-rating
-                    .inner-stars
-                      i.fa-solid.fa-star
-                      i.fa-solid.fa-star
-                      i.fa-solid.fa-star
-                      i.fa-solid.fa-star
-                      i.fa-solid.fa-star
-                    .inner-number (5)
-                  .inner-stock
-                    .inner-label Số chỗ còn:
-                    .inner-number 10
-            // End Product Item
+            each item in tourList 
+              +product-item(item)
+
           // Pagination
           .box-pagination
             button
