@@ -6,9 +6,11 @@ const settingMiddleware = require("../../middlewares/client/setting.middleware")
 const categoryMiddleware = require("../../middlewares/client/category.middleware");
 const contactRoutes = require('./contact.route');
 const categoryRoutes = require('./category.route');
+const cityMiddleware = require('../../middlewares/client/city.middleware');
 
 router.use(categoryMiddleware.list);
 router.use(settingMiddleware.websiteInfo)
+router.use(cityMiddleware.list);
 
 router.use('/', homeRoutes);
 router.use('/tours', tourRoutes);

@@ -393,3 +393,34 @@ if(orderForm) {
   // End List Input Method
 }
 // End Order Form
+
+const boxFilter = document.querySelector(".box-filter");
+if(boxFilter) {
+  const url = new URL(`${window.location.origin}/search`);
+
+  const buttonApply = boxFilter.querySelector(".inner-button");
+
+  buttonApply.addEventListener("click", () => {
+    const filterList = [
+      "locationFrom",
+      "locationTo",
+      "departureDate",
+      "stockAdult",
+      "stockChildren",
+      "stockBaby",
+      "price"
+    ];
+
+    filterList.forEach(key => {
+      const value = boxFilter.querySelector(`[name="${key}"]`).value;
+      if(value) {
+        url.searchParams.set(key, value);
+      } else {
+        url.searchParams.delete(key);
+      }
+    });
+
+    window.location.href = url.href;
+  });
+}
+// End Box Filter

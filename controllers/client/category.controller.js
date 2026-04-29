@@ -22,8 +22,7 @@ module.exports.list = async (req, res) => {
   }
 
   const dataDetail = await getListProductByCategory(categoryDetail.id);
-  console.log(dataDetail);
-
+  
   res.render('client/pages/tour-list', {
     pageTitle: categoryDetail.name,
     categoryDetail: categoryDetail,
