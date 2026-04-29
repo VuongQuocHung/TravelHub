@@ -424,3 +424,57 @@ if(boxFilter) {
   });
 }
 // End Box Filter
+
+// Box Search
+const boxSearch = document.querySelector("[box-search]");
+if(boxSearch) {
+  const url = new URL(`${window.location.origin}/search`);
+
+  const buttonApply = boxSearch.querySelector(".inner-button");
+
+  buttonApply.addEventListener("click", () => {
+    // Điểm đến
+    const locationTo = boxSearch.querySelector("[name='locationTo']").value;
+    if(locationTo) {
+      url.searchParams.set("locationTo", locationTo);
+    } else {
+      url.searchParams.delete("locationTo");
+    }
+
+    // Số lượng
+    // Người lớn
+    const stockAdult = parseInt(boxSearch.querySelector(`[name="stockAdult"]`).innerHTML);
+    if(stockAdult > 0) {
+      url.searchParams.set("stockAdult", stockAdult);
+    } else {
+      url.searchParams.delete("stockAdult");
+    }
+
+    // Trẻ em
+    const stockChildren = parseInt(boxSearch.querySelector(`[name="stockChildren"]`).innerHTML);
+    if(stockChildren > 0) {
+      url.searchParams.set("stockChildren", stockChildren);
+    } else {
+      url.searchParams.delete("stockChildren");
+    }
+
+    // Em bé
+    const stockBaby = parseInt(boxSearch.querySelector(`[name="stockBaby"]`).innerHTML);
+    if(stockBaby > 0) {
+      url.searchParams.set("stockBaby", stockBaby);
+    } else {
+      url.searchParams.delete("stockBaby");
+    }
+
+    // Ngày khởi hành
+    const departureDate = boxSearch.querySelector("[name='departureDate']").value;
+    if(departureDate) {
+      url.searchParams.set("departureDate", departureDate);
+    } else {
+      url.searchParams.delete("departureDate");
+    }
+
+    window.location.href = url.href;
+  });
+}
+// End Box Search

@@ -20,11 +20,11 @@ block main
           data-aos="fade-up"
           )
           | Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua
-        form.inner-form(
+        .inner-form(
           data-aos-delay="300" 
           data-aos-duration="800" 
           data-aos="fade-up" 
-          action="#"
+          box-search
           )
           .inner-box.inner-address
             .inner-input-group
@@ -32,6 +32,7 @@ block main
               input.inner-input(
                 placeholder="Bạn muốn đi đâu?" 
                 type="text"
+                name="locationTo"
                 )
               i.fa-solid.fa-angle-down.inner-down
             .inner-suggest
@@ -79,25 +80,25 @@ block main
                 .inner-label Người lớn
                 .inner-count
                   span.inner-down -
-                  span.inner-number 1
+                  span.inner-number(name="stockAdult") 1
                   span.inner-up +
               .inner-item
                 .inner-label Trẻ em
                 .inner-count
                   span.inner-down -
-                  span.inner-number 0
+                  span.inner-number(name="stockChildren") 0
                   span.inner-up +
               .inner-item
                 .inner-label Em bé
                 .inner-count
                   span.inner-down -
-                  span.inner-number 0
+                  span.inner-number(name="stockBaby") 0
                   span.inner-up +
           .inner-box.inner-calendar
             .inner-input-group
               img.inner-icon(src="/client/assets/images/icon-calendar.svg")
-              input.inner-input(type="date")
-          button.inner-button(type="submit")
+              input.inner-input(type="date" name="departureDate")
+          button.inner-button
             i.fa-solid.fa-magnifying-glass
             | Tìm Kiếm
   // End Section 1
