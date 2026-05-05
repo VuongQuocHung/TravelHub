@@ -22,7 +22,7 @@ const buildCategoryTree = (categoryList, parentId) => {
 module.exports.buildCategoryTree = buildCategoryTree;
 
 // Lấy ra mảng id của các danh mục con của cha 
-const getListSubCaregoryId = async (parentId) => {
+const getListSubCategoryId = async (parentId) => {
   const listSubCategoryId = [];
   const findListSubCaregory = async (parentId) => {
     const listSubCategory = await Category.find({
@@ -39,11 +39,11 @@ const getListSubCaregoryId = async (parentId) => {
   await findListSubCaregory(parentId);
   return listSubCategoryId;
 }
-module.exports.getListSubCaregoryId = getListSubCaregoryId;
+module.exports.getListSubCategoryId = getListSubCategoryId;
 
 // Lấy ra mảng sản phẩm theo danh mục 
 module.exports.getListProductByCategory = async (categoryId) => {
-  const listSubCategoryId = await getListSubCaregoryId(categoryId);
+  const listSubCategoryId = await getListSubCategoryId(categoryId);
   const categoryDetail = await Category.findOne({
     _id: categoryId,
     deleted: false,

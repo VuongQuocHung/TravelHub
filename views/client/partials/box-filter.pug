@@ -1,0 +1,63 @@
+include ../mixins/options.pug
+
+.box-filter
+  .inner-head
+    .inner-title Bộ Lọc
+    i.fa-solid.fa-filter
+  .inner-body
+    .inner-group
+      .inner-label Danh mục
+      select(name="category")
+        option(value="") -- Chọn danh mục --
+        +options(categoryTree, 0, categoryDetail.id)
+    .inner-group
+      .inner-label Điểm đi
+      select(name="locationFrom")
+        option(value="") -- Chọn điểm đi --
+        each item in cityList
+          option(value=item.id) #{item.name}
+    .inner-group
+      .inner-label Điểm đến
+      select(name="locationTo")
+        option(value="") -- Chọn điểm đến --
+        each item in cityList
+          option(value=item.name) #{item.name}
+    .inner-group
+      .inner-label Ngày khởi hành
+      input(type="date" name="departureDate")
+    .inner-group
+      .inner-label Số Lượng Hành Khách
+      .inner-input-list
+        .inner-input-item
+          .inner-label Người lớn:
+          input(
+            value="0" 
+            type="number"
+            name="stockAdult"
+            )
+        .inner-input-item
+          .inner-label Trẻ em:
+          input(
+            value="0" 
+            type="number"
+            name="stockChildren"
+            )
+        .inner-input-item
+          .inner-label Em bé:
+          input(
+            value="0" 
+            type="number"
+            name="stockBaby"
+            )
+    .inner-group
+      .inner-label Mức giá
+      select(name="price")
+        option(value="") -- Chọn khoảng giá --
+        option(value="0-999999") Dưới 1tr
+        option(value="1000000-3000000") Từ 1tr đến 3tr
+        option(value="3000000-6000000") Từ 3tr đến 6tr
+        option(value="6000000-10000000") Từ 6tr đến 10tr
+        option(value="10000000-1000000000") Trên 10tr
+    .inner-group
+      button.inner-button Áp Dụng
+.inner-overlay

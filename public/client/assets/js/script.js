@@ -397,20 +397,18 @@ if(orderForm) {
 const boxFilter = document.querySelector(".box-filter");
 if(boxFilter) {
   const url = new URL(`${window.location.origin}/search`);
-
-  const buttonApply = boxFilter.querySelector(".inner-button");
-
+  const filterList = [
+    "category",
+    "locationFrom",
+    "locationTo",
+    "departureDate",
+    "stockAdult",
+    "stockChildren",
+    "stockBaby",
+    "price"
+  ];
+  const buttonApply = boxFilter.querySelector(".inner-button"); // Bắt sự kiện click nút apply
   buttonApply.addEventListener("click", () => {
-    const filterList = [
-      "locationFrom",
-      "locationTo",
-      "departureDate",
-      "stockAdult",
-      "stockChildren",
-      "stockBaby",
-      "price"
-    ];
-
     filterList.forEach(key => {
       const value = boxFilter.querySelector(`[name="${key}"]`).value;
       if(value) {
@@ -422,6 +420,16 @@ if(boxFilter) {
 
     window.location.href = url.href;
   });
+
+  // Hiển thị lựa chọn mặc định
+  const urlCurrent = new URL(window.location.href);
+  filterList.forEach(key => {
+    const value = urlCurrent.searchParams.get(key);
+    if(value) {
+      boxFilter.querySelector(`[name="${key}"]`).value = value;
+    }
+  });
+
 }
 // End Box Filter
 

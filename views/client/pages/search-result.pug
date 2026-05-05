@@ -1,12 +1,7 @@
-extends ../layouts/default.pug 
-include ../mixins/breadcrumb.pug
+extends ../layouts/default.pug
 include ../mixins/product.pug
 
-block main 
-  // Breadcrumb
-  +box-breadcrumb(breadcrumb)
-  // End Breadcrumb
-
+block main
   // Section 9
   .section-9
     .container
@@ -17,8 +12,7 @@ block main
           // End Box Filter
         .inner-right
           .inner-info
-            h2.inner-title #{categoryDetail.name}
-            .inner-desc !{categoryDetail.description}
+            h2.inner-title Kết quả tìm kiếm
           .inner-info-2
             .inner-sort
               .inner-label Sắp xếp:
@@ -42,9 +36,12 @@ block main
               span.inner-title Bộ Lọc
               i.fa-solid.fa-filter
           .inner-list-tour
-            each item in tourList 
-              +product-item(item)
-
+            if (tourList.length > 0)
+              each item in tourList
+                +product-item(item)
+            else
+              p
+                i Không tìm thấy kết quả.
           // Pagination
           .box-pagination
             button
