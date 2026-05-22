@@ -34,16 +34,16 @@ module.exports.result = async (req, res) => {
 
   // Điểm đi
   if(req.query.locationFrom) {
-    find.locations = req.query.locationFrom;
+    find.locations = req.query.locationFrom; // xem trong mảng locations có phần tử locationFrom không
   }
   // Hết Điểm đi
 
   // Điểm đến
-  // if(req.query.locationTo) {
-  //   const keyword = slugify(req.query.locationTo);
-  //     const regex = new RegExp(keyword, "i");
-  //     find.slug = regex;
-  // }
+  if(req.query.locationTo) {
+    const keyword = slugify(req.query.locationTo);
+    const regex = new RegExp(keyword, "i");
+    find.slug = regex;
+  }
   // Hết Điểm đến
 
   // Ngày khởi hành

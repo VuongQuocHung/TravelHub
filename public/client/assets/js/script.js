@@ -394,6 +394,7 @@ if(orderForm) {
 }
 // End Order Form
 
+// Box Filter
 const boxFilter = document.querySelector(".box-filter");
 if(boxFilter) {
   const url = new URL(`${window.location.origin}/search`);
@@ -410,16 +411,16 @@ if(boxFilter) {
   const buttonApply = boxFilter.querySelector(".inner-button"); // Bắt sự kiện click nút apply
   buttonApply.addEventListener("click", () => {
     filterList.forEach(key => {
-      const value = boxFilter.querySelector(`[name="${key}"]`).value;
-      if(value) {
-        url.searchParams.set(key, value);
-      } else {
-        url.searchParams.delete(key);
-      }
-    });
-
-    window.location.href = url.href;
+    const value = boxFilter.querySelector(`[name="${key}"]`).value;
+    if(value) {
+      url.searchParams.set(key, value);
+    } else {
+      url.searchParams.delete(key);
+    }
   });
+
+  window.location.href = url.href;
+});
 
   // Hiển thị lựa chọn mặc định
   const urlCurrent = new URL(window.location.href);

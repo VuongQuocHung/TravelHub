@@ -10,4 +10,6 @@ mixin box-breadcrumb(data)
         h1.inner-title #{data.name}
         .inner-list
           a(href="/") Trang Chủ
-          a(href=`category/${data.slug}`) #{data.name}
+          if(data.categoryName)
+            a(href=`${data.linkCategory}`) #{data.categoryName}
+          a(href=`${data.link}`) #{data.name}
