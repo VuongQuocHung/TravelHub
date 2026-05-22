@@ -37,13 +37,13 @@ header.header
             a.active(href="/") Trang chủ
           each item in categoryTree
             li
-              a(href=`category/${item.slug}`) #{item.name}
+              a(href=`/category/${item.slug}`) #{item.name}
               if (item.children.length > 0)
                 i.fa-solid.fa-caret-down
                 ul
                   each itemChild in item.children
                     li
-                      a(href=`category/${itemChild.slug}`) #{itemChild.name}
+                      a(href=`/category/${itemChild.slug}`) #{itemChild.name}
                     
           li
             a(href="#") Tin tức
