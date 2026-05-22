@@ -9,6 +9,7 @@ const settingRoutes  = require('./setting.route');
 const contactRoutes = require('./contact.route');
 const profileRoutes = require('./profile.route');
 const authenMiddleware = require("../../middlewares/admin/authen.middleware");
+const uploadController = require("../../controllers/admin/upload.controller");
 
 router.use('/account', accountRoutes);
 
@@ -27,6 +28,8 @@ router.use('/contact', authenMiddleware.verifyToken, contactRoutes);
 router.use('/setting', authenMiddleware.verifyToken, settingRoutes);
 
 router.use('/profile', authenMiddleware.verifyToken, profileRoutes);
+
+router.use('/upload', authenMiddleware.verifyToken, require('./upload.route'));
 
 
 router.use(authenMiddleware.verifyToken, (req, res) => {
