@@ -10,6 +10,7 @@ const schema = new mongoose.Schema(
     status: String,
     featured: String,
     avatar: String,
+    images: Array,
     priceAdult: Number,
     priceChildren: Number,
     priceBaby: Number,

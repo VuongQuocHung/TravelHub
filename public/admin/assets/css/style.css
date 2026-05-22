@@ -1485,6 +1485,11 @@ a {
   color: #EF3826;
 }
 
+.section-8 form .inner-upload-image-multi .filepond--root {
+  width: 300px;
+  max-height: 600px;
+}
+
 @media (max-width: 767.98px) {
   .section-8 {
     padding: 20px;

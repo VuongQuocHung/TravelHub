@@ -13,14 +13,20 @@ router.get('/trash', tourController.trash);
 
 router.post('/create', 
   checkPer(["tour-create"]),
-  upload.single('avatar'), 
+  upload.fields([
+    { name: 'avatar', maxCount: 1 },
+    { name: 'images', maxCount: 10 }
+  ]), 
   tourValidate.createPost,
   tourController.createPost
 );
 
 router.patch('/edit/:id', 
   checkPer(["tour-edit"]),
-  upload.single('avatar'), 
+  upload.fields([
+    { name: 'avatar', maxCount: 1 },
+    { name: 'images', maxCount: 10 }
+  ]), 
   tourValidate.createPost,
   tourController.editPatch
 );

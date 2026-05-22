@@ -143,7 +143,17 @@ module.exports.createPost = async (req, res) => {
       }
     }
 
-    req.body.avatar = req.file ? req.file.path : "";
+        if(req.files.avatar){ // files ở đây là 1 mảng các đối tượng
+      req.body.avatar = req.files.avatar[0].path;
+    } else {
+      delete req.body.avatar;
+    }
+
+    if(req.files.images){ // files ở đây là 1 mảng các đối tượng
+      req.body.images = req.files.images.map(file => file.path);
+    } else {
+      delete req.body.images;
+    }
 
     req.body.priceAdult = req.body.priceAdult ? parseInt(req.body.priceAdult) : 0;
     req.body.priceChildren = req.body.priceChildren ? parseInt(req.body.priceChildren) : 0;
@@ -244,7 +254,17 @@ module.exports.editPatch = async (req, res) => {
       }
     }
 
-    req.body.avatar = req.file ? req.file.path : "";
+    if(req.files.avatar){ // files ở đây là 1 mảng các đối tượng
+      req.body.avatar = req.files.avatar[0].path;
+    } else {
+      delete req.body.avatar;
+    }
+
+    if(req.files.images){ // files ở đây là 1 mảng các đối tượng
+      req.body.images = req.files.images.map(file => file.path);
+    } else {
+      delete req.body.images;
+    }
 
     req.body.priceAdult = req.body.priceAdult ? parseInt(req.body.priceAdult) : 0;
     req.body.priceChildren = req.body.priceChildren ? parseInt(req.body.priceChildren) : 0;

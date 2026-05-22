@@ -15,69 +15,24 @@ block main
             .inner-images-main
               .swiper.swiper-box-images-main
                 .swiper-wrapper
-                  .swiper-slide
-                    .inner-image
-                      img(
-                        alt="" 
-                        src="/client/assets/images/banner-9.png"
-                        )
-                  .swiper-slide
-                    .inner-image
-                      img(
-                        alt="" 
-                        src="/client/assets/images/banner-10.png"
-                        )
-                  .swiper-slide
-                    .inner-image
-                      img(
-                        alt="" 
-                        src="/client/assets/images/banner-11.png"
-                        )
-                  .swiper-slide
-                    .inner-image
-                      img(
-                        alt="" 
-                        src="/client/assets/images/banner-12.png"
-                        )
-                  .swiper-slide
-                    .inner-image
-                      img(
-                        alt="" 
-                        src="/client/assets/images/banner-12.png"
-                        )
+                  each image in tourDetail.images 
+                    .swiper-slide
+                      .inner-image
+                        img(
+                          alt="" 
+                          src=image
+                          )
             .inner-images-thumb
               .swiper.swiper-box-images-thumb
                 .swiper-wrapper
-                  .swiper-slide
-                    .inner-image
-                      img(
-                        alt="" 
-                        src="/client/assets/images/banner-9.png"
-                        )
-                  .swiper-slide
-                    .inner-image
-                      img(
-                        alt="" 
-                        src="/client/assets/images/banner-10.png"
-                        )
-                  .swiper-slide
-                    .inner-image
-                      img(
-                        alt="" 
-                        src="/client/assets/images/banner-11.png"
-                        )
-                  .swiper-slide
-                    .inner-image
-                      img(
-                        alt="" 
-                        src="/client/assets/images/banner-12.png"
-                        )
-                  .swiper-slide
-                    .inner-image
-                      img(
-                        alt="" 
-                        src="/client/assets/images/banner-12.png"
-                        )
+                  each image in tourDetail.images 
+                    .swiper-slide
+                      .inner-image
+                        img(
+                          alt="" 
+                          src=image
+                          )
+                  
           .box-tour-info
             .inner-title Thông Tin Tour
             .inner-content

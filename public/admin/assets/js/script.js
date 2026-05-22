@@ -106,6 +106,37 @@ if(listFilepondImage.length > 0) {
 }
 // End Filepond Image
 
+// Filepond Image Multi
+const listFilepondImageMulti = document.querySelectorAll("[filepond-image-multi]");
+let filePondMulti = {};
+if(listFilepondImageMulti.length > 0) {
+  listFilepondImageMulti.forEach(filepondImage => {
+    FilePond.registerPlugin(FilePondPluginImagePreview);
+    FilePond.registerPlugin(FilePondPluginFileValidateType);
+
+    const files = [];
+    const elementListImageDefault = filepondImage.closest("[list-image-default]");
+    if(elementListImageDefault) {
+      const listImageDefault = elementListImageDefault.getAttribute("list-image-default");
+      if(listImageDefault) {
+        console.log(listImageDefault);
+        imageArray = JSON.parse(listImageDefault);
+        console.log(imageArray);
+        imageArray.forEach(imageDefault => {
+          files.push({
+            source: imageDefault
+          });
+        })
+      }
+    }
+    filePondMulti[filepondImage.name] = FilePond.create(filepondImage, {
+      labelIdle: '+',
+      files: files
+    });
+  });
+}
+// End Filepond Image Multi
+
 // Biểu đồ doanh thu
 const revenueChart = document.querySelector("#revenue-chart");
 if(revenueChart) {
@@ -281,6 +312,7 @@ if(tourCreateForm) {
       if(avatars.length > 0) {
         avatar = avatars[0].file;
       }
+      const images = filePondMulti.images.getFiles();
       const priceAdult = event.target.priceAdult.value;
       const priceChildren = event.target.priceChildren.value;
       const priceBaby = event.target.priceBaby.value;
@@ -328,6 +360,11 @@ if(tourCreateForm) {
       formData.append("status", status);
       formData.append("featured", featured);
       formData.append("avatar", avatar);
+      if(images.length > 0) {
+        images.forEach(image => {
+          formData.append("images", image.file);
+        });
+      }
       formData.append("priceAdult", priceAdult);
       formData.append("priceChildren", priceChildren);
       formData.append("priceBaby", priceBaby);
@@ -388,6 +425,7 @@ if(tourEditForm) {
       if(avatars.length > 0) {
         avatar = avatars[0].file;
       }
+      const images = filePondMulti.images.getFiles();
       const priceAdult = event.target.priceAdult.value;
       const priceChildren = event.target.priceChildren.value;
       const priceBaby = event.target.priceBaby.value;
@@ -435,6 +473,11 @@ if(tourEditForm) {
       formData.append("status", status);
       formData.append("featured", featured);
       formData.append("avatar", avatar);
+      if(images.length > 0) {
+        images.forEach(image => {
+          formData.append("images", image.file);  
+        })
+      }
       formData.append("priceAdult", priceAdult);
       formData.append("priceChildren", priceChildren);
       formData.append("priceBaby", priceBaby);
@@ -450,6 +493,7 @@ if(tourEditForm) {
       formData.append("departureDate", departureDate);
       formData.append("information", information);
       formData.append("schedules", JSON.stringify(schedules));
+
       
       fetch(`/${pathAdmin}/tour/edit/${id}`, {
         method: "PATCH",

@@ -1976,13 +1976,15 @@ input, button, textarea {
   aspect-ratio: 695/480;
   border-radius: 10px;
   overflow: hidden;
+  border: 1px solid #b04040;
 }
 
 .box-images .inner-images-main .inner-image img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   display: block;
+
 }
 
 /* .box-images .inner-images-thumb {
@@ -1994,6 +1996,7 @@ input, button, textarea {
   aspect-ratio: 166/129;
   border-radius: 10px;
   overflow: hidden;
+  border: 1px solid #b04040;
 }
 
 .box-images .inner-images-thumb .inner-image img {
@@ -2001,6 +2004,12 @@ input, button, textarea {
   height: 100%;
   object-fit: cover;
   display: block;
+  padding: 10px;
+}
+
+
+.box-images .inner-images-thumb .swiper-slide-thumb-active .inner-image {
+  background-color: #edffed;
 }
 
 @media (max-width: 575.98px) {
@@ -2050,8 +2059,8 @@ input, button, textarea {
 .box-tour-detail .inner-product .inner-image img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  display: block;
+  object-fit: contain;
+  border: 1px solid #b04040;
 }
 
 .box-tour-detail .inner-product .inner-info {

@@ -12,6 +12,7 @@ module.exports.createPost = (req, res, next) => {
     status: Joi.string().allow(''),
     featured: Joi.string().allow(''),
     avatar: Joi.string().allow(''),
+    images: Joi.string().allow(''),
     priceAdult: Joi.string().allow(''),
     priceChildren: Joi.string().allow(''),
     priceBaby: Joi.string().allow(''),
