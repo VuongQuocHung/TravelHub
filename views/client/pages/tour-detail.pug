@@ -86,7 +86,7 @@ block main
                 span.inner-highlight #{tourDetail.departureDateFormat}
             .inner-form
               label.inner-label Khởi Hành Tại:
-              select
+              select(locationFrom)
                 each item in cityList 
                   option(value=item._id) #{item.name}
             .inner-quantity
@@ -142,5 +142,5 @@ block main
               .inner-total-price 
                 span(total-price) #{tourDetail.priceNewAdult.toLocaleString("vi-VN")} 
                 span đ
-            button.inner-button-add-cart Thêm Vào Giỏ Hàng
+            button.inner-button-add-cart(tourId = tourDetail.id) Thêm Vào Giỏ Hàng
   // End Section 10

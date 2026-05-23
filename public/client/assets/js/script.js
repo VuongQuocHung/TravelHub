@@ -510,7 +510,6 @@ if(boxTourDetail) {
       quantity = parseInt(input.value);
       const spanQuantity = boxTourDetail.querySelector(`[quantity="${type}"]`);
       spanQuantity.innerHTML = quantity;
-      
       // Tính tổng tiền
       let totalPrice = 0;
       listInputQuantity.forEach(item => { // Duyệt qua tất cả input để tính tổng tiền
@@ -520,6 +519,50 @@ if(boxTourDetail) {
       })
       const elementTotalPrice = boxTourDetail.querySelector("[total-price]");
       elementTotalPrice.innerHTML = totalPrice.toLocaleString("vi-VN");
-    })
-  })
+    });
+  });
+
+  // Thêm vào giỏ hàng
+  const buttonAddCart = boxTourDetail.querySelector(".inner-button-add-cart");
+  buttonAddCart.addEventListener("click", () => {
+    const tourId = buttonAddCart.getAttribute("tourId");
+    const locationFrom = boxTourDetail.querySelector("[locationFrom]").value;
+    let listQuantity = {}
+    listInputQuantity.forEach(item => {
+      const type = item.getAttribute("input-quantity");
+      const quantity = parseInt(item.value);
+      listQuantity[type] = quantity;
+    });
+
+    if(!locationFrom) {
+      notyf.error("Vui lòng chọn nơi khởi hành!");
+      return;
+    }
+
+    if(!(listQuantity.adult > 0 || listQuantity.children > 0 || listQuantity.baby > 0)) {
+      notyf.error("Vui lòng chọn ít nhất một loại vé!");
+      return;
+    }
+    console.log(listQuantity);
+
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const indexItemExist = cart.findIndex(item => item.tourId == tourId);
+    if(indexItemExist > -1) {
+      // Nếu tour đã tồn tại trong giỏ hàng thì cập nhật lại thông tin
+      cart[indexItemExist].listQuantity.adult += listQuantity.adult; 
+      cart[indexItemExist].listQuantity.children += listQuantity.children;
+      cart[indexItemExist].listQuantity.baby += listQuantity.baby;
+      cart[indexItemExist].locationFrom = locationFrom; // Cập nhật lại nơi khởi hành
+      notyf.success("Cập nhật giỏ hàng thành công!");
+    } else {
+      const item = {
+      tourId: tourId,
+      locationFrom: locationFrom,
+      listQuantity: listQuantity,
+    }
+      cart.push(item); // Nếu tour chưa tồn tại trong giỏ hàng thì thêm mới
+      notyf.success("Thêm vào giỏ hàng thành công!");
+    }
+    localStorage.setItem("cart", JSON.stringify(cart));
+  });
 }
