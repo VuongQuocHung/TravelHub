@@ -100,9 +100,11 @@ block main
                       min="0" 
                       max=tourDetail.stockAdult
                       type="number"
+                      input-quantity="adult"
+                      price=tourDetail.priceNewAdult
                       )
                   .inner-item-price
-                    span 1
+                    span(quantity="adult") 1
                     span x
                     span.inner-highlight #{tourDetail.priceNewAdult.toLocaleString("vi-VN")}
                 .inner-item
@@ -113,9 +115,11 @@ block main
                       min="0" 
                       max =tourDetail.stockChildren
                       type="number"
+                      input-quantity="children"
+                      price=tourDetail.priceNewChildren
                       )
                   .inner-item-price
-                    span 0
+                    span(quantity="children") 0
                     span x
                     span.inner-highlight #{tourDetail.priceNewChildren.toLocaleString("vi-VN")}
                 .inner-item
@@ -126,13 +130,17 @@ block main
                       min="0" 
                       max=tourDetail.stockBaby
                       type="number"
+                      input-quantity="baby"
+                      price=tourDetail.priceNewBaby
                       )
                   .inner-item-price
-                    span 0
+                    span(quantity="baby") 0
                     span x
                     span.inner-highlight #{tourDetail.priceNewBaby.toLocaleString("vi-VN")}
             .inner-total
               .inner-total-label Tổng cộng:
-              .inner-total-price #{tourDetail.priceNewAdult.toLocaleString("vi-VN")} đ
+              .inner-total-price 
+                span(total-price) #{tourDetail.priceNewAdult.toLocaleString("vi-VN")} 
+                span đ
             button.inner-button-add-cart Thêm Vào Giỏ Hàng
   // End Section 10

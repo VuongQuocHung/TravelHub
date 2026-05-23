@@ -1,3 +1,4 @@
+
 // Menu Mobile
 const buttonMenuMobile = document.querySelector(".header .inner-menu-mobile");
 if(buttonMenuMobile) {
@@ -487,3 +488,38 @@ if(boxSearch) {
   });
 }
 // End Box Search
+
+// box-tour-detail 
+const boxTourDetail = document.querySelector(".box-tour-detail");
+if(boxTourDetail) {
+  // Tăng/giảm số lượng
+  const listInputQuantity = boxTourDetail.querySelectorAll("input[input-quantity]");
+  listInputQuantity.forEach(input => {
+    input.addEventListener("change", () => {
+      // Cập nhật số lượng
+      let quantity = parseInt(input.value);
+      const type = input.getAttribute("input-quantity");
+      const max = parseInt(input.getAttribute("max"));
+      if(quantity > max){
+        input.value = max;
+        notyf.error(`Chỉ còn lại ${max} chỗ!`);
+      }
+      if(quantity < 0) {
+        input.value = 0;
+      }
+      quantity = parseInt(input.value);
+      const spanQuantity = boxTourDetail.querySelector(`[quantity="${type}"]`);
+      spanQuantity.innerHTML = quantity;
+      
+      // Tính tổng tiền
+      let totalPrice = 0;
+      listInputQuantity.forEach(item => { // Duyệt qua tất cả input để tính tổng tiền
+        const soluong = parseInt(item.value);
+        const gia = parseInt(item.getAttribute("price"));
+        totalPrice += soluong * gia; 
+      })
+      const elementTotalPrice = boxTourDetail.querySelector("[total-price]");
+      elementTotalPrice.innerHTML = totalPrice.toLocaleString("vi-VN");
+    })
+  })
+}

@@ -98,7 +98,7 @@ block main
           input(type="date" id="departureDate" name="departureDate" value=tourDetail.departureDateFormat)
         .inner-group.inner-two-col
           label(class="inner-label" for="information") Thông tin tour
-          textarea(id="information" textarea-mce name="information")
+          textarea(id="information" textarea-mce name="information") !{tourDetail.information}
         .inner-group.inner-two-col
           label(class="inner-label") Lịch trình tour
           .inner-schedule
