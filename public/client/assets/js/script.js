@@ -489,6 +489,15 @@ if(boxSearch) {
 }
 // End Box Search
 
+const updateMiniCart = () => {
+  const miniCart = document.querySelector("[mini-cart]");
+  if(miniCart){
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    miniCart.innerHTML = cart.length;
+  }
+}
+updateMiniCart();
+
 // box-tour-detail 
 const boxTourDetail = document.querySelector(".box-tour-detail");
 if(boxTourDetail) {
@@ -543,7 +552,6 @@ if(boxTourDetail) {
       notyf.error("Vui lòng chọn ít nhất một loại vé!");
       return;
     }
-    console.log(listQuantity);
 
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
     const indexItemExist = cart.findIndex(item => item.tourId == tourId);
@@ -562,7 +570,11 @@ if(boxTourDetail) {
     }
       cart.push(item); // Nếu tour chưa tồn tại trong giỏ hàng thì thêm mới
       notyf.success("Thêm vào giỏ hàng thành công!");
+      updateMiniCart();
     }
     localStorage.setItem("cart", JSON.stringify(cart));
   });
 }
+
+// End box-tour-detail
+
