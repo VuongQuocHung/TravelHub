@@ -567,6 +567,7 @@ if(boxTourDetail) {
       tourId: tourId,
       locationFrom: locationFrom,
       listQuantity: listQuantity,
+      checked: true, // Mặc định khi thêm vào giỏ hàng sẽ được chọn
     }
       cart.unshift(item); // Nếu tour chưa tồn tại trong giỏ hàng thì thêm vào đầu mảng
       notyf.success("Thêm vào giỏ hàng thành công!");
@@ -595,14 +596,18 @@ const drawCart = () => {
     if(data.code == "success") {
       let subTotal = 0;
       const htmlArray = data.cartDetail.map(item => {
-        subTotal += item.detail.priceNewAdult * item.listQuantity.adult + item.detail.priceNewChildren * item.listQuantity.children + item.detail.priceNewBaby * item.listQuantity.baby;
+        if(item.checked) { // Chỉ tính tổng tiền nếu tour được chọn
+          subTotal  += item.detail.priceNewAdult * item.listQuantity.adult 
+                    + item.detail.priceNewChildren * item.listQuantity.children 
+                    + item.detail.priceNewBaby * item.listQuantity.baby;
+        }
         return `
           <div class="inner-tour-item">
             <div class="inner-actions">
               <button class="inner-delete" button-delete tour-id="${item.tourId}">
                 <i class="fa-solid fa-xmark"></i>
               </button>
-              <input type="checkbox" class="inner-check">
+              <input type="checkbox" class="inner-check" ${item.checked ? "checked" : ""} tour-id="${item.tourId}">
             </div>
             <div class="inner-product">
               <div class="inner-image">
@@ -744,6 +749,22 @@ const drawCart = () => {
             localStorage.setItem("cart", JSON.stringify(cart));
             drawCart(); // Vẽ lại giỏ hàng
             updateMiniCart(); // Cập nhật lại số lượng trên mini cart
+          }
+        })
+      })
+
+      // Bắt sự kiện check item
+      const listCheckBox = boxCart.querySelectorAll(".inner-check");
+      listCheckBox.forEach(checkbox => {
+        checkbox.addEventListener("change", () => {
+          const checked = checkbox.checked;
+          const tourId = checkbox.getAttribute("tour-id");
+          const cart = JSON.parse(localStorage.getItem("cart")) || [];
+          const indexItem = cart.findIndex(item => item.tourId == tourId);
+          if(indexItem > -1){
+            cart[indexItem].checked = checked; // Cập nhật lại trạng thái checked của item trong giỏ hàng
+            localStorage.setItem("cart", JSON.stringify(cart));
+            drawCart(); // Vẽ lại giỏ hàng để cập nhật lại tổng tiền
           }
         })
       })
