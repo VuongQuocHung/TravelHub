@@ -1,6 +1,10 @@
 const { randomNumberString } = require("../../helpers/random.helper");
 const Order = require("../../models/order.model");
 const Tour = require("../../models/tour.model");
+const City = require("../../models/city.model");
+const { paymentMethodList, paymentStatusList, orderStatusList } = require("../../configs/variable.config");
+const moment = require("moment");
+
 module.exports.createPost = async (req, res) => {
   // mã đơn hàng
   while(true){
@@ -61,7 +65,54 @@ module.exports.createPost = async (req, res) => {
   res.json({
     code: "success",
     message: "Tạo đơn hàng thành công!",
-    orderId: newRecord.id,
+    orderCode: req.body.code
   })
 }
 
+module.exports.success = async (req, res) => {
+  const {orderCode, phone} = req.query;
+  const orderDetail = await Order.findOne({ 
+    code: orderCode, 
+    phone: phone,
+    deleted: false
+  });
+
+  if(!orderDetail) {
+    res.redirect("/");
+    return;
+  }
+
+  // Phương thức thanh toán
+  orderDetail.paymentMethodName = paymentMethodList.find(item => item.value === orderDetail.paymentMethod).label;
+
+  // Trạng thái thanh toán
+  orderDetail.paymentStatusName = paymentStatusList.find(item => item.value === orderDetail.paymentStatus).label;
+
+  // Trạng thái đơn hàng
+  orderDetail.statusName = orderStatusList.find(item => item.value === orderDetail.status).label;
+
+  orderDetail.createdAtFormat = moment(orderDetail.createdAt).format("HH:mm - DD/MM/YYYY");
+
+  for(const tour of orderDetail.toursChecked) {
+    console.log("tour", tour);
+    tour.departureDateFormatted = moment(tour.departureDate).format("HH:mm DD/MM/YYYY");
+    const city = await City.findOne({
+      _id: tour.locationFrom
+    });
+    console.log("city", city);
+    tour.cityName = city.name;
+    const tourInfo = await Tour.findOne({
+      _id: tour.tourId,
+      deleted: false,
+      status: "active"
+    });
+    if(tourInfo){
+      tour.slug = tourInfo.slug;
+    }
+  }
+
+  res.render("client/pages/order-success", {
+    pageTitle: "Đặt tour thành công",
+    orderDetail: orderDetail
+  });
+}

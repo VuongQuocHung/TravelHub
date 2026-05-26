@@ -90,3 +90,45 @@ module.exports.permissionsList = [
   },
 
 ];
+
+module.exports.paymentMethodList = [
+  {
+    label: "Tiền mặt",
+    value: "money"
+  },
+  {
+    label: "ZaloPay",
+    value: "zalopay"
+  },
+  {
+    label: "VNPay",
+    value: "vnpay"
+  },
+  {
+    label: "Chuyển khoản ngân hàng",
+    value: "bank"
+  },
+]
+
+module.exports.paymentStatusList = [
+  {
+    label: "Chưa thanh toán",
+    value: "unpaid"
+  },
+  {
+    label: "Đã thanh toán",
+    value: "paid"
+  },
+]
+
+module.exports.orderStatusList = [
+  {
+    label: "Khởi tạo",
+    value: "initial"
+  },
+  {
+    label: "Hoàn thành",
+
+    value: "done"
+  },
+]
