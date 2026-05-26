@@ -369,12 +369,54 @@ if(orderForm) {
       const fullName = event.target.fullName.value;
       const phone = event.target.phone.value;
       const note = event.target.note.value;
-      const method = event.target.method.value;
+      const paymentMethod = event.target.method.value;
+      const cart = JSON.parse(localStorage.getItem("cart"));
+      const toursChecked = [];
+      cart.forEach(item => {
+        if(item.checked) {
+          toursChecked.push({
+            tourId: item.tourId,
+            locationFrom: item.locationFrom,
+            quantityAdult: item.listQuantity.adult,
+            quantityChildren: item.listQuantity.children,
+            quantityBaby: item.listQuantity.baby
+          });
+        }
+      });
 
-      console.log(fullName);
-      console.log(phone);
-      console.log(note);
-      console.log(method);
+      if(toursChecked.length == 0) {
+        notyf.error("Vui lòng chọn ít nhất 1 tour!");
+        return;
+      }
+      const dataFinal = {
+        fullName: fullName,
+        phone: phone,
+        note: note,
+        paymentMethod: paymentMethod,
+        toursChecked: toursChecked,
+      }
+      fetch(`/order/create`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dataFinal)
+      })
+        .then(res => res.json())
+        .then(data => {
+          if(data.code == "error") {
+            notyf.error(data.message);
+          }
+          if(data.code == "success") {
+            // Xóa các tour đã đặt trong giỏ hàng
+            const cart = JSON.parse(localStorage.getItem("cart")) || [];
+            const cartFilter = cart.filter(item => item.checked == false);
+            localStorage.setItem("cart", JSON.stringify(cartFilter));
+
+            drawNotyf(data.code, data.message);
+            window.location.href = `/order/success?orderCode=${data.orderCode}&phone=${phone}`;
+          }
+        })
     })
   ;
 

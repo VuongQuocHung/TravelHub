@@ -8,6 +8,7 @@ const categoryMiddleware = require("../../middlewares/client/category.middleware
 const contactRoutes = require('./contact.route');
 const categoryRoutes = require('./category.route');
 const cityMiddleware = require('../../middlewares/client/city.middleware');
+const orderRoutes = require('./order.route');
 
 router.use(categoryMiddleware.list);
 router.use(settingMiddleware.websiteInfo)
@@ -19,6 +20,7 @@ router.use('/cart', cartRoutes);
 router.use('/contact', contactRoutes);
 router.use('/category', categoryRoutes);
 router.use('/search', searchRoutes);
+router.use('/order', orderRoutes);
 
 module.exports = router;
 
