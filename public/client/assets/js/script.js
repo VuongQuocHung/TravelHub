@@ -568,7 +568,7 @@ if(boxTourDetail) {
       locationFrom: locationFrom,
       listQuantity: listQuantity,
     }
-      cart.push(item); // Nếu tour chưa tồn tại trong giỏ hàng thì thêm mới
+      cart.unshift(item); // Nếu tour chưa tồn tại trong giỏ hàng thì thêm vào đầu mảng
       notyf.success("Thêm vào giỏ hàng thành công!");
     }
     localStorage.setItem("cart", JSON.stringify(cart));
@@ -599,7 +599,7 @@ const drawCart = () => {
         return `
           <div class="inner-tour-item">
             <div class="inner-actions">
-              <button class="inner-delete">
+              <button class="inner-delete" button-delete tour-id="${item.tourId}">
                 <i class="fa-solid fa-xmark"></i>
               </button>
               <input type="checkbox" class="inner-check">
@@ -715,24 +715,39 @@ const drawCart = () => {
         localStorage.setItem("cart", JSON.stringify(data.cartDetail));
         updateMiniCart();
       }
-    }
-
-    // Bắt sự kiện tăng giảm số lượng khách hàng
-    const listInputTypeCustomer = boxCart.querySelectorAll("input[type-customer]");
-    listInputTypeCustomer.forEach(input => {
-      input.addEventListener("change", () => {
-        const tourId = input.getAttribute("tour-id");
-        const type = input.getAttribute("type-customer");
-        const quantity = parseInt(input.value);
-        const cart = JSON.parse(localStorage.getItem("cart")) || [];
-        const indexItem = cart.findIndex(item => item.tourId == tourId);
-        if(indexItem > -1) {
-          cart[indexItem].listQuantity[type] = quantity;
-          localStorage.setItem("cart", JSON.stringify(cart));
-          drawCart();
-        }
+      // Bắt sự kiện tăng giảm số lượng khách hàng
+      const listInputTypeCustomer = boxCart.querySelectorAll("input[type-customer]");
+      listInputTypeCustomer.forEach(input => {
+        input.addEventListener("change", () => {
+          const tourId = input.getAttribute("tour-id");
+          const type = input.getAttribute("type-customer");
+          const quantity = parseInt(input.value);
+          const cart = JSON.parse(localStorage.getItem("cart")) || [];
+          const indexItem = cart.findIndex(item => item.tourId == tourId);
+          if(indexItem > -1) {
+            cart[indexItem].listQuantity[type] = quantity;
+            localStorage.setItem("cart", JSON.stringify(cart));
+            drawCart();
+          }
+        });
       });
-    });
+
+      // Bắt sự kiện xóa từng tour
+      const listButtonDelete = boxCart.querySelectorAll("[button-delete]");
+      listButtonDelete.forEach(button => {
+        button.addEventListener("click", () => {
+          const tourId = button.getAttribute("tour-id");
+          const cart = JSON.parse(localStorage.getItem("cart")) || [];
+          const indexItem = cart.findIndex(item => item.tourId == tourId);
+          if(indexItem > -1){
+            cart.splice(indexItem, 1); // Xóa phần tử khỏi mảng
+            localStorage.setItem("cart", JSON.stringify(cart));
+            drawCart(); // Vẽ lại giỏ hàng
+            updateMiniCart(); // Cập nhật lại số lượng trên mini cart
+          }
+        })
+      })
+    }
 
     if(data.code == "error") {
       notyf.error(data.message);
