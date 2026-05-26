@@ -570,11 +570,138 @@ if(boxTourDetail) {
     }
       cart.push(item); // Nếu tour chưa tồn tại trong giỏ hàng thì thêm mới
       notyf.success("Thêm vào giỏ hàng thành công!");
-      updateMiniCart();
     }
     localStorage.setItem("cart", JSON.stringify(cart));
+    updateMiniCart();
   });
 }
 
 // End box-tour-detail
 
+// Box Cart
+const boxCart = document.querySelector("[box-cart]");
+if(boxCart) {
+  const cart = JSON.parse(localStorage.getItem("cart")) ;
+  fetch(`/cart/detail`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      cart: cart
+    })
+  })
+  .then(res => res.json( ))
+  .then(data => {
+    if(data.code == "success") {
+      console.log(data);
+      let subTotal = 0;
+      const htmlArray = data.cartDetail.map(item => {
+        subTotal += item.detail.priceNewAdult * item.listQuantity.adult + item.detail.priceNewChildren * item.listQuantity.children + item.detail.priceNewBaby * item.listQuantity.baby;
+        return `
+          <div class="inner-tour-item">
+            <div class="inner-actions">
+              <button class="inner-delete">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+              <input type="checkbox" class="inner-check">
+            </div>
+            <div class="inner-product">
+              <div class="inner-image">
+                <a href="/tour/detail/${item.detail.slug}">
+                  <img src="${item.detail.avatar}" alt="${item.detail.name}">
+                </a>
+              </div>
+              <div class="inner-content">
+                <div class="inner-title">
+                  <a href="/tour/detail/${item.detail.slug}">
+                    ${item.detail.name}
+                  </a>
+                </div>
+                <div class="inner-meta">
+                  <div class="inner-meta-item">
+                    Mã Tour: <b>123456789</b>
+                  </div>
+                  <div class="inner-meta-item">
+                    Ngày Khởi Hành: <b>${item.detail.departureDate}</b>
+                  </div>
+                  <div class="inner-meta-item">
+                    Khởi Hành Tại: <b>${item.detail.locationFromName}</b>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="inner-quantity">
+              <label class="inner-label">Số Lượng Hành Khách</label>
+              <div class="inner-list">
+                <div class="inner-item">
+                  <div class="inner-item-label">
+                    Người lớn:
+                  </div>
+                  <div class="inner-item-input">
+                    <input type="number" min="0" max="${item.detail.stockAdult}" value="${item.listQuantity.adult}">
+                  </div>
+                  <div class="inner-item-price">
+                    <span>${item.listQuantity.adult}</span>
+                    <span>x</span>
+                    <span class="inner-highlight">${item.detail.priceNewAdult.toLocaleString("vi-VN")}</span>
+                  </div>
+                </div>
+                <div class="inner-item">
+                  <div class="inner-item-label">
+                    Trẻ em:
+                  </div>
+                  <div class="inner-item-input">
+                    <input type="number" min="0" max="${item.detail.stockChildren}" value="${item.listQuantity.children}">
+                  </div>
+                  <div class="inner-item-price">
+                    <span>${item.listQuantity.children}</span>
+                    <span>x</span>
+                    <span class="inner-highlight">${item.detail.priceNewChildren.toLocaleString("vi-VN")}</span>
+                  </div>
+                </div>
+                <div class="inner-item">
+                  <div class="inner-item-label">
+                    Em bé:
+                  </div>
+                  <div class="inner-item-input">
+                    <input type="number" min="0" max="${item.detail.stockBaby}" value="${item.listQuantity.baby}">
+                  </div>
+                  <div class="inner-item-price">
+                    <span>${item.listQuantity.baby}</span>
+                    <span>x</span>
+                    <span class="inner-highlight">${item.detail.priceNewBaby.toLocaleString("vi-VN")}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `
+      })
+      const elementTourList = boxCart.querySelector(".inner-tour-list");
+      elementTourList.innerHTML = htmlArray.join("");
+
+      const discount = 0;
+      const totalPrice = subTotal - discount;
+      const elementSubTotal = boxCart.querySelector("[sub-total]");
+      const elementDiscount = boxCart.querySelector("[discount]");
+      const elementTotalPrice = boxCart.querySelector("[total-price]");
+      elementSubTotal.innerHTML = subTotal.toLocaleString("vi-VN");
+      elementDiscount.innerHTML = discount.toLocaleString("vi-VN");
+      elementTotalPrice.innerHTML = totalPrice.toLocaleString("vi-VN");
+
+      // Cập nhật lại số lượng trong giỏ hàng khi có sự thay đổi
+      if(cart.length != data.cartDetail.length) {
+        data.cartDetail.forEach(item => delete item.detail); // Xóa trường detail để cập nhật lại số lượng dễ dàng hơn
+        localStorage.setItem("cart", JSON.stringify(data.cartDetail));
+        updateMiniCart();
+      }
+    }
+    if(data.code == "error") {
+      notyf.error(data.message);
+      localStorage.setItem("cart", JSON.stringify([])); // Xóa giỏ hàng nếu có lỗi
+      updateMiniCart();
+    }
+  });
+}
+// End Box Cart
