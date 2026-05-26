@@ -578,9 +578,8 @@ if(boxTourDetail) {
 
 // End box-tour-detail
 
-// Box Cart
-const boxCart = document.querySelector("[box-cart]");
-if(boxCart) {
+// Hàm vẽ giỏ hàng (call lại mỗi khi có sự thay đổi về số lượng trong giỏ hàng)
+const drawCart = () => {
   const cart = JSON.parse(localStorage.getItem("cart")) ;
   fetch(`/cart/detail`, {
     method: "POST",
@@ -594,7 +593,6 @@ if(boxCart) {
   .then(res => res.json( ))
   .then(data => {
     if(data.code == "success") {
-      console.log(data);
       let subTotal = 0;
       const htmlArray = data.cartDetail.map(item => {
         subTotal += item.detail.priceNewAdult * item.listQuantity.adult + item.detail.priceNewChildren * item.listQuantity.children + item.detail.priceNewBaby * item.listQuantity.baby;
@@ -639,7 +637,14 @@ if(boxCart) {
                     Người lớn:
                   </div>
                   <div class="inner-item-input">
-                    <input type="number" min="0" max="${item.detail.stockAdult}" value="${item.listQuantity.adult}">
+                    <input 
+                      type="number" 
+                      min="0" 
+                      max="${item.detail.stockAdult}" 
+                      value="${item.listQuantity.adult}"
+                      type-customer="adult"
+                      tour-id="${item.tourId}"
+                    >
                   </div>
                   <div class="inner-item-price">
                     <span>${item.listQuantity.adult}</span>
@@ -652,7 +657,14 @@ if(boxCart) {
                     Trẻ em:
                   </div>
                   <div class="inner-item-input">
-                    <input type="number" min="0" max="${item.detail.stockChildren}" value="${item.listQuantity.children}">
+                    <input 
+                      type="number" 
+                      min="0" 
+                      max="${item.detail.stockChildren}" 
+                      value="${item.listQuantity.children}"
+                      type-customer="children"
+                      tour-id="${item.tourId}"
+                    >
                   </div>
                   <div class="inner-item-price">
                     <span>${item.listQuantity.children}</span>
@@ -665,7 +677,14 @@ if(boxCart) {
                     Em bé:
                   </div>
                   <div class="inner-item-input">
-                    <input type="number" min="0" max="${item.detail.stockBaby}" value="${item.listQuantity.baby}">
+                    <input 
+                      type="number" 
+                      min="0" 
+                      max="${item.detail.stockBaby}" 
+                      value="${item.listQuantity.baby}"
+                      type-customer="baby"
+                      tour-id="${item.tourId}"
+                    >
                   </div>
                   <div class="inner-item-price">
                     <span>${item.listQuantity.baby}</span>
@@ -697,11 +716,35 @@ if(boxCart) {
         updateMiniCart();
       }
     }
+
+    // Bắt sự kiện tăng giảm số lượng khách hàng
+    const listInputTypeCustomer = boxCart.querySelectorAll("input[type-customer]");
+    listInputTypeCustomer.forEach(input => {
+      input.addEventListener("change", () => {
+        const tourId = input.getAttribute("tour-id");
+        const type = input.getAttribute("type-customer");
+        const quantity = parseInt(input.value);
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        const indexItem = cart.findIndex(item => item.tourId == tourId);
+        if(indexItem > -1) {
+          cart[indexItem].listQuantity[type] = quantity;
+          localStorage.setItem("cart", JSON.stringify(cart));
+          drawCart();
+        }
+      });
+    });
+
     if(data.code == "error") {
       notyf.error(data.message);
       localStorage.setItem("cart", JSON.stringify([])); // Xóa giỏ hàng nếu có lỗi
       updateMiniCart();
     }
   });
+}
+
+// Box Cart
+const boxCart = document.querySelector("[box-cart]");
+if(boxCart) {
+  drawCart();
 }
 // End Box Cart
