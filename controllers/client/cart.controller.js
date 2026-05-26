@@ -11,7 +11,6 @@ module.exports.cart = (req, res) => {
 module.exports.detail = async (req, res) => {
   try {
     const { cart } = req.body;
-    console.log(req.body);
     const cartDetail = [];
     for(const item of cart){
       const tourDetail = await Tour.findOne({

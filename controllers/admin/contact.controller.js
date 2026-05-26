@@ -13,8 +13,8 @@ module.exports.list = async (req, res) => {
     const regex = new RegExp(keyword, "i");
     target.slug = regex;
   }
-  console.log("target tìm kiếm: " + target.slug);
-  console.log("keyword tìm kiếm: " + req.query.keyword);
+  // console.log("target tìm kiếm: " + target.slug);
+  // console.log("keyword tìm kiếm: " + req.query.keyword);
   // Hết Tìm Kiếm
 
   const contactList = await Contact
@@ -22,7 +22,7 @@ module.exports.list = async (req, res) => {
     .sort({ 
       createdAt: "desc"
     });
-  console.log("contactList: " + contactList);
+  // console.log("contactList: " + contactList);
   for (const item of contactList) {
     item.createdAtFormat = moment(item.createdAt).format("HH:mm - DD/MM/YYYY");
   }

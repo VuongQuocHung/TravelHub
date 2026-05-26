@@ -94,12 +94,10 @@ module.exports.success = async (req, res) => {
   orderDetail.createdAtFormat = moment(orderDetail.createdAt).format("HH:mm - DD/MM/YYYY");
 
   for(const tour of orderDetail.toursChecked) {
-    console.log("tour", tour);
     tour.departureDateFormatted = moment(tour.departureDate).format("HH:mm DD/MM/YYYY");
     const city = await City.findOne({
       _id: tour.locationFrom
     });
-    console.log("city", city);
     tour.cityName = city.name;
     const tourInfo = await Tour.findOne({
       _id: tour.tourId,

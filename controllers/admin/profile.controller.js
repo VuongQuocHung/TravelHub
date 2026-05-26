@@ -64,7 +64,6 @@ module.exports.editPatch = async (req, res) => {
     });
 
   } catch (error) {
-    console.log(error);
     res.json({
       code: "error",
       message: "Có lỗi xảy ra khi cập nhật thông tin cá nhân"
@@ -87,8 +86,6 @@ module.exports.changePasswordPatch = async (req, res) => {
 
     req.body.updatedBy = id;
 
-    console.log(req.body);
-
     await AccountAdmin.updateOne({
       _id: id
     }, {
@@ -101,7 +98,6 @@ module.exports.changePasswordPatch = async (req, res) => {
     });
 
   } catch (error) {
-    console.log(error);
     res.json({
       code: "error",
       message: "Có lỗi xảy ra khi cập nhật thông tin cá nhân"

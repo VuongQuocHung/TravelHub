@@ -44,8 +44,6 @@ module.exports.list = async (req, res) => {
     const regex = new RegExp(keyword, "i");
     target.slug = regex;
   }
-  console.log("target tìm kiếm: " + target.slug);
-  console.log("keyword tìm kiếm: " + req.query.keyword);
   // Hết Tìm Kiếm
 
   // Pagination
@@ -193,7 +191,6 @@ module.exports.edit = async (req, res) => {
       _id: id,
       deleted: false
     });
-    console.log(tourDetail);
 
     if(!tourDetail){
       res.redirect(`/${pathAdmin}/tour/list`);
@@ -229,7 +226,6 @@ module.exports.editPatch = async (req, res) => {
       _id: id,
       deleted: false
     });
-    console.log(tourDetail);
 
     if(!tourDetail){
       res.json({
