@@ -60,7 +60,8 @@ module.exports.createPost = async (req, res) => {
 
   res.json({
     code: "success",
-    message: "Tạo đơn hàng thành công!"
+    message: "Tạo đơn hàng thành công!",
+    orderId: newRecord.id,
   })
 }
 
