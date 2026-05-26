@@ -124,11 +124,12 @@ module.exports.paymentStatusList = [
 module.exports.orderStatusList = [
   {
     label: "Khởi tạo",
-    value: "initial"
+    value: "initial",
+    color: "orange"
   },
   {
     label: "Hoàn thành",
-
-    value: "done"
+    value: "done",
+    color: "green"
   },
 ]
