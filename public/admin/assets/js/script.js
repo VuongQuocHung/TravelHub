@@ -140,50 +140,114 @@ if(listFilepondImageMulti.length > 0) {
 // Biểu đồ doanh thu
 const revenueChart = document.querySelector("#revenue-chart");
 if(revenueChart) {
-  new Chart(revenueChart, {
-    type: 'line',
-    data: {
-      labels: ['01', '02', '03', '04', '05'],
-      datasets: [
-        {
-          label: 'Tháng 04/2025', // Nhãn của dataset
-          data: [1200000, 1800000, 3200000, 900000, 1600000], // Dữ liệu
-          borderColor: '#4379EE', // Màu viền
-          borderWidth: 1.5, // Độ dày của đường
-        },
-        {
-          label: 'Tháng 03/2025', // Nhãn của dataset
-          data: [1000000, 900000, 1200000, 1200000, 1400000], // Dữ liệu
-          borderColor: '#EF3826', // Màu viền
-          borderWidth: 1.5, // Độ dày của đường
-        }
-      ]
-    },
-    options: {
-      plugins: {
-        legend: {
-          position: 'bottom'
-        }
-      },
-      scales: {
-        x: {
-          title: {
-            display: true,
-            text: 'Ngày'
-          }
-        },
-        y: {
-          title: {
-            display: true,
-            text: 'Doanh thu (VND)'
-          }
-        }
-      },
-      maintainAspectRatio: false, // Không giữ tỷ lệ khung hình mặc định
+  let chart;
+
+  const drawChart = (currentTime) => {
+    if (chart) {
+      chart.destroy();
     }
-  });
+
+    // Lấy tháng và năm hiện tại
+    const currentMonth = currentTime.getMonth() + 1;
+    const currentYear = currentTime.getFullYear();
+
+    // Ngày 01 tháng trước
+    const prevTime = new Date(currentYear, currentTime.getMonth() - 1, 1);
+
+    // Lấy tháng và năm trước
+    const prevMonth = prevTime.getMonth() + 1;
+    const prevYear = prevTime.getFullYear();
+
+    // Lấy ra tổng số ngày của tháng này và tháng trước
+    const totalDayCurrentMonth = new Date(currentYear, currentMonth, 0).getDate();
+    const totalDayPrevMonth = new Date(prevYear, prevMonth, 0).getDate();
+    const maxDay = totalDayCurrentMonth > totalDayPrevMonth ? totalDayCurrentMonth : totalDayPrevMonth;
+    const arrayDay = [];
+    for(let i = 1; i <= maxDay; i++) {
+      arrayDay.push(i);
+    }
+
+    const dataFinal = {
+      currentMonth: currentMonth,
+      currentYear: currentYear,
+      prevMonth: prevMonth,
+      prevYear: prevYear,
+      arrayDay: arrayDay
+    };
+
+    fetch(`/${pathAdmin}/dashboard/revenue-chart`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(dataFinal),
+    })
+      .then(res => res.json())
+      .then(data => {
+        if(data.code == "error") {
+          notyf.error(data.message);
+        }
+
+        if(data.code == "success") {
+          chart = new Chart(revenueChart, {
+            type: 'line',
+            data: {
+              labels: arrayDay,
+              datasets: [
+                {
+                  label: `Tháng ${currentMonth}/${currentYear}`, // Nhãn của dataset
+                  data: data.dataCurrentMonth, // Dữ liệu
+                  borderColor: '#4379EE', // Màu viền
+                  borderWidth: 1.5, // Độ dày của đường
+                },
+                {
+                  label: `Tháng ${prevMonth}/${prevYear}`, // Nhãn của dataset
+                  data: data.dataPrevMonth, // Dữ liệu
+                  borderColor: '#EF3826', // Màu viền
+                  borderWidth: 1.5, // Độ dày của đường
+                }
+              ]
+            },
+            options: {
+              plugins: {
+                legend: {
+                  position: 'bottom'
+                }
+              },
+              scales: {
+                x: {
+                  title: {
+                    display: true,
+                    text: 'Ngày'
+                  }
+                },
+                y: {
+                  title: {
+                    display: true,
+                    text: 'Doanh thu (VND)'
+                  }
+                }
+              },
+              maintainAspectRatio: false, // Không giữ tỷ lệ khung hình mặc định
+            }
+          });
+        }
+      })
+  }
+
+  // Thời gian hiện tại
+  const currentTime = new Date();
+  drawChart(currentTime);
+
+  // Chọn tháng bất kỳ
+  const inputSelectMonth = document.querySelector("#select-month");
+  inputSelectMonth.addEventListener("change", () => {
+    const currentTime = new Date(inputSelectMonth.value);
+    drawChart(currentTime);
+  })
 }
 // Hết Biểu đồ doanh thu
+
 
 // Category Create Form
 const categoryCreateForm = document.querySelector("#category-create-form");
