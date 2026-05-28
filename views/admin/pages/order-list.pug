@@ -85,7 +85,7 @@ block main
                 div PTTT: #{orderDetail.paymentMethodName}
                 div TTTT: #{orderDetail.paymentStatusName}
               td
-                .badge.badge-orange Khởi tạo
+                div(class=`badge badge-${orderDetail.statusDetail.color}`) #{orderDetail.statusDetail.label}
               td(class="inner-center")
                 div #{orderDetail.createdAtFormat}
               td

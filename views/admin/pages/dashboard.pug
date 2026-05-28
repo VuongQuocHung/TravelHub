@@ -12,19 +12,25 @@ block main
           img(src="/admin/assets/images/section-1-icon-1.svg")
         .inner-content
           .inner-title Người dùng
-          .inner-number 1.200
+          .inner-number #{overview.user.toLocaleString("vi-VN")}
+      .inner-item
+        .inner-icon
+          img(src="/admin/assets/images/section-1-icon-1.svg")
+        .inner-content
+          .inner-title Quản trị viên
+          .inner-number #{overview.admin.toLocaleString("vi-VN")}
       .inner-item
         .inner-icon
           img(src="/admin/assets/images/section-1-icon-2.svg")
         .inner-content
           .inner-title Đơn hàng
-          .inner-number 3.600
+          .inner-number #{overview.order.toLocaleString("vi-VN")}
       .inner-item
         .inner-icon
           img(src="/admin/assets/images/section-1-icon-3.svg")
         .inner-content
           .inner-title Doanh thu
-          .inner-number 300.000.000đ
+          .inner-number #{overview.revenue.toLocaleString("vi-VN")}đ
     //- End Section 1
 
     //- Section 2
