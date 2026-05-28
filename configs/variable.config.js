@@ -132,4 +132,9 @@ module.exports.orderStatusList = [
     value: "done",
     color: "green"
   },
+  {
+    label: "Đã hủy",
+    value: "cancel",
+    color: "red"
+  },
 ]
