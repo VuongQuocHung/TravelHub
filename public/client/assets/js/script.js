@@ -413,8 +413,22 @@ if(orderForm) {
             const cartFilter = cart.filter(item => item.checked == false);
             localStorage.setItem("cart", JSON.stringify(cartFilter));
 
-            drawNotyf(data.code, data.message);
-            window.location.href = `/order/success?orderCode=${data.orderCode}&phone=${phone}`;
+
+            switch (paymentMethod) {
+              case "money":
+                notyf.success("Bạn đã chọn thanh toán tiền mặt khi đi tour!");
+                break;
+              case "bank":
+                drawNotyf(data.code, data.message);
+                window.location.href = `/order/success?orderCode=${data.orderCode}&phone=${phone}`;
+                break;
+
+              case "zalopay":
+                // Mở trang thanh toán ZaloPay
+                drawNotyf(data.code, data.message);
+                window.location.href = `/order/payment-zalopay?orderCode=${data.orderCode}&phone=${phone}`;
+                console.log("Redirecting to ZaloPay...");
+            }
           }
         })
     })
