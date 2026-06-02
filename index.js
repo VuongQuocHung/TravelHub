@@ -9,7 +9,7 @@ const variableConfig = require("./configs/variable.config");
 const cookieParser = require('cookie-parser');
 
 const app = express()
-const port = 4000
+const port = 3000
 
 // Kết nối DATABASE 
 connectDB();

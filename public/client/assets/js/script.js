@@ -425,9 +425,12 @@ if(orderForm) {
 
               case "zalopay":
                 // Mở trang thanh toán ZaloPay
-                drawNotyf(data.code, data.message);
                 window.location.href = `/order/payment-zalopay?orderCode=${data.orderCode}&phone=${phone}`;
-                console.log("Redirecting to ZaloPay...");
+                break;
+              case "vnpay":
+                // Mở trang thanh toán VNPAY
+                window.location.href = `/order/payment-vnpay?orderCode=${data.orderCode}&phone=${phone}`;
+                break;
             }
           }
         })
