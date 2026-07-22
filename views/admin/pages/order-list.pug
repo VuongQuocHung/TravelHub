@@ -1,4 +1,7 @@
 extends ../layouts/default.pug
+include ../mixins/filter.pug 
+include ../mixins/search.pug 
+include ../mixins/pagination.pug 
 
 block title
   title #{pageTitle}
@@ -11,37 +14,33 @@ block main
     .inner-wrap
       .inner-item.inner-label
         <i class="fa-solid fa-filter"></i> Bộ lọc
+        +filter-status([
+          { value: 'initial', label: 'Khởi tạo' },
+          { value: 'done', label: 'Hoàn thành' },
+          { value: 'cancel', label: 'Đã hủy' }
+        ])
+
+      +filter-date()
+
       .inner-item
-        select
-          option(value="") Trạng thái
-          option(value="") Khởi tạo
-          option(value="") Hoàn thành
-          option(value="") Hủy
-      .inner-item.inner-date
-        input(type="date")
-        span -
-        input(type="date")
-      .inner-item
-        select
+        select(filter="paymentMethod")
           option(value="") Phương thức thanh toán
-          option(value="") Ví Momo
-          option(value="") VNPay
-          option(value="") ZaloPay
+          each item in paymentMethodList
+            option(value=item.value) #{item.label}
+
       .inner-item
-        select
+        select(filter="paymentStatus")
           option(value="") Trạng thái thanh toán
-          option(value="") Đã thanh toán
-          option(value="") Chưa thanh toán
-      .inner-item.inner-reset
-        <i class="fa-solid fa-rotate-left"></i> Xóa bộ lọc
+          each item in paymentStatusList
+            option(value=item.value) #{item.label}
+
+      +filter-reset()
   //- End Section 4
 
   //- Section 5
   .section-5
     .inner-wrap
-      .inner-search
-        <i class="fa-solid fa-magnifying-glass"></i>
-        input(type="text" placeholder="Tìm kiếm")
+      +search()
   //- End Section 5
 
   //- Section 6
@@ -104,9 +103,5 @@ block main
 
   //- Section 7
   .section-7
-    span(class="inner-label") Hiển thị 1 - 9 của 78
-    select(class="inner-pagination")
-      option Trang 1
-      option Trang 2
-      option Trang 3
+    +pagination(paginationData, orderList)
   //- End Section 7
