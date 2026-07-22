@@ -1,6 +1,8 @@
 # Project-1 (Backend)
 
-Repository: https://gitlab.com/qhung8a-group/project-1-be-t12-2025
+Demo (FE): https://travelhub-obpy.onrender.com/
+Demo (BE): https://travelhub-obpy.onrender.com/admin/account/login
+(đăng nhập với tài khoản admin ở dưới)
 
 ## Tổng quan
 Backend của một website bán tour du lịch được xây dựng bằng Node.js + Express theo kiến trúc MVC. Ứng dụng gồm hai phần: client-facing (hiển thị danh sách/chi tiết tour, giỏ hàng, form liên hệ) và admin panel (CRUD tour, category, account, order, setting, dashboard).
