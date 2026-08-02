@@ -1,8 +1,9 @@
 
 module.exports.checkPer = (permissions) => {
   return (req, res, next) => {
-    const existPer = permissions.some(per => res.locals.pers.includes(per));
-    console.log("existPer", existPer);
+    // Dùng mảng rỗng làm giá trị an toàn nếu middleware xác thực chưa gán permissions.
+    const accountPermissions = Array.isArray(res.locals.pers) ? res.locals.pers : [];
+    const existPer = permissions.some(per => accountPermissions.includes(per));
     
     if(!existPer){
       return res.json({

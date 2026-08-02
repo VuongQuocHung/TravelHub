@@ -4,8 +4,6 @@ const accountValidate = require("../../validates/admin/account.validate");
 const authMiddleware = require("../../middlewares/admin/authen.middleware");
 const authGoogleMiddleware = require("../../middlewares/admin/authGoogle.middleware");
 
-const passport = require('passport');
-
 router.get('/login', accountController.login);
 
 router.post('/login',  accountValidate.loginPost, accountController.loginPost);
@@ -34,14 +32,6 @@ router.post(
 
 router.post('/logout', accountController.logoutPost);
 
-// Redirect đến Google
-router.get('/google',
-  passport.authenticate('google', { 
-    scope: ['profile', 'email'],
-    session: false 
-  })
-);
-
 // Redirect sang Google
 router.get('/google', authGoogleMiddleware.loginGoogle);
 
@@ -53,4 +43,4 @@ router.get(
 );
 
 
-module.exports = router;  
+module.exports = router;

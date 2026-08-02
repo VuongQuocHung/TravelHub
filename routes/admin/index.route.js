@@ -11,6 +11,12 @@ const profileRoutes = require('./profile.route');
 const authenMiddleware = require("../../middlewares/admin/authen.middleware");
 const uploadController = require("../../controllers/admin/upload.controller");
 
+// Giá trị mặc định an toàn cho mọi view admin; middleware xác thực sẽ ghi đè khi có role.
+router.use((req, res, next) => {
+  res.locals.pers = [];
+  next();
+});
+
 router.use('/account', accountRoutes);
 
 router.use('/dashboard', authenMiddleware.verifyToken, dashboardRoutes);

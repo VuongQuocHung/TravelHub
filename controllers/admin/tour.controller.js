@@ -335,11 +335,12 @@ module.exports.deletePatch = async (req, res) => {
 module.exports.changeMultiPatch = async (req, res) => {
   try {
     const { listId, option } = req.body;
+    const permissions = Array.isArray(res.locals.pers) ? res.locals.pers : [];
 
     switch (option) {
       case "active":
       case "inactive":
-        if(!res.locals.pers.includes("tour-edit")){
+        if(!permissions.includes("tour-edit")){
           return res.json({
             code: "error",
             message: "Không có quyền truy cập!"
@@ -359,7 +360,7 @@ module.exports.changeMultiPatch = async (req, res) => {
         break;
 
       case "delete":
-        if(!res.locals.pers.includes("tour-delete")){
+        if(!permissions.includes("tour-delete")){
           return res.json({
             code: "error",
             message: "Không có quyền truy cập!"

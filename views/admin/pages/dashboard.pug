@@ -2,7 +2,8 @@ extends ../layouts/default.pug
 
 
 block main
-  if (pers.includes('dashboard-view'))
+  - const dashboardPermissions = Array.isArray(pers) ? pers : []
+  if (dashboardPermissions.includes('dashboard-view'))
     h1.box-title Tổng quan
 
     //- Section 1

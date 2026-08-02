@@ -18,10 +18,20 @@ module.exports.googleCallback = (req, res, next) => {
   passport.authenticate('google', {
     failureRedirect: `/${pathAdmin}/account/login`,
     session: false
-  }, (err, account) => {
+  }, (err, account, info) => {
 
     if (err || !account) {
-      return res.redirect(`/${pathAdmin}/account/login`);
+      // Chỉ đưa các mã lỗi do hệ thống định nghĩa lên URL, tránh hiển thị lỗi nội bộ.
+      const allowedErrorCodes = new Set([
+        'account-not-active',
+        'role-required'
+      ]);
+      const authError = allowedErrorCodes.has(info?.code)
+        ? info.code
+        : 'google-auth-failed';
+
+      // Trang đăng nhập sẽ đổi mã lỗi này thành thông báo tiếng Việt thân thiện.
+      return res.redirect(`/${pathAdmin}/account/login?authError=${authError}`);
     }
 
     // Tạo token

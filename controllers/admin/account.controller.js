@@ -4,11 +4,18 @@ const jwt = require('jsonwebtoken');
 const { randomNumberString } = require("../../helpers/random.helper");
 const ForgotPassword = require("../../models/forgot-password.model");
 const { sendMail } = require("../../helpers/mail.helper")
-const passport = require("../../configs/passport")
+
+// Ánh xạ mã lỗi nội bộ sang nội dung an toàn để hiển thị trên trang đăng nhập.
+const authErrorMessages = {
+  'account-not-active': 'Tài khoản đã bị tạm dừng và không thể đăng nhập.',
+  'role-required': 'Tài khoản chưa được gán nhóm quyền.',
+  'google-auth-failed': 'Đăng nhập bằng Google không thành công. Vui lòng thử lại.'
+};
 
 module.exports.login = async (req, res) => {
   res.render('admin/pages/login', {
     pageTitle: 'Đăng nhập',
+    authErrorMessage: authErrorMessages[req.query.authError] || '',
   });
 }
 

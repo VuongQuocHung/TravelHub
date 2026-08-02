@@ -2,7 +2,8 @@ extends ../layouts/default.pug
 include ../mixins/options.pug
 
 block main
-  if (pers.includes("tour-create"))
+  - const tourCreatePermissions = Array.isArray(pers) ? pers : []
+  if (tourCreatePermissions.includes("tour-create"))
     h1.box-title Tạo tour
 
     .section-8

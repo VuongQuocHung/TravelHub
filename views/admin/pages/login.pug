@@ -4,6 +4,9 @@ block main
   .form-account
     h2.inner-title Đăng nhập
     p.inner-desc Vui lòng nhập email và mật khẩu để tiếp tục
+    //- Thông báo lý do đăng nhập Google không thành công.
+    if authErrorMessage
+      p.inner-auth-error(role="alert")= authErrorMessage
     form.inner-form#login-form
       .inner-group
         label(class="inner-label" for="email") Email

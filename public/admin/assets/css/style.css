@@ -58,6 +58,18 @@ a {
   opacity: 0.8;
 }
 
+/* Thông báo lỗi xác thực Google */
+.form-account .inner-auth-error {
+  margin: -20px 0 30px;
+  padding: 12px 16px;
+  border: 1px solid #f4b4b4;
+  border-radius: 8px;
+  background-color: #fff1f1;
+  color: #b42318;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
 .form-account .inner-form {
   margin-bottom: 30px;
 }

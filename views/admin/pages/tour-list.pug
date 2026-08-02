@@ -5,6 +5,7 @@ include ../mixins/search.pug
 include ../mixins/buttons.pug 
 include ../mixins/pagination.pug 
 block main
+  - const tourListPermissions = Array.isArray(pers) ? pers : []
   h1.box-title #{pageTitle}
 
   //- Section 4
@@ -44,20 +45,20 @@ block main
           .inner-item
             select
               option(value="") -- Hành động --
-              if (pers.includes("tour-edit"))
+              if (tourListPermissions.includes("tour-edit"))
                 option(value="active") Hoạt động
                 option(value="inactive") Tạm dừng
-              if (pers.includes("tour-delete"))
+              if (tourListPermissions.includes("tour-delete"))
                 option(value="delete") Xóa
           .inner-item
             button Áp dụng
       
       +search()
 
-      if (pers.includes("tour-create"))
+      if (tourListPermissions.includes("tour-create"))
         +button-create(`/${pathAdmin}/tour/create`)
 
-      if (pers.includes("tour-trash"))
+      if (tourListPermissions.includes("tour-trash"))
         .inner-button-trash
           a(href=`/${pathAdmin}/tour/trash`) Thùng rác
   //- End Section 5
@@ -110,13 +111,13 @@ block main
                   div.inner-time #{item.updateAtFormat}
                 td
                   .inner-buttons
-                    if (pers.includes("tour-edit"))
+                    if (tourListPermissions.includes("tour-edit"))
                       a(
                         href=`/${pathAdmin}/tour/edit/${item.id}` 
                         class="inner-edit"
                         ) <i class="fa-regular fa-pen-to-square"></i>
                         
-                    if (pers.includes("tour-delete"))
+                    if (tourListPermissions.includes("tour-delete"))
                       button(
                         class="inner-delete" 
                         button-delete 

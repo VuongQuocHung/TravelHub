@@ -7,7 +7,8 @@ include ../mixins/pagination.pug
 include ../mixins/back.pug 
 
 block main
-  if (pers.includes("tour-trash"))
+  - const tourTrashPermissions = Array.isArray(pers) ? pers : []
+  if (tourTrashPermissions.includes("tour-trash"))
     h1.box-title Thùng rác tour
 
     //- Section 5

@@ -2,7 +2,8 @@ extends ../layouts/default.pug
 include ../mixins/options.pug
 
 block main
-  if (pers.includes("tour-edit"))
+  - const tourEditPermissions = Array.isArray(pers) ? pers : []
+  if (tourEditPermissions.includes("tour-edit"))
     h1.box-title #{pageTitle}
 
     .section-8
