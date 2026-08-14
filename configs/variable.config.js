@@ -22,6 +22,10 @@ module.exports.permissionsList = [
     label: "Xóa danh mục",
     value: "category-delete"
   },
+  {
+    label: "Thùng rác danh mục",
+    value: "category-trash"
+  },
   
   // Tour
   {
@@ -87,6 +91,66 @@ module.exports.permissionsList = [
   {
     label: "Thùng rác người dùng",
     value: "user-trash"
+  },
+
+  // Liên hệ
+  {
+    label: "Xem thông tin liên hệ",
+    value: "contact-view"
+  },
+  {
+    label: "Xóa thông tin liên hệ",
+    value: "contact-delete"
+  },
+  {
+    label: "Thùng rác thông tin liên hệ",
+    value: "contact-trash"
+  },
+
+  // Cấu hình website
+  {
+    label: "Xem cấu hình website",
+    value: "setting-view"
+  },
+  {
+    label: "Sửa cấu hình website",
+    value: "setting-edit"
+  },
+
+  // Tài khoản quản trị
+  {
+    label: "Xem tài khoản quản trị",
+    value: "account-admin-view"
+  },
+  {
+    label: "Tạo tài khoản quản trị",
+    value: "account-admin-create"
+  },
+  {
+    label: "Sửa tài khoản quản trị",
+    value: "account-admin-edit"
+  },
+
+  // Nhóm quyền
+  {
+    label: "Xem nhóm quyền",
+    value: "role-view"
+  },
+  {
+    label: "Tạo nhóm quyền",
+    value: "role-create"
+  },
+  {
+    label: "Sửa nhóm quyền",
+    value: "role-edit"
+  },
+  {
+    label: "Xóa nhóm quyền",
+    value: "role-delete"
+  },
+  {
+    label: "Thùng rác nhóm quyền",
+    value: "role-trash"
   },
 
 ];

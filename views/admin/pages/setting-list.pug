@@ -1,20 +1,24 @@
 extends ../layouts/default.pug
 
 block main
+  - const settingPermissions = Array.isArray(pers) ? pers : []
   h1.box-title Cài đặt chung
 
   //- Section 9
   .section-9
-    a(href=`/${pathAdmin}/setting/website-info-home` class="inner-item")
-      .inner-icon <i class="fa-solid fa-home"></i>
-      .inner-text Cấu hình trang chủ
-    a(href=`/${pathAdmin}/setting/website-info` class="inner-item")
-      .inner-icon <i class="fa-solid fa-info"></i>
-      .inner-text Thông tin website
-    a(href=`/${pathAdmin}/setting/account-admin/list` class="inner-item")
-      .inner-icon <i class="fa-solid fa-user-tie"></i>
-      .inner-text Tài khoản quản trị
-    a(href=`/${pathAdmin}/setting/role/list` class="inner-item")
-      .inner-icon <i class="fa-solid fa-user-gear"></i>
-      .inner-text Nhóm quyền
+    if (settingPermissions.includes('setting-view'))
+      a(href=`/${pathAdmin}/setting/website-info-home` class="inner-item")
+        .inner-icon <i class="fa-solid fa-home"></i>
+        .inner-text Cấu hình trang chủ
+      a(href=`/${pathAdmin}/setting/website-info` class="inner-item")
+        .inner-icon <i class="fa-solid fa-info"></i>
+        .inner-text Thông tin website
+    if (settingPermissions.includes('account-admin-view') || settingPermissions.includes('user-view'))
+      a(href=`/${pathAdmin}/setting/account-admin/list` class="inner-item")
+        .inner-icon <i class="fa-solid fa-user-tie"></i>
+        .inner-text Tài khoản quản trị
+    if (settingPermissions.includes('role-view') || settingPermissions.includes('user-view'))
+      a(href=`/${pathAdmin}/setting/role/list` class="inner-item")
+        .inner-icon <i class="fa-solid fa-user-gear"></i>
+        .inner-text Nhóm quyền
   //- End Section 9

@@ -27,13 +27,15 @@ nav.sider
         a(href=`/${pathAdmin}/user/manage`) 
           <i class="fa-solid fa-user"></i> Quản lý người dùng
 
-    li
-      a(href=`/${pathAdmin}/contact/list`) 
-        <i class="fa-solid fa-user-group"></i> Thông tin liên hệ
+    if (siderPermissions.includes('contact-view'))
+      li
+        a(href=`/${pathAdmin}/contact/list`)
+          <i class="fa-solid fa-user-group"></i> Thông tin liên hệ
   hr
   ul.inner-menu
-    li
-      a(href=`/${pathAdmin}/setting/list`) <i class="fa-solid fa-gear"></i> Cài đặt chung
+    if (siderPermissions.includes('setting-view') || siderPermissions.includes('account-admin-view') || siderPermissions.includes('role-view') || siderPermissions.includes('user-view'))
+      li
+        a(href=`/${pathAdmin}/setting/list`) <i class="fa-solid fa-gear"></i> Cài đặt chung
     li
       a(href=`/${pathAdmin}/profile/edit`) <i class="fa-solid fa-user-gear"></i> Thông tin cá nhân
     li
