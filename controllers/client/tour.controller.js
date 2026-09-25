@@ -2,6 +2,10 @@ const Tour = require('../../models/tour.model');
 const Category = require('../../models/category.model');
 const City = require('../../models/city.model');
 const moment = require("moment");
+const {
+  sanitizeRichText,
+  sanitizeTourSchedules
+} = require("../../helpers/sanitize-html.helper");
 module.exports.detail = async (req, res) => {
   const slug = req.params.slug;
   const tourDetail = await Tour.findOne({
@@ -29,6 +33,9 @@ module.exports.detail = async (req, res) => {
   }
 
   tourDetail.departureDateFormat = moment(tourDetail.departureDate).format("DD/MM/YYYY"); 
+  // Làm sạch cả dữ liệu cũ trong database trước khi render HTML.
+  tourDetail.information = sanitizeRichText(tourDetail.information);
+  tourDetail.schedules = sanitizeTourSchedules(tourDetail.schedules);
 
   const cityList = await City.find({
     _id: { $in: tourDetail.locations }

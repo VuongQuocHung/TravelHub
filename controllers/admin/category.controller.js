@@ -3,6 +3,7 @@ const AccountAdmin = require("../../models/account-admin.model");
 const Category = require("../../models/category.model");
 const moment = require("moment");
 const slugify = require('slugify');
+const { sanitizeRichText } = require("../../helpers/sanitize-html.helper");
 module.exports.list = async (req, res) => {
   const target = {
     deleted: false
@@ -158,6 +159,7 @@ module.exports.createPost = async (req, res) => {
 
   req.body.createdBy = req.account.id; // account được lưu ở trong hàm verifyToken
   req.body.avatar = req.file ? req.file.path : "";
+  req.body.description = sanitizeRichText(req.body.description);
   // Cách 1: Tạo 1 bản ghi, không trả về dữ liệu
   // await Category.create(req.body);
 
@@ -237,6 +239,7 @@ module.exports.editPatch = async (req, res) => {
     req.body.updatedBy = req.account.id;
 
     req.body.avatar = req.file ? req.file.path : "";
+    req.body.description = sanitizeRichText(req.body.description);
 
     await Category.updateOne({
       _id: id

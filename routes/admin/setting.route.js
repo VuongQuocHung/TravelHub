@@ -1,6 +1,4 @@
-const multer  = require('multer')
-const cloudinaryHelper = require("../../helpers/cloudinary.helper")
-const upload = multer({ storage: cloudinaryHelper.storage });
+const uploadMiddleware = require("../../middlewares/admin/upload.middleware");
 
 const router = require('express').Router();
 
@@ -19,7 +17,7 @@ router.get('/website-info', checkPer(["setting-view"]), settingController.websit
 router.patch(
   '/website-info', 
   checkPer(["setting-edit"]),
-  upload.fields([
+  uploadMiddleware.imageFields([
     {
       name: "logo",
       maxCount: 1
@@ -37,7 +35,7 @@ router.get('/website-info-home', checkPer(["setting-view"]), settingController.w
 router.patch(
   '/website-info-home', 
   checkPer(["setting-edit"]),
-  upload.none(), 
+  uploadMiddleware.noFile(),
   settingController.websiteInfoHomePatch
 );
 
@@ -56,7 +54,7 @@ router.get(
 router.post(
   '/account-admin/create',
   checkPer(["account-admin-create", "user-create"]),
-  upload.single('avatar'),
+  uploadMiddleware.singleImage('avatar'),
   settingController.accountAdminCreatePost
 );
 
@@ -69,7 +67,7 @@ router.get(
 router.patch(
   '/account-admin/edit/:id',
   checkPer(["account-admin-edit", "user-edit"]),
-  upload.single('avatar'),
+  uploadMiddleware.singleImage('avatar'),
   settingController.accountAdminEditPatch
 );
 
@@ -82,7 +80,7 @@ router.get(
 router.patch(
   '/account-admin/edit-password/:id',
   checkPer(["account-admin-edit", "user-edit"]),
-  upload.none(),
+  uploadMiddleware.noFile(),
   settingController.accountAdminEditPasswordPatch
 );
 

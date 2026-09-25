@@ -5,6 +5,10 @@ const Tour = require("../../models/tour.model")
 const City = require("../../models/city.model");
 const moment = require("moment");
 const slugify = require('slugify');
+const {
+  sanitizeRichText,
+  sanitizeTourSchedules
+} = require("../../helpers/sanitize-html.helper");
 
 module.exports.list = async (req, res) => {
   const target = {
@@ -164,7 +168,9 @@ module.exports.createPost = async (req, res) => {
     req.body.stockBaby = req.body.stockBaby ? parseInt(req.body.stockBaby) : 0;
     req.body.locations = req.body.locations ? JSON.parse(req.body.locations) : []; //locations phải ở dạng mảng
     req.body.departureDate = req.body.departureDate ? new Date(req.body.departureDate) : null;
-    req.body.schedules = req.body.schedules ? JSON.parse(req.body.schedules) : []; // schedules phải ở dạng mảng
+    const schedules = req.body.schedules ? JSON.parse(req.body.schedules) : [];
+    req.body.schedules = sanitizeTourSchedules(schedules);
+    req.body.information = sanitizeRichText(req.body.information);
     req.body.createdBy = req.account.id;
 
     // Tạo 1 bản ghi, có trả về dữ liệu
@@ -198,6 +204,9 @@ module.exports.edit = async (req, res) => {
     }
 
     tourDetail.departureDateFormat = moment(tourDetail.departureDate).format('YYYY-MM-DD');
+    // Làm sạch dữ liệu cũ trước khi đưa vào TinyMCE ở trang chỉnh sửa.
+    tourDetail.information = sanitizeRichText(tourDetail.information);
+    tourDetail.schedules = sanitizeTourSchedules(tourDetail.schedules);
 
      // Danh sách danh mục
     const categoryList = await Category.find({
@@ -273,7 +282,9 @@ module.exports.editPatch = async (req, res) => {
     req.body.stockBaby = req.body.stockBaby ? parseInt(req.body.stockBaby) : 0;
     req.body.locations = req.body.locations ? JSON.parse(req.body.locations) : []; //locations phải ở dạng mảng
     req.body.departureDate = req.body.departureDate ? new Date(req.body.departureDate) : null;
-    req.body.schedules = req.body.schedules ? JSON.parse(req.body.schedules) : []; // schedules phải ở dạng mảng
+    const schedules = req.body.schedules ? JSON.parse(req.body.schedules) : [];
+    req.body.schedules = sanitizeTourSchedules(schedules);
+    req.body.information = sanitizeRichText(req.body.information);
     req.body.updatedBy = req.account.id;
 
     await Tour.updateOne({

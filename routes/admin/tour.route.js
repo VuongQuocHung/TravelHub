@@ -1,11 +1,8 @@
 const router = require('express').Router();
-const multer  = require('multer')
-const cloudinaryHelper = require("../../helpers/cloudinary.helper")
+const uploadMiddleware = require("../../middlewares/admin/upload.middleware");
 const tourController =  require("../../controllers/admin/tour.controller");
 const tourValidate = require("../../validates/admin/tour.validate");
 const { checkPer, checkPerByOption } = require("../../middlewares/admin/permission.middleware");
-
-const upload = multer({ storage: cloudinaryHelper.storage })
 
 router.get('/list', checkPer(["tour-view"]), tourController.list);
 router.get('/create', checkPer(["tour-create"]), tourController.create);
@@ -13,7 +10,7 @@ router.get('/trash', checkPer(["tour-trash"]), tourController.trash);
 
 router.post('/create', 
   checkPer(["tour-create"]),
-  upload.fields([
+  uploadMiddleware.imageFields([
     { name: 'avatar', maxCount: 1 },
     { name: 'images', maxCount: 10 }
   ]), 
@@ -23,7 +20,7 @@ router.post('/create',
 
 router.patch('/edit/:id', 
   checkPer(["tour-edit"]),
-  upload.fields([
+  uploadMiddleware.imageFields([
     { name: 'avatar', maxCount: 1 },
     { name: 'images', maxCount: 10 }
   ]), 

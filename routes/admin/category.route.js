@@ -1,11 +1,8 @@
 const router = require('express').Router();
-const multer  = require('multer')
-const cloudinaryHelper = require("../../helpers/cloudinary.helper")
+const uploadMiddleware = require("../../middlewares/admin/upload.middleware");
 const categoryController =  require("../../controllers/admin/category.controller");
 const categoryValidate = require('../../validates/admin/category.validate');
 const { checkPer, checkPerByOption } = require("../../middlewares/admin/permission.middleware");
-
-const upload = multer({ storage: cloudinaryHelper.storage });
 
 router.get('/list', checkPer(["category-view"]), categoryController.list);
 
@@ -15,7 +12,7 @@ router.get('/trash', checkPer(["category-trash"]), categoryController.trash);
 
 router.post('/create', 
   checkPer(["category-create"]),
-  upload.single('avatar'), 
+  uploadMiddleware.singleImage('avatar'),
   categoryValidate.createPost,
   categoryController.createPost);
 
@@ -24,7 +21,7 @@ router.get('/edit/:id', checkPer(["category-edit"]), categoryController.edit);
 router.patch(
   '/edit/:id', 
   checkPer(["category-edit"]),
-  upload.single('avatar'), 
+  uploadMiddleware.singleImage('avatar'),
   categoryValidate.createPost,
   categoryController.editPatch
 );
